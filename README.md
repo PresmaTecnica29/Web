@@ -12,7 +12,6 @@ Para configurar el archivo `db.php` con las credenciales de la base de datos, si
 
 3. Reemplaza los valores de estas variables con las credenciales de tu base de datos.
 
-4. Guarda los cambios en el archivo `db.php`...
+4. Guarda los cambios en el archivo `db.php`.
 
 Con estos pasos, habrás configurado el archivo `db.php` con las credenciales de la base de datos.
-docu

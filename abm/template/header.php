@@ -200,12 +200,11 @@
               echo '<li><a href="../netbook/qr.php" class="nav-link px-2 text-white">Recursos</a></li>';
             }
           } ?>
-          <li><a href="/public/index.php?logout" class="nav-link px-2 text-white">Cerrar Sesion</a></li>
+          <li><a href="/Desarrollo-Web/index.php?logout" class="nav-link px-2 text-white">Cerrar sesion</a></li>
         </ul>
 
         <div class="text-end" bis_skin_checked="1">
-          <a href="#" class="btn btn-warning"><?php echo $_SESSION['user_name']; ?> </a>
-          <img src="../template/logofinal.png" height="30" width="30">
+          <a href="#" class="btn btn-warning"><?php echo $_SESSION['user_name']; ?></a>
         </div>
       </div>
     </div>

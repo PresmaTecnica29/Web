@@ -36,7 +36,7 @@ if (isset($_POST['submit'])) {
 
     $ultimoIdInsertado = $conexion->lastInsertId();
 
-    //$consultaSQL = "INSERT INTO user_security (user_id, must_change_password) VALUES (:user_id, TRUE)";
+    $consultaSQL = "INSERT INTO user_security (user_id, must_change_password) VALUES (:user_id, TRUE)";
     $sentencia = $conexion->prepare($consultaSQL);
     $sentencia->execute(['user_id' => $ultimoIdInsertado]);
     
@@ -104,7 +104,7 @@ if (isset($resultado)) {
         <div class="form-group">
           <input name="csrf" type="hidden" value="<?php echo escapar($_SESSION['csrf']); ?>">
           <input type="submit" name="submit" class="btn btn-primary" value="Enviar">
-          <a href="../abmPersonas/abmPersonas.php" class="btn btn-primary">Regresar al inicio</a>
+          <a class="btn btn-primary" href="abm.php">Regresar al inicio</a>
         </div>
       </form>
     </div>

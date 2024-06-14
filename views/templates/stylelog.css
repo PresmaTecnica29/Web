@@ -60,11 +60,11 @@ img, #linea2 > a, #linea1 > a{
   .card {
     box-sizing: border-box;
     width: 190px;
-    height: 170px;
+    height: 254px;
     background: rgba(217, 217, 217, 0.58);
     border: 1px solid white;
     box-shadow: 12px 17px 51px rgba(0, 0, 0, 0.22);
-    backdrop-filter: none;
+    backdrop-filter: blur(6px);
     border-radius: 17px;
     text-align: center;
     cursor: pointer;
@@ -73,10 +73,8 @@ img, #linea2 > a, #linea1 > a{
     align-items: center;
     justify-content: center;
     user-select: none;
-    font-weight: bold;
+    font-weight: bolder;
     color: black;
-    text-decoration:none;
-    font-size:24px;
   }
   
   .card:hover {
@@ -87,44 +85,3 @@ img, #linea2 > a, #linea1 > a{
   .card:active {
     transform: scale(0.95) rotateZ(1.7deg);
   }
-
-  #menu {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 300px; /* Ancho del menú */
-    height: 100%; /* Altura del menú */
-    background-color: #fff;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Sombra */
-    z-index: 9999;
-    overflow-y: auto; /* Permitir desplazamiento vertical si el contenido es demasiado largo */
-}
-
-#menu.active {
-    display: block;
-}
-
-#menu ul {
-    list-style: none;
-    padding: 0;
-}
-
-#menu ul li {
-    padding: 10px;
-    border-bottom: 1px solid #ccc; /* Línea divisoria entre elementos */
-}
-
-#menu ul li:last-child {
-    border-bottom: none; /* Eliminar línea divisoria del último elemento */
-}
-
-#menu ul li a {
-    text-decoration: none;
-    color: #333;
-    font-size: 16px;
-}
-
-#menu ul li a:hover {
-    color: #007bff;
-}

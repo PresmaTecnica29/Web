@@ -52,7 +52,7 @@ if ($error) {
   <div class="row">
     <div class="col-md-12">
       <a href="agregarUsuario.php" class="btn btn-primary mt-4">Crear alumno</a>
-      <a href="/public/index.php" class="btn btn-primary mt-4">Volver al inicio</a>
+      <a href="/Desarrollo-Web/index.php" class="btn btn-primary mt-4">Volver al inicio</a>
       <hr>
 
       <form method="post" class="form-inline">

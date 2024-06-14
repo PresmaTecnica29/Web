@@ -16,8 +16,7 @@
         <div class="container" bis_skin_checked="1">
             <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start" bis_skin_checked="1">
                 <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                    <li><a href="/public/index.php" class="nav-link px-2 text-secondary">Inicio</a></li>
-                    
+                    <li><a href='/Desarrollo-Web/index.php' class="nav-link px-2 text-secondary">Inicio</a></li>
                     <li><a href='abm/netbook/abm.php' class="nav-link px-2 text-white">Registros</a></li>
                     <?php
                     if (isset($_SESSION['user_rol'])) {
@@ -26,18 +25,11 @@
                             echo '<li><a href="abm/netbook/qr.php" class="nav-link px-2 text-white">Recursos</a></li>';
                         }
                     } ?>
-                    <li><a href="/public/index.php?logout" class="nav-link px-2 text-white">Cerrar Sesion</a></li>
+                    <li><a href="/Desarrollo-Web/index.php?logout" class="nav-link px-2 text-white">Cerrar sesion</a></li>
                 </ul>
 
                 <div class="text-end" bis_skin_checked="1">
-                    <button class="btn btn-warning" id="openMenuBtn"><?php echo $_SESSION['user_name']; ?></button>
-                    <script>
-                        document.getElementById("openMenuBtn").addEventListener("click", function() {
-                            var menu = document.getElementById("menu");
-                            menu.classList.toggle("active");
-                        });
-                    </script>
-                    <img src="views/templates/logofinal.png">
+                    <a href="#" class="btn btn-warning"><?php echo $_SESSION['user_name']; ?></a>
                 </div>
             </div>
         </div>
@@ -59,13 +51,11 @@
     <footer class="bg-light text-center text-lg-start">
         <!-- Copyright -->
         <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
-            © 2024 Presma
-            <a href = "https://www.tecnica29de6.edu.ar/" class="text-dark">Escuela Técnica N° 29 DE 6 Reconquista de Buenos Aires</a>
+            © 2023 Copyright:
+            <a class="text-dark" href="https://mdbootstrap.com/">Presma</a>
         </div>
         <!-- Copyright -->
     </footer>
-    <nav id="menu">
-    </nav>
-
 </body>
+
 </html>

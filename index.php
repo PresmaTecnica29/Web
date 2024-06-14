@@ -40,5 +40,3 @@ if ($login->isUserLoggedIn() == true) {
     // for demonstration purposes, we simply show the "you are not logged in" view.
     include("views/not_logged_in.php");
 }
-
-    
