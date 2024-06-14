@@ -1,4 +1,5 @@
 <?php
+/*
 $host = 'localhost';
 $db = 'login';
 $user = 'root';
@@ -12,7 +13,9 @@ $opt = [
     PDO::ATTR_EMULATE_PREPARES => false,
 ];
 $pdo = new PDO($dsn, $user, $pass, $opt);
-
+*/
+include '../config.php';
+$pdo = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 include '../funciones.php';
 
 csrf();
