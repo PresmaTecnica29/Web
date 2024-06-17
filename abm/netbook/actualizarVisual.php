@@ -1,10 +1,9 @@
 <?php
 try {
     include '../funciones.php';
-    $config = include('../db.php');
+    $config = include('../../config/db.php');
 
-    $dsn = 'mysql:host=' . $config['db']['host'] . ';dbname=' . $config['db']['name'];
-    $conexion = new PDO($dsn, $config['db']['user'], $config['db']['pass'], $config['db']['options']);
+    $conexion = conexion();
 
     $stmt = $pdo->query("
     SELECT 

@@ -200,7 +200,7 @@
               echo '<li><a href="../netbook/qr.php" class="nav-link px-2 text-white">Recursos</a></li>';
             }
           } ?>
-          <li><a href="/Desarrollo-Web/index.php?logout" class="nav-link px-2 text-white">Cerrar sesion</a></li>
+          <li><a href="/Web/index.php?logout" class="nav-link px-2 text-white">Cerra sesion</a></li>
         </ul>
 
         <div class="text-end" bis_skin_checked="1">

@@ -1,11 +1,7 @@
 <?php
-$servername = "190.228.29.62";
-$username = "bdwebet29";
-$password = "Tecnica29!";
-$dbname = "bdwebet29";
-
+$config = include('../../config/db.php');
 // Crear conexión
-$conn = new mysqli($servername, $username, $password, $dbname);
+$conn = new mysqli($config['db']['host'], $config['db']['user'], $config['db']['pass'], $config['db']['name']);
 
 // Verificar conexión
 if ($conn->connect_error) {

@@ -1,18 +1,6 @@
 <?php
-$host = '190.228.29.62';
-$db = 'bdwebet29';
-$user = 'bdwebet29';
-$pass = 'Tecnica29!';
-$charset = 'utf8mb4';
-
-$dsn = "mysql:host=$host;dbname=$db;charset=$charset";
-$opt = [
-    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-    PDO::ATTR_EMULATE_PREPARES => false,
-];
-$pdo = new PDO($dsn, $user, $pass, $opt);
-
+$config = include('../../config/db.php');
+$conexion = conexion();
 include '../funciones.php';
 
 csrf();
@@ -21,7 +9,7 @@ if (isset($_POST['submit']) && !hash_equals($_SESSION['csrf'], $_POST['csrf'])) 
 }
 
 $error = false;
-$config = include('../db.php');
+
 
 $stmt = $pdo->query("
 SELECT 
