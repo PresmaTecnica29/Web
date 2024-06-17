@@ -13,11 +13,10 @@ if (isset($_POST['submit'])) {
     'mensaje' => 'El usuario ' . escapar($_POST['nombre']) . ' ha sido agregado con éxito'
   ];
 
-  $config = include '../db.php';
+  $config = include '../../config/db.php';
 
   try {
-    $dsn = 'mysql:host=' . $config['db']['host'] . ';dbname=' . $config['db']['name'];
-    $conexion = new PDO($dsn, $config['db']['user'], $config['db']['pass'], $config['db']['options']);
+    $conexion = conexion();
 
     $password_encriptada = password_hash($_POST['password'], PASSWORD_DEFAULT);
 
@@ -46,7 +45,7 @@ if (isset($_POST['submit'])) {
   }
 }
 
-require_once("../db.php");
+require_once("../../config/db.php");
 $conexion=conexion();
 $statement=$conexion->prepare("SELECT * FROM rol");
 $statement->execute();

@@ -13,11 +13,10 @@ if (isset($_POST['submit'])) {
     'mensaje' => 'La ' . escapar($_POST['recurso_nombre']) . ' ha sido agregado con éxito'
   ];
 
-  $config = include('../db.php');
+  $config = include('../../config/db.php');
 
   try {
-    $dsn = 'mysql:host=' . $config['db']['host'] . ';dbname=' . $config['db']['name'];
-    $conexion = new PDO($dsn, $config['db']['user'], $config['db']['pass'], $config['db']['options']);
+    $conexion = conexion();
 
     $recurso = [
       "recurso_id"   => $_POST['recurso_id'],
@@ -36,7 +35,7 @@ if (isset($_POST['submit'])) {
     $resultado['mensaje'] = $error->getMessage();
   }
 }
-require_once("../db.php");
+require_once('../../config/db.php');
 $conexion = conexion();
 $statement = $conexion->prepare("SELECT * FROM tipo_recurso");
 $statement->execute();
