@@ -105,10 +105,11 @@ button {
 button:hover {
     background-color: #5f5f9c;
 }
-#op{
-    margin-top:50px;
-    flex-direction:column;
-    display:flex;
+
+#op {
+    margin-top: 50px;
+    flex-direction: column;
+    display: flex;
 }
 
 #back {
@@ -117,6 +118,7 @@ button:hover {
     color: #7878bd;
 
 }
-#back:hover{
-    color:#401031;
+
+#back:hover {
+    color: #401031;
 }
