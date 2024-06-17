@@ -26,8 +26,7 @@ if (isset($_POST['confirmar'])) {
 
     header('Location: abmPersonas.php');
     exit();
-
-  } catch(PDOException $error) {
+  } catch (PDOException $error) {
     $resultado['error'] = true;
     $resultado['mensaje'] = $error->getMessage();
   }
@@ -39,10 +38,10 @@ if (isset($_POST['confirmar'])) {
 <div class="container mt-2">
   <div class="row">
     <div class="col-md-12">
-      <?php if ($resultado['error']): ?>
-      <div class="alert alert-danger" role="alert">
-        <?= $resultado['mensaje'] ?>
-      </div>
+      <?php if ($resultado['error']) : ?>
+        <div class="alert alert-danger" role="alert">
+          <?= $resultado['mensaje'] ?>
+        </div>
       <?php endif; ?>
       <form method="post">
         <input type="hidden" name="id" value="<?= $_GET['id'] ?>" />

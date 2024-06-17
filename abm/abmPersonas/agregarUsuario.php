@@ -38,25 +38,24 @@ if (isset($_POST['submit'])) {
     $consultaSQL = "INSERT INTO user_security (user_id, must_change_password) VALUES (:user_id, TRUE)";
     $sentencia = $conexion->prepare($consultaSQL);
     $sentencia->execute(['user_id' => $ultimoIdInsertado]);
-    
-  } catch(PDOException $error) {
+  } catch (PDOException $error) {
     $resultado['error'] = true;
     $resultado['mensaje'] = $error->getMessage();
   }
 }
 
 require_once("../../config/db.php");
-$conexion=conexion();
-$statement=$conexion->prepare("SELECT * FROM rol");
+$conexion = conexion();
+$statement = $conexion->prepare("SELECT * FROM rol");
 $statement->execute();
-$datos=$statement->fetchAll();
+$datos = $statement->fetchAll();
 ?>
 
 <?php include "../template/header.php"; ?>
 
 <?php
 if (isset($resultado)) {
-  ?>
+?>
   <div class="container mt-3">
     <div class="row">
       <div class="col-md-12">
@@ -66,7 +65,7 @@ if (isset($resultado)) {
       </div>
     </div>
   </div>
-  <?php
+<?php
 }
 ?>
 
