@@ -181,7 +181,7 @@
       bottom: 0;
     }
   </style>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="../../views/templates/stylelog.css">
   <link rel="icon" href="../template/logofinal.png" type="image/png">
   <title>Presma</title>
 </head>
@@ -200,11 +200,12 @@
               echo '<li><a href="../netbook/qr.php" class="nav-link px-2 text-white">Recursos</a></li>';
             }
           } ?>
-          <li><a href="/Web/index.php?logout" class="nav-link px-2 text-white">Cerra sesion</a></li>
+          <li><a href="/Web/index.php?logout" class="nav-link px-2 text-white">Cerrar sesion</a></li>
         </ul>
 
-        <div class="text-end" bis_skin_checked="1">
-          <a href="#" class="btn btn-warning"><?php echo $_SESSION['user_name']; ?></a>
+        <div class="contenedor" bis_skin_checked="1">
+                    <div class="caja-advertencia"><?php echo $_SESSION['user_name']; ?></div>
+                    <img class="ñiquito" src="../../views/templates/logofinal.png">
         </div>
       </div>
     </div>

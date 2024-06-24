@@ -16,7 +16,6 @@
         <div class="container" bis_skin_checked="1">
             <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start" bis_skin_checked="1">
                 <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                    <li><a href='./index.php' class="nav-link px-2 text-secondary">Inicio</a></li>
                     <li><a href='abm/netbook/abm.php' class="nav-link px-2 text-white">Registros</a></li>
                     <?php
                     if (isset($_SESSION['user_rol'])) {
@@ -28,8 +27,9 @@
                     <li><a href="/Web/index.php?logout" class="nav-link px-2 text-white">Cerrar sesion</a></li>
                 </ul>
 
-                <div class="text-end" bis_skin_checked="1">
-                    <a href="#" class="btn btn-warning"><?php echo $_SESSION['user_name']; ?></a>
+                <div class="contenedor" bis_skin_checked="1">
+                    <div class="caja-advertencia"><?php echo $_SESSION['user_name']; ?></div>
+                    <img class="ñiquito" src="views/templates/logofinal.png">
                 </div>
             </div>
         </div>
