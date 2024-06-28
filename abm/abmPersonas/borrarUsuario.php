@@ -47,7 +47,7 @@ if (isset($_POST['confirmar'])) {
         <input type="hidden" name="id" value="<?= $_GET['id'] ?>" />
         <p>¿Estás seguro de que quieres eliminar este usuario?</p>
         <button type="submit" name="confirmar" class="btn btn-danger">Sí, eliminar usuario</button>
-        <a href="abmPersonas.php" class="btn btn-secondary">No, volver al inicio</a>
+        <a href="abmPersonas.php" class="btn btn-secondary">No, regresar</a>
       </form>
     </div>
   </div>

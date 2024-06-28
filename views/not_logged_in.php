@@ -49,7 +49,7 @@ if (isset($login)) {
         <input type="submit" name="login" value="Iniciar sesion" id="submit" class="input" />
       </div>
       <div class="field" id="op">
-        <a href="cambio_contraseña.php" id="back">He olvido mi contraseña</a>
+        <a href="cambiar_password.php" id="back">He olvido mi contraseña</a>
         <a href="register.php" id="back">Registrar una nueva cuenta</a>
       </div>
   </div>

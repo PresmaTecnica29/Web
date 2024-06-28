@@ -11,7 +11,7 @@ if (isset($_POST['submit']) && !hash_equals($_SESSION['csrf'], $_POST['csrf'])) 
 $error = false;
 
 
-$stmt = $pdo->query("
+$stmt = $conexion->query("
 SELECT 
 recurso.*, 
 IF(
