@@ -52,9 +52,7 @@ if ($error) {
 <div class="container">
   <div class="row">
     <div class="col-md-12">
-      <a href="../../index.php" class="btn btn-primary mt-4">Volver al inicio</a>
       <a href="agregarMaterial.php" class="btn btn-primary mt-4">Agregar material</a>
-      <a href="visual.php" class="btn btn-primary mt-4">Forma visual</a>
       <hr>
 
       <form method="post" class="form-inline">
@@ -62,7 +60,6 @@ if ($error) {
           <input type="text" id="apellido" name="apellido" placeholder="Buscar por Id" class="form-control">
         </div>
         <input name="csrf" type="hidden" value="<?php echo escapar($_SESSION['csrf']); ?>"><br>
-        <button type="submit" name="submit" class="btn btn-primary">Ver resultados</button>
       </form>
     </div>
   </div>
