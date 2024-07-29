@@ -26,29 +26,56 @@ $error = false;
 
 
 $stmt = $conexion->query("
-SELECT 
-recurso.*, 
-IF(
-    (registros.opcion = 'Accepted' AND registros.devuelto IN ('Denied', 'Pending')), 
-    'Ocupado', 
-    'Libre'
-) as recurso_estado, 
-IF(
-    (registros.opcion = 'Accepted' AND registros.devuelto IN ('Denied', 'Pending')), 
-    users.user_name, 
-    'N/A'
-) as user_name
+SELECT recurso.*, 
+    IF(
+        (registros.opcion = 'Accepted' AND registros.devuelto IN ('Denied', 'Pending')), 
+        'Ocupado', 
+        'Libre'
+    ) as recurso_estado, 
+    IF(
+        (registros.opcion = 'Accepted' AND registros.devuelto IN ('Denied', 'Pending')), 
+        users.user_name, 
+        'N/A'
+    ) as user_name
 FROM recurso 
 LEFT JOIN registros 
-ON recurso.recurso_id = registros.idrecurso 
-AND registros.idregistro = (
-    SELECT MAX(idregistro) 
-    FROM registros AS r
-    WHERE r.idrecurso = recurso.recurso_id
-)
+    ON recurso.recurso_id = registros.idrecurso 
+    AND registros.idregistro = (
+        SELECT MAX(idregistro) 
+        FROM registros AS r
+        WHERE r.idrecurso = recurso.recurso_id
+    )
 LEFT JOIN users 
-ON registros.idusuario = users.user_id 
+    ON registros.idusuario = users.user_id 
+WHERE recurso.recurso_id LIKE '%A'
 ORDER BY recurso.recurso_id
+
+");
+$stmtB = $conexion->query("
+SELECT recurso.*, 
+    IF(
+        (registros.opcion = 'Accepted' AND registros.devuelto IN ('Denied', 'Pending')), 
+        'Ocupado', 
+        'Libre'
+    ) as recurso_estado, 
+    IF(
+        (registros.opcion = 'Accepted' AND registros.devuelto IN ('Denied', 'Pending')), 
+        users.user_name, 
+        'N/A'
+    ) as user_name
+FROM recurso 
+LEFT JOIN registros 
+    ON recurso.recurso_id = registros.idrecurso 
+    AND registros.idregistro = (
+        SELECT MAX(idregistro) 
+        FROM registros AS r
+        WHERE r.idrecurso = recurso.recurso_id
+    )
+LEFT JOIN users 
+    ON registros.idusuario = users.user_id 
+WHERE recurso.recurso_id LIKE '%B'
+ORDER BY recurso.recurso_id
+
 ");
 
 
@@ -91,7 +118,7 @@ ORDER BY recurso.recurso_id
 <?php 
         while ($row = $stmt->fetch()) {
             $color = $row['recurso_estado'] == 'Libre' ? '#d4edda' : '#f8d7da';
-            echo "<div class='netbook' 
+            echo "<div class='netbook'
                      data-recurso_id='{$row['recurso_id']}' 
                      data-recurso_nombre='{$row['recurso_nombre']}' 
                      data-recurso_estado='{$row['recurso_estado']}' 
@@ -106,8 +133,22 @@ ORDER BY recurso.recurso_id
 </div>
 
 <div id="opcion2Div" class="hidden">
-<p style='color:red'> Contenido del carrito 2aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa </p>
-    
+<div style='display:flex; flex-wrap:wrap; background-color: white; border-radius: 10px; margin-top: 25px;'>
+<?php 
+        while ($row = $stmtB->fetch()) {
+            $color = $row['recurso_estado'] == 'Libre' ? '#d4edda' : '#f8d7da';
+            echo "<div class='netbook'
+                     data-recurso_id='{$row['recurso_id']}' 
+                     data-recurso_nombre='{$row['recurso_nombre']}' 
+                     data-recurso_estado='{$row['recurso_estado']}' 
+                     data-reservado-por='{$row['user_name']}' 
+                     style='background-color: {$color}; width: 50px; height: 50px; margin: 10px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.15); display: flex; justify-content: center; align-items: center; text-align: center;'>
+                    <img src='netbook.png' alt='Netbook' style='width: 50%;'>
+                    <p>{$row['recurso_nombre']}</p>
+                  </div>";
+        }
+        ?>
+    </div>   
 </div>
 
 <div id="opcion3Div" class="hidden">

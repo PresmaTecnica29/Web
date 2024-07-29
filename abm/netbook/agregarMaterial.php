@@ -69,7 +69,7 @@ if (isset($resultado)) {
       <h2 class="mt-4" style='margin-bottom:10px';>Agregar un material</h2>
       <form method="post">
         <div class="form-group">
-          <label for="recurso_id">Codigo del recuros</label>
+          <label for="recurso_id">Codigo del recurso</label>
           <input type="text" name="recurso_id" id="recurso_id" class="form-control" required>
         </div>
         <div class="form-group">
