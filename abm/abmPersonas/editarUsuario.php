@@ -120,7 +120,7 @@ if (isset($alumno) && $alumno) {
             <input type="email" name="email" id="email" value="<?= escapar($alumno['user_email']) ?>" class="form-control">
           </div>
           <br>
-          <div class="form-group">
+          <div class="form-group" style='margin-bottom:10px;'>
             <label for="rol">Rol</label>
             <select name="rol" id="rol" class="input">
               <?php foreach ($datos as $dato) : ?>
@@ -131,7 +131,7 @@ if (isset($alumno) && $alumno) {
           <div class="form-group">
             <input name="csrf" type="hidden" value="<?php echo escapar($_SESSION['csrf']); ?>">
             <input type="submit" name="submit" class="btn btn-primary" value="Actualizar">
-            <a class="btn btn-primary" href="abm.php">Regresar</a>
+            <a class="btn btn-primary" href="">Regresar</a>
           </div>
         </form>
       </div>

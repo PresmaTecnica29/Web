@@ -52,7 +52,9 @@ if ($error) {
 <div class="container">
   <div class="row">
     <div class="col-md-12">
+      <a href="../../index.php" class="btn btn-primary mt-4">Volver al inicio</a>
       <a href="agregarMaterial.php" class="btn btn-primary mt-4">Agregar material</a>
+      <a href="visual.php" class="btn btn-primary mt-4">Forma visual</a>
       <hr>
 
       <form method="post" class="form-inline">
@@ -76,7 +78,7 @@ if ($error) {
             <th>Material</th>
             <th>Estado</th>
             <th>Area</th>
-          </t
+          </tr>
         </thead>
         <tbody>
           <?php
@@ -91,6 +93,7 @@ if ($error) {
                 <td>
                   <a href="<?= 'generar_qr.php?id=' . escapar($fila["recurso_id"] . '&nombre=' . escapar(($fila["recurso_nombre"]))) ?>">Generar Qr</a>
                   <a href="<?= 'abrirqr.php?nombre=' . escapar($fila["recurso_nombre"]) ?>">Abrir Qr</a>
+                  
                 </td>
               </tr>
           <?php

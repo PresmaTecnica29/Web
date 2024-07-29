@@ -27,7 +27,7 @@ try {
   $error = $error->getMessage();
 }
 
-$titulo = isset($_POST['apellido']) ? 'Lista de alumnos (' . $_POST['apellido'] . ')' : 'Lista de alumnos';
+$titulo = isset($_POST['apellido']) ? 'Lista de Alumnos (' . $_POST['apellido'] . ')' : 'Lista de Alumnos';
 ?>
 
 <?php include "../template/header.php"; ?>
@@ -52,7 +52,6 @@ if ($error) {
   <div class="row">
     <div class="col-md-12">
       <a href="agregarUsuario.php" class="btn btn-primary mt-4">Crear alumno</a>
-      
       <hr>
 
       <form method="post" class="form-inline">

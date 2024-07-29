@@ -1,4 +1,4 @@
-/* .modal {
+ .modal {
     display: none; 
     position: fixed; 
     z-index: 1; 
@@ -65,5 +65,14 @@ html, body{
     width: 80px !important;
     flex-wrap: wrap;
     font-size: 13px;
+    text-align: center;
+    float: none;
+    margin-left:auto;
+    margin-right:auto;
+    margin-top:auto;
+    margin-bottom:auto;
+    vertical-align: bottom;
+    background-color: red;
+   
 }
-*/
+
