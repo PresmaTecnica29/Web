@@ -13,11 +13,10 @@ if (isset($_POST['submit'])) {
     'mensaje' => 'El usuario ' . escapar($_POST['nombre']) . ' ha sido agregado con éxito'
   ];
 
-  $config = include '../db.php';
+  $config = include '../../config/db.php';
 
   try {
-    $dsn = 'mysql:host=' . $config['db']['host'] . ';dbname=' . $config['db']['name'];
-    $conexion = new PDO($dsn, $config['db']['user'], $config['db']['pass'], $config['db']['options']);
+    $conexion = conexion();
 
     $password_encriptada = password_hash($_POST['password'], PASSWORD_DEFAULT);
 
@@ -36,28 +35,27 @@ if (isset($_POST['submit'])) {
 
     $ultimoIdInsertado = $conexion->lastInsertId();
 
-    //$consultaSQL = "INSERT INTO user_security (user_id, must_change_password) VALUES (:user_id, TRUE)";
+    $consultaSQL = "INSERT INTO user_security (user_id, must_change_password) VALUES (:user_id, TRUE)";
     $sentencia = $conexion->prepare($consultaSQL);
     $sentencia->execute(['user_id' => $ultimoIdInsertado]);
-    
-  } catch(PDOException $error) {
+  } catch (PDOException $error) {
     $resultado['error'] = true;
     $resultado['mensaje'] = $error->getMessage();
   }
 }
 
-require_once("../db.php");
-$conexion=conexion();
-$statement=$conexion->prepare("SELECT * FROM rol");
+require_once("../../config/db.php");
+$conexion = conexion();
+$statement = $conexion->prepare("SELECT * FROM rol");
 $statement->execute();
-$datos=$statement->fetchAll();
+$datos = $statement->fetchAll();
 ?>
 
 <?php include "../template/header.php"; ?>
 
 <?php
 if (isset($resultado)) {
-  ?>
+?>
   <div class="container mt-3">
     <div class="row">
       <div class="col-md-12">
@@ -67,7 +65,7 @@ if (isset($resultado)) {
       </div>
     </div>
   </div>
-  <?php
+<?php
 }
 ?>
 
@@ -104,7 +102,7 @@ if (isset($resultado)) {
         <div class="form-group">
           <input name="csrf" type="hidden" value="<?php echo escapar($_SESSION['csrf']); ?>">
           <input type="submit" name="submit" class="btn btn-primary" value="Enviar">
-          <a href="../abmPersonas/abmPersonas.php" class="btn btn-primary">Regresar al inicio</a>
+          <a class="btn btn-primary" href="abm.php">Regresar al inicio</a>
         </div>
       </form>
     </div>

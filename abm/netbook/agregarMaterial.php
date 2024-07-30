@@ -13,11 +13,10 @@ if (isset($_POST['submit'])) {
     'mensaje' => 'La ' . escapar($_POST['recurso_nombre']) . ' ha sido agregado con éxito'
   ];
 
-  $config = include('../db.php');
+  $config = include('../../config/db.php');
 
   try {
-    $dsn = 'mysql:host=' . $config['db']['host'] . ';dbname=' . $config['db']['name'];
-    $conexion = new PDO($dsn, $config['db']['user'], $config['db']['pass'], $config['db']['options']);
+    $conexion = conexion();
 
     $recurso = [
       "recurso_id"   => $_POST['recurso_id'],
@@ -36,7 +35,7 @@ if (isset($_POST['submit'])) {
     $resultado['mensaje'] = $error->getMessage();
   }
 }
-require_once("../db.php");
+require_once('../../config/db.php');
 $conexion = conexion();
 $statement = $conexion->prepare("SELECT * FROM tipo_recurso");
 $statement->execute();
@@ -67,18 +66,17 @@ if (isset($resultado)) {
 <div class="container">
   <div class="row">
     <div class="col-md-12">
-      <h2 class="mt-4">Agregar un material</h2>
-      <hr>
+      <h2 class="mt-4" style='margin-bottom:10px';>Agregar un material</h2>
       <form method="post">
         <div class="form-group">
-          <label for="recurso_id">Codigo del recuros</label>
+          <label for="recurso_id">Codigo del recurso</label>
           <input type="text" name="recurso_id" id="recurso_id" class="form-control" required>
         </div>
         <div class="form-group">
           <label for="recurso_nombre">Nombre del recurso</label>
           <input type="text" name="recurso_nombre" id="recurso_nombre" class="form-control" required>
         </div>
-        <div class="form-group">
+        <div class="form-group" style='margin-top: 20px'>
           <label for="recurso_estado">Estado</label>
           <select name="recurso_estado" id="recurso_estado" class="input" required>
           <option value="" disabled hidden selected >Estado</option>
@@ -99,8 +97,8 @@ if (isset($resultado)) {
         <br>
         <div class="form-group">
           <input name="csrf" type="hidden" value="<?php echo escapar($_SESSION['csrf']); ?>">
-          <input type="submit" name="submit" class="btn btn-primary" value="Enviar">
-          <a class="btn btn-primary" href="abm.php">Regresar al inicio</a>
+          <a class="btn btn-primary" href="abm.php" style= 'background-color: red'>Cancelar</a>
+          <input type="submit" name="submit" class="btn btn-primary" value="Aceptar" style='margin-left:1px; background-color: green'>
         </div>
       </form>
     </div>

@@ -37,6 +37,7 @@ if (isset($_POST['submit'])) {
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -78,11 +79,11 @@ if (isset($_POST['submit'])) {
       </div>
     </div>
   </div>
-  <footer class="bg-light text-center text-lg-start" style="position: fixed; bottom: 0px; width:100%;">
+  <footer class="bg-light text-center text-lg-start">
         <!-- Copyright -->
         <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
-            © 2023 Copyright:
-            <a class="text-dark" href="https://mdbootstrap.com/">Presma</a>
+            © 2024 Copyright:
+            <a class="text-dark" href="https://www.tecnica29de6.edu.ar/">Escuela Tecnica N°29 DE 6 Reconquista de Buenos Aires</a>
         </div>
         <!-- Copyright -->
     </footer>

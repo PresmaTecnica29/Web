@@ -1,3 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Cambiar Estado</title>
+    <script>
+        function cambiarEstado(netbookId) {
+            fetch('?' + new URLSearchParams({
+                action: 'cambiar_estado',
+                id: netbookId,
+                estado: 3
+            }), {
+                method: 'GET'
+            })
+            .then(response => response.text())
+            .then(data => {
+                alert(data);
+                console.log(data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+</head>
+<body>
+
+    <?php
+    // Verifica si se ha enviado una solicitud para cambiar el estado
+    if (isset($_GET['action']) && $_GET['action'] == 'cambiar_estado') {
+        
+        // Obtener datos del GET
+        $id = intval($_GET['id']);
+        $estado = intval($_GET['estado']);
+
+        // Preparar y ejecutar la consulta SQL
+        $sql = "UPDATE netbooks SET recurso_estado = ? WHERE id = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("ii", $estado, $id);
+
+        if ($stmt->execute()) {
+            echo "Estado cambiado exitosamente";
+        } else {
+            echo "Error al cambiar el estado: " . $conn->error;
+        }
+        // Terminar el script para evitar que se ejecute el HTML después de la solicitud AJAX
+        exit();
+    }
+    ?>
+    
 <?php
 include '../funciones.php';
 
@@ -7,12 +57,11 @@ if (isset($_POST['submit']) && !hash_equals($_SESSION['csrf'], $_POST['csrf'])) 
 }
 
 $error = false;
-$config = include('../db.php');
+$config = include('../../config/db.php');
 
 
 try {
-  $dsn = 'mysql:host=' . $config['db']['host'] . ';dbname=' . $config['db']['name'];
-  $conexion = new PDO($dsn, $config['db']['user'], $config['db']['pass'], $config['db']['options']);
+  $conexion = conexion();
 
   if (isset($_POST['apellido'])) {
     $consultaSQL = "SELECT recurso.recurso_id, recurso.recurso_nombre, estado.descripcion_estado, area.area_nombre FROM recurso INNER JOIN area ON recurso.recurso_tipo = area.id inner join estado on recurso.recurso_estado = estado.idEstado AND recurso.recurso_id LIKE '%" . $_POST['apellido'] . "%' limit 100;";
@@ -53,7 +102,7 @@ if ($error) {
 <div class="container">
   <div class="row">
     <div class="col-md-12">
-      <a href="/public/index.php" class="btn btn-primary mt-4">Volver al inicio</a>
+    
       <a href="agregarMaterial.php" class="btn btn-primary mt-4">Agregar material</a>
       <a href="visual.php" class="btn btn-primary mt-4">Forma visual</a>
       <hr>
@@ -63,7 +112,6 @@ if ($error) {
           <input type="text" id="apellido" name="apellido" placeholder="Buscar por Id" class="form-control">
         </div>
         <input name="csrf" type="hidden" value="<?php echo escapar($_SESSION['csrf']); ?>"><br>
-        <button type="submit" name="submit" class="btn btn-primary">Ver resultados</button>
       </form>
     </div>
   </div>
@@ -80,7 +128,7 @@ if ($error) {
             <th>Material</th>
             <th>Estado</th>
             <th>Area</th>
-            </tr>
+          </tr>
         </thead>
         <tbody>
           <?php
@@ -95,13 +143,18 @@ if ($error) {
                 <td>
                   <a href="<?= 'generar_qr.php?id=' . escapar($fila["recurso_id"] . '&nombre=' . escapar(($fila["recurso_nombre"]))) ?>">Generar Qr</a>
                   <a href="<?= 'abrirqr.php?nombre=' . escapar($fila["recurso_nombre"]) ?>">Abrir Qr</a>
+
+                  <!-- Botón para cambiar el estado de una netbook con ID 1 -->
+                  <button onclick="cambiarEstado(1)">Poner en Mantenimiento</button>
+                  
                 </td>
               </tr>
           <?php
+          
             }
           }
           ?>
-        <tbody>
+        </body>
       </table>
     </div>
   </div>

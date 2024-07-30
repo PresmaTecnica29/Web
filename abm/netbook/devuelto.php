@@ -7,18 +7,16 @@ if (isset($_POST['submit']) && !hash_equals($_SESSION['csrf'], $_POST['csrf'])) 
 }
 
 $error = false;
-$config = include('../db.php');
+$config = include('../../config/db.php');
 
 
 try {
-  $dsn = 'mysql:host=' . $config['db']['host'] . ';dbname=' . $config['db']['name'];
-  $conexion = new PDO($dsn, $config['db']['user'], $config['db']['pass'], $config['db']['options']);
-
+  $conexion = conexion();
 
   if (isset($_POST['apellido'])) {
-    $consultaSQL = "SELECT registros.idregistro, users.user_name, DATE_FORMAT(registros.inicio_prestamo, '%d/%m %H:%i') AS inicio_prestamo, DATE_FORMAT(horario.horario, '%H:%i') AS fin_prestamo, COALESCE(registros.fechas_extendidas, '----') AS fechas_extendidas, recurso.recurso_nombre FROM registros INNER JOIN users ON registros.idusuario = users.user_id INNER JOIN recurso ON recurso.recurso_id = registros.idrecurso INNER JOIN horario ON horario.id = registros.fin_prestamo WHERE registros.opcion <> 'Pending' and registros.devuelto = 1 ORDER BY registros.idregistro desc;";
+    $consultaSQL = "SELECT registros.idregistro, users.user_name, DATE_FORMAT(registros.inicio_prestamo, '%d/%m %H:%i') AS inicio_prestamo, DATE_FORMAT(horario.horario, '%H:%i') AS fin_prestamo, COALESCE(registros.fechas_extendidas, '----') AS fechas_extendidas, recurso.recurso_nombre FROM registros INNER JOIN users ON registros.idusuario = users.user_id INNER JOIN recurso ON recurso.recurso_id = registros.idrecurso INNER JOIN horario ON horario.id = registros.fin_prestamo WHERE registros.opcion <> 'Pending' AND registros.devuelto = 1 AND users.user_name LIKE '%" . $_POST['apellido'] . "%' ORDER BY registros.idregistro DESC";
   } else {
-    $consultaSQL = "SELECT registros.idregistro, users.user_name, DATE_FORMAT(registros.inicio_prestamo, '%d/%m %H:%i') AS inicio_prestamo, DATE_FORMAT(horario.horario, '%H:%i') AS fin_prestamo, COALESCE(registros.fechas_extendidas, '----') AS fechas_extendidas, recurso.recurso_nombre FROM registros INNER JOIN users ON registros.idusuario = users.user_id INNER JOIN recurso ON recurso.recurso_id = registros.idrecurso INNER JOIN horario ON horario.id = registros.fin_prestamo WHERE registros.opcion <> 'Pending' and registros.devuelto = 1 ORDER BY registros.idregistro desc ;";
+    $consultaSQL = "SELECT registros.idregistro, users.user_name, DATE_FORMAT(registros.inicio_prestamo, '%d/%m %H:%i') AS inicio_prestamo, DATE_FORMAT(horario.horario, '%H:%i') AS fin_prestamo, COALESCE(registros.fechas_extendidas, '----') AS fechas_extendidas, recurso.recurso_nombre FROM registros INNER JOIN users ON registros.idusuario = users.user_id INNER JOIN recurso ON recurso.recurso_id = registros.idrecurso INNER JOIN horario ON horario.id = registros.fin_prestamo WHERE registros.opcion <> 'Pending' and registros.devuelto = 1 ORDER BY registros.idregistro desc ";
   }
 
   $sentencia = $conexion->prepare($consultaSQL);
@@ -57,7 +55,6 @@ if ($error) {
 <div class="container">
   <div class="row">
     <div class="col-md-12">
-      <a href="/public/index.php" class="btn btn-primary mt-4">Volver al inicio</a>
       <a href="agregarMaterial.php" class="btn btn-primary mt-4">Agregar material</a>
       <a href="visual.php" class="btn btn-primary mt-4">Forma visual</a>
       <a href="abm.php" class="btn btn-primary mt-4">Ver activos</a>
@@ -65,10 +62,9 @@ if ($error) {
 
       <form method="post" class="form-inline">
         <div class="form-group mr-3">
-          <input type="text" id="apellido" name="apellido" placeholder="Buscar por alumno" class="form-control">
+          <input type="text" id="apellido" name="apellido" placeholder="Buscar por Apellido" class="form-control">
         </div>
         <input name="csrf" type="hidden" value="<?php echo escapar($_SESSION['csrf']); ?>"><br>
-        <button type="submit" name="submit" class="btn btn-primary">Ver resultados</button>
       </form>
     </div>
   </div>
@@ -99,7 +95,7 @@ if ($error) {
               <tr>
                 <td><?php echo escapar($fila["idregistro"]); ?></td>
                 <td><?php echo escapar($fila["user_name"]); ?></td>
-                <td><?php echo escapar(($fila["inicio_prestamo"])); ?></td>
+                <td><?php echo escapar($fila["inicio_prestamo"]); ?></td>
                 <td><?php echo escapar($fila["fin_prestamo"]); ?></td>
                 <td><?php echo escapar($fila["fechas_extendidas"]); ?></td>
                 <td><?php echo escapar($fila["recurso_nombre"]); ?></td>

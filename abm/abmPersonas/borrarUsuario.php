@@ -6,7 +6,7 @@ if (isset($_POST['submit']) && !hash_equals($_SESSION['csrf'], $_POST['csrf'])) 
 }
 
 
-$config = include '../db.php';
+$config = include '../../config/db.php';
 
 $resultado = [
   'error' => false,
@@ -15,8 +15,7 @@ $resultado = [
 
 if (isset($_POST['confirmar'])) {
   try {
-    $dsn = 'mysql:host=' . $config['db']['host'] . ';dbname=' . $config['db']['name'];
-    $conexion = new PDO($dsn, $config['db']['user'], $config['db']['pass'], $config['db']['options']);
+    $conexion = conexion();
 
     $id = $_POST['id'];
     $consultaSQL = "DELETE FROM users WHERE user_id = :id";
@@ -27,8 +26,7 @@ if (isset($_POST['confirmar'])) {
 
     header('Location: abmPersonas.php');
     exit();
-
-  } catch(PDOException $error) {
+  } catch (PDOException $error) {
     $resultado['error'] = true;
     $resultado['mensaje'] = $error->getMessage();
   }
@@ -40,16 +38,16 @@ if (isset($_POST['confirmar'])) {
 <div class="container mt-2">
   <div class="row">
     <div class="col-md-12">
-      <?php if ($resultado['error']): ?>
-      <div class="alert alert-danger" role="alert">
-        <?= $resultado['mensaje'] ?>
-      </div>
+      <?php if ($resultado['error']) : ?>
+        <div class="alert alert-danger" role="alert">
+          <?= $resultado['mensaje'] ?>
+        </div>
       <?php endif; ?>
       <form method="post">
         <input type="hidden" name="id" value="<?= $_GET['id'] ?>" />
         <p>¿Estás seguro de que quieres eliminar este usuario?</p>
         <button type="submit" name="confirmar" class="btn btn-danger">Sí, eliminar usuario</button>
-        <a href="abmPersonas.php" class="btn btn-secondary">No, volver al inicio</a>
+        <a href="abmPersonas.php" class="btn btn-secondary">No, regresar</a>
       </form>
     </div>
   </div>
