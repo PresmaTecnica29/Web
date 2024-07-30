@@ -104,7 +104,7 @@ ORDER BY recurso.recurso_id
         <div style='background-color: white; display: flex; flex-wrap: wrap; margin-top:35px; margin-left:110px;'>
         
         <form id="miFormulario" style='margin-top:10px;'>
-  <label for="opciones" style="color:">Selecciona una opción:</label>
+  <label for="opciones" >Selecciona una opción:</label>
   <select id="opciones" name="opciones">
     <option value="opcion1">Carrito 1</option>
     <option value="opcion2">Carrito 2</option>
