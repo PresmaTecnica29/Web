@@ -41,9 +41,9 @@ if ($conexion) {
   <link rel="icon" href="views/templates/logofinal.png" type="image/png">
   <title>Inico de sesion</title>
 </head>
-
-<body>
-  <div id="formulario">
+</form>
+<body>  
+<div id="formulario">
     <form class="form card" method="post" action="register.php" name="registerform">
       <div class="card_header">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
@@ -80,11 +80,11 @@ if ($conexion) {
         <label for="verfcode">verfcode</label>
         <a href="views\verificacion.php" id="verificacion">VERIFICACION
       </div>
-      
       <div class="field">
-        <input type="submit" name="register" value="Register" class="input" />
+        <input type="submit" name="register" value="Register" class="input"/>
       </div>
       <a href="index.php" id="back">Volver a la pagina de inicio de sesion</a>
+      </form>
     </form>
   </div>
 </body>
