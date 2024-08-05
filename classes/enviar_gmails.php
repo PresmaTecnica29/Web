@@ -19,7 +19,7 @@ function sendVerificationCode($userEmail, $code, $username) {
         $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
         $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
         $mail->Username   = 'presma@tecnica29de6.edu.ar';                     //SMTP username
-        $mail->Password   = 'zilpgelenyajtkjt';                               //SMTP password
+        $mail->Password   = '';                               //SMTP password
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
         $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
     
@@ -29,7 +29,7 @@ function sendVerificationCode($userEmail, $code, $username) {
     
         //Content
         $mail->isHTML(true);                                  //Set email format to HTML
-        $mail->Subject = 'Tu codigo de verificacion Presma';
+        $mail->Subject = 'Tu codigo de verificacion PRESMA';
         $mail->Body    = 'Tu codigo de verificacion es ' . $code;
         $mail->AltBody = 'Tu codigo de verificacion es ' . $code;
     
