@@ -75,4 +75,17 @@ html, body{
     background-color: red;
    
 }
-
+.boton {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: white;
+    background-color: #0d6efd;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 5px;
+  }
+  .boton:hover {
+    background-color: #5585e6;
+    color:white;
+  }

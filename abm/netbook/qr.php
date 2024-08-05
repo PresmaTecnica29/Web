@@ -2,51 +2,11 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Cambiar Estado</title>
-    <script>
-        function cambiarEstado(netbookId) {
-            fetch('?' + new URLSearchParams({
-                action: 'cambiar_estado',
-                id: netbookId,
-                estado: 3
-            }), {
-                method: 'GET'
-            })
-            .then(response => response.text())
-            .then(data => {
-                alert(data);
-                console.log(data);
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-        }
-    </script>
+    <title>Recursos</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+  
 </head>
 <body>
-
-    <?php
-    // Verifica si se ha enviado una solicitud para cambiar el estado
-    if (isset($_GET['action']) && $_GET['action'] == 'cambiar_estado') {
-        
-        // Obtener datos del GET
-        $id = intval($_GET['id']);
-        $estado = intval($_GET['estado']);
-
-        // Preparar y ejecutar la consulta SQL
-        $sql = "UPDATE netbooks SET recurso_estado = ? WHERE id = ?";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("ii", $estado, $id);
-
-        if ($stmt->execute()) {
-            echo "Estado cambiado exitosamente";
-        } else {
-            echo "Error al cambiar el estado: " . $conn->error;
-        }
-        // Terminar el script para evitar que se ejecute el HTML después de la solicitud AJAX
-        exit();
-    }
-    ?>
     
 <?php
 include '../funciones.php';
@@ -141,11 +101,10 @@ if ($error) {
                 <td><?php echo escapar($fila["descripcion_estado"]); ?></td>
                 <td><?php echo escapar($fila["area_nombre"]); ?></td>
                 <td>
-                  <a href="<?= 'generar_qr.php?id=' . escapar($fila["recurso_id"] . '&nombre=' . escapar(($fila["recurso_nombre"]))) ?>">Generar Qr</a>
-                  <a href="<?= 'abrirqr.php?nombre=' . escapar($fila["recurso_nombre"]) ?>">Abrir Qr</a>
-
-                  <!-- Botón para cambiar el estado de una netbook con ID 1 -->
-                  <button onclick="cambiarEstado(1)">Poner en Mantenimiento</button>
+                  <a href="<?= 'generar_qr.php?id=' . escapar($fila["recurso_id"] . '&nombre=' . escapar(($fila["recurso_nombre"]))) ?>" class="boton" title="Crea un nuevo QR para esta netbook" style='margin-left:10px;'>Generar Qr</a>
+                  <a href="<?= 'abrirqr.php?nombre=' . escapar($fila["recurso_nombre"]) ?>" class="boton" title="Muestra el QR actual de esta netbook" style='margin-left:10px;'>Abrir Qr</a>
+                  <a href="<?= 'mantenimientonetbook.php?nombre=' . escapar($fila["recurso_nombre"]) ?>" class="boton" title="Cambia el estado de la netbook a MANTENIMIENTO" style='margin-left:10px;'>Poner en Mantenimiento</a>
+                  <a href="<?= 'habilitarnetbook.php?nombre=' . escapar($fila["recurso_nombre"]) ?>" class="boton" title="Cambia el estado de la netbook a LIBRE" style='margin-left:10px;'>Habilitar</a>
                   
                 </td>
               </tr>
