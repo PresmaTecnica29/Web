@@ -2,37 +2,41 @@
 <?php
 // Incluir los archivos necesarios de PHPMailer
 use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
+
 
 require 'C:\wamp64\www\Web\abm\PHPMailer-master\src\Exception.php';
 require 'C:\wamp64\www\Web\abm\PHPMailer-master\src\PHPMailer.php';
 require 'C:\wamp64\www\Web\abm\PHPMailer-master\src\SMTP.php';
 
-function sendVerificationCode($userEmail, $code) {
+function sendVerificationCode($userEmail, $code, $username) {
     $mail = new PHPMailer(true);
     try {
-        // Configuración del servidor SMTP
-        $mail->isSMTP();
-        $mail->Host = 'smtp.gmail.com'; // Cambia esto al servidor SMTP
-        $mail->SMTPAuth = true;
-        $mail->Username = 'presma@tecnica29de6.edu.ar'; // Tu dirección de correo
-        $mail->Password = 'Presma1234!'; // Tu contraseña
-        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-        $mail->Port = 587;
-
-        // Remitente y destinatario
-        $mail->setFrom('presma@tecnica29de6.edu.ar', 'Presma');
-        $mail->addAddress($userEmail);
-
-        // Contenido del correo
-        $mail->isHTML(true);
-        $mail->Subject = 'Código de Verificación para la pagina PRESMA';
-        $mail->Body = 'Tu código de verificación es: ' . $code;
-
+        //Server settings
+        $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
+        $mail->isSMTP();                                            //Send using SMTP
+        $mail->Host       = 'smtp.email.com';                     //Set the SMTP server to send through
+        $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
+        $mail->Username   = 'presma@tecnica29de6.edu.ar';                     //SMTP username
+        $mail->Password   = 'zilpgelenyajtkjt';                               //SMTP password
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
+        $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+    
+        //Recipients
+        $mail->setFrom('presma@tecnica29de6.edu.ar', 'PRESMA');
+        $mail->addAddress($userEmail, $username);     //Add a recipient
+    
+        //Content
+        $mail->isHTML(true);                                  //Set email format to HTML
+        $mail->Subject = 'Tu codigo de verificacion Presma';
+        $mail->Body    = 'Tu codigo de verificacion es ' + $code;
+        $mail->AltBody = 'Tu codigo de verificacion es ' + $code;
+    
         $mail->send();
-        echo 'Correo de verificación enviado.';
+        echo 'Tu codigo de verificacion fue enviado al gmail que ingresaste';
     } catch (Exception $e) {
-        echo 'El correo no pudo ser enviado. Mailer Error: ', $mail->ErrorInfo;
+        echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
     }
 }
 function generateVerificationCode($length = 6) {
