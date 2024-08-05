@@ -10,7 +10,7 @@ require 'C:\wamp64\www\Web\abm\PHPMailer-master\src\Exception.php';
 require 'C:\wamp64\www\Web\abm\PHPMailer-master\src\PHPMailer.php';
 require 'C:\wamp64\www\Web\abm\PHPMailer-master\src\SMTP.php';
 
-function sendVerificationCode($userEmail, $code, $username) {
+function sendVerificationCode($userEmail, $code,) {
     $mail = new PHPMailer(true);
     try {
         //Server settings
@@ -19,13 +19,13 @@ function sendVerificationCode($userEmail, $code, $username) {
         $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
         $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
         $mail->Username   = 'presma@tecnica29de6.edu.ar';                     //SMTP username
-        $mail->Password   = '';                               //SMTP password
+        $mail->Password   = 'zilpgelenyajtkjt';                               //SMTP password
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
         $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
     
         //Recipients
         $mail->setFrom('presma@tecnica29de6.edu.ar', 'PRESMA');
-        $mail->addAddress($userEmail, $username);     //Add a recipient
+        $mail->addAddress($userEmail, 'Usuario');     //Add a recipient
     
         //Content
         $mail->isHTML(true);                                  //Set email format to HTML
@@ -40,7 +40,7 @@ function sendVerificationCode($userEmail, $code, $username) {
     }
 }
 function generateVerificationCode($length = 6) {
-    return substr(str_shuffle('0123456789'), 0, $length);
+    return substr(str_shuffle('123456789'), 0, $length);
 }
 
 function storeVerificationCode($userId, $code) {

@@ -98,13 +98,17 @@ class Registration
 
                 if ($query_check_user_name->num_rows == 1) {
                     $this->errors[] = "Perdon, este nombre de usuario/email ya estan en uso.";}
-                    else{
+                    else {
                 $sql = "INSERT INTO users (`user_name`, `user_password_hash`, `user_email`,`idRol` ) VALUES ('$user_name','$user_password_hash','$user_email','$user_rol')";
                 $query_new_user_insert = $this->db_connection->query($sql);  
                 $code = generateVerificationCode();
-                sendVerificationCode($user_email, $code, $user_name);
-
-            }
+                sendVerificationCode($user_email, $code);
+                $consultaid = "SELECT user_id FROM users WHERE user_email = '$user_email'";
+                $query_check_user_id = $this->db_connection->query($consultaid);
+                $consultaid2 = $query_check_user_id->fetch_assoc();
+                $userid = $consultaid2["user_id"];
+                storeVerificationCode($userid, $code);
+               }
             } else {
                 $this->errors[] = "Sorry, no database connection.";
             }
