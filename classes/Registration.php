@@ -100,21 +100,10 @@ class Registration
                     $this->errors[] = "Perdon, este nombre de usuario/email ya estan en uso.";}
                     else{
                 $sql = "INSERT INTO users (`user_name`, `user_password_hash`, `user_email`,`idRol` ) VALUES ('$user_name','$user_password_hash','$user_email','$user_rol')";
-                $query_new_user_insert = $this->db_connection->query($sql);
-                
-                $sql = "SELECT user_id FROM users WHERE user_name = '" . $user_name . "' OR user_email = '" . $user_email . "';";
-                $query_get_user_id = $this->db_connection->query($sql);
-
-                $sql = "SELECT user_email FROM users WHERE user_name = '" . $user_name . "' OR user_email = '" . $user_email . "';";
-                $query_get_user_email = $this->db_connection->query($sql);
-                
+                $query_new_user_insert = $this->db_connection->query($sql);  
                 $code = generateVerificationCode();
+                sendVerificationCode($user_email, $code, $user_name);
 
-                storeVerificationCode($query_get_user_id, $code);
-
-                sendVerificationCode($query_get_user_email, $code, $user_name);
-                
-                
             }
             } else {
                 $this->errors[] = "Sorry, no database connection.";

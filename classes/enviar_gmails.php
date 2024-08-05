@@ -16,7 +16,7 @@ function sendVerificationCode($userEmail, $code, $username) {
         //Server settings
         $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
         $mail->isSMTP();                                            //Send using SMTP
-        $mail->Host       = 'smtp.email.com';                     //Set the SMTP server to send through
+        $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
         $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
         $mail->Username   = 'presma@tecnica29de6.edu.ar';                     //SMTP username
         $mail->Password   = 'zilpgelenyajtkjt';                               //SMTP password
@@ -30,11 +30,11 @@ function sendVerificationCode($userEmail, $code, $username) {
         //Content
         $mail->isHTML(true);                                  //Set email format to HTML
         $mail->Subject = 'Tu codigo de verificacion Presma';
-        $mail->Body    = 'Tu codigo de verificacion es ' + $code;
-        $mail->AltBody = 'Tu codigo de verificacion es ' + $code;
+        $mail->Body    = 'Tu codigo de verificacion es ' . $code;
+        $mail->AltBody = 'Tu codigo de verificacion es ' . $code;
     
         $mail->send();
-        echo 'Tu codigo de verificacion fue enviado al gmail que ingresaste';
+        echo 'Tu codigo de verificacion fue enviado al gmail que ingresas';
     } catch (Exception $e) {
         echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
     }
