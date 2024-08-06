@@ -71,7 +71,8 @@
           data: {
             status: status,
             id: notificationId, // Cambia esta línea para usar notificationId
-            hora: $('#horario').val()
+            hora: $('#horario').val(),
+            nombre:$('#notificationMessageResource').text()
           },
           success: function(response) {
             $('#notificationMessage').text(response);
@@ -90,6 +91,7 @@
           data: {
             status: status,
             id: notificationIddev,
+            
           },
           success: function(response) {
             $('#devolucionMessage').text(response);
@@ -136,7 +138,7 @@
           document.getElementById('notificationMessageUser').textContent = 'Alumno: ' + notificacion.user_name;
           document.getElementById('notificationMessageResource').textContent = 'Material: ' + notificacion.recurso_nombre;
           document.getElementById('notificationMessageStart').textContent = 'Horario inicio: ' + notificacion.inicio_prestamo;
-
+          <?php $nombre= 1 ?>
           notificationId = notificacion.idregistro; // Agrega esta línea para almacenar el id de la notificación
 
           $('#acceptReturn, #denyReturn').show();
