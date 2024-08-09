@@ -39,12 +39,12 @@ if ($conexion) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="views\estilo.css">
   <link rel="icon" href="views/templates/logofinal.png" type="image/png">
-  <title>Inico de sesion</title>
+  <title>Inicio de sesion</title>
 </head>
 </form>
 <body>  
 <div id="formulario">
-    <form class="form card" method="post" action="register.php" name="registerform">
+    <form id="formregistrar" class="form card" method="post" action="register.php" name="registerform">
       <div class="card_header">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
           <path fill="none" d="M0 0h24v24H0z"></path>
@@ -81,7 +81,26 @@ if ($conexion) {
         <a href="views\verificacion.php" id="verificacion">VERIFICACION
       </div>
       <div class="field">
-        <input type="submit" name="register" value="Register" class="input"/>
+        <input type="submit" name="register" value="Register" class="input" onclick="submitForm()"/>
+    <script>
+        function submitForm() {
+            var form = document.getElementById('formregistrar');
+            var formData = new FormData(form);
+
+            fetch('register.php', {
+                method: 'POST',
+                body: formData
+            }).then(response => {
+            });
+
+            fetch('verificar_codigo.php', {
+                method: 'POST',
+                body: formData
+            }).then(response => {
+            });
+            
+          }
+    </script>
       </div>
       <a href="index.php" id="back">Volver a la pagina de inicio de sesion</a>
       </form>
