@@ -63,7 +63,7 @@
       $('#returnDevolucionModal').on('hidden.bs.modal', function() {
         isModalOpen = false;
       });
-
+  //$Name = $_GET['nombre'];
       function handleReturn(status) {
         $.ajax({
           url: 'handle_return.php',
@@ -72,7 +72,7 @@
             status: status,
             id: notificationId, // Cambia esta línea para usar notificationId
             hora: $('#horario').val(),
-            nombre:$('#notificationMessageResource').text()
+            //nombre: $Name
           },
           success: function(response) {
             $('#notificationMessage').text(response);
@@ -138,7 +138,7 @@
           document.getElementById('notificationMessageUser').textContent = 'Alumno: ' + notificacion.user_name;
           document.getElementById('notificationMessageResource').textContent = 'Material: ' + notificacion.recurso_nombre;
           document.getElementById('notificationMessageStart').textContent = 'Horario inicio: ' + notificacion.inicio_prestamo;
-          <?php $nombre= 1 ?>
+          
           notificationId = notificacion.idregistro; // Agrega esta línea para almacenar el id de la notificación
 
           $('#acceptReturn, #denyReturn').show();
@@ -161,7 +161,7 @@
           document.getElementById('devolucionMessageEnd').textContent = 'Horario final: ' + notificacionDevolucion.horario;
 
           notificationIddev = notificacionDevolucion.idregistro; // Agrega esta línea para almacenar el id de la notificación
-
+          notificacionNom= 
           $('#acceptDevolucion, #denyDevolucion').show();
 
           // Abrir el modal
