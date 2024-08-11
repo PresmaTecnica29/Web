@@ -141,9 +141,8 @@ if ($error) {
 
       <div class="modal-body">
         <p id="notificationMessageUser">Alumno: <?php echo isset($notification['user_name']) ? $notification['user_name'] : ''; ?></p>
-        <p id="notificationMessageResource">Material: <p id="nombreNet"><?php echo isset($notification['recurso_nombre']) ? $notification['recurso_nombre'] : ''; ?></p></p>
+        <p id="notificationMessageResource">Material: <?php echo isset($notification['recurso_nombre']) ? $notification['recurso_nombre'] : ''; ?></p>
         <p id="notificationMessageStart">Horario inicio: <?php echo isset($notification['inicio_prestamo']) ? $notification['inicio_prestamo'] : ''; ?></p>
-        
         <div class="form-group">
           <label for="horario">Horario</label>
           <select name="horario" id="horario" class="input">
@@ -153,6 +152,8 @@ if ($error) {
             <?php endforeach; ?>
           </select>
         </div>
+      </div>
+
            
 
       <div class="modal-footer">
