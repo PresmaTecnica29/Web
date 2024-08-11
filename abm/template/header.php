@@ -63,7 +63,7 @@
       $('#returnDevolucionModal').on('hidden.bs.modal', function() {
         isModalOpen = false;
       });
-
+      //$Name = $_GET['nombre'];
       function handleReturn(status) {
         $.ajax({
           url: 'handle_return.php',
@@ -71,7 +71,8 @@
           data: {
             status: status,
             id: notificationId, // Cambia esta línea para usar notificationId
-            hora: $('#horario').val()
+            hora: $('#horario').val(),
+           // nombre: $('#nombreNet').val()
           },
           success: function(response) {
             $('#notificationMessage').text(response);
@@ -90,6 +91,7 @@
           data: {
             status: status,
             id: notificationIddev,
+
           },
           success: function(response) {
             $('#devolucionMessage').text(response);
@@ -159,8 +161,8 @@
           document.getElementById('devolucionMessageEnd').textContent = 'Horario final: ' + notificacionDevolucion.horario;
 
           notificationIddev = notificacionDevolucion.idregistro; // Agrega esta línea para almacenar el id de la notificación
-
-          $('#acceptDevolucion, #denyDevolucion').show();
+          notificacionNom =
+            $('#acceptDevolucion, #denyDevolucion').show();
 
           // Abrir el modal
           $('#returnDevolucionModal').modal('show');
@@ -174,6 +176,7 @@
     .img>img {
       margin-right: 5px;
     }
+    
 
     footer {
       width: 100%;
@@ -204,8 +207,8 @@
         </ul>
 
         <div class="contenedor" bis_skin_checked="1">
-                    <div class="caja-advertencia"><?php echo $_SESSION['user_name']; ?></div>
-                    <img class="ñiquito" src="../../views/templates/logofinal.png">
+          <div class="caja-advertencia"><?php echo $_SESSION['user_name']; ?></div>
+          <img class="ñiquito" src="../../views/templates/logofinal.png">
         </div>
       </div>
     </div>

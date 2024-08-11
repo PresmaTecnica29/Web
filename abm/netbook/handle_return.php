@@ -11,10 +11,15 @@ $status = $_POST['status'];
 $id = $_POST['id'];
 $horario_id = $_POST['hora'];
 
+//$nombreNet=$_POST['nombreNet'];
+
+
 
 $sql = "SELECT * FROM registros WHERE idregistro = ?";
+//1$sql2 = "SELECT * FROM recurso WHERE recurso_nombre = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $id);
+//$stmt2->bind_param("s", $nombreNet);
 $stmt->execute();
 $result = $stmt->get_result();
 
@@ -27,6 +32,13 @@ if ($result->num_rows > 0) {
       $sql = "UPDATE registros SET opcion = 'Denied' WHERE idregistro = ?";
       $stmt = $conn->prepare($sql);
       $stmt->bind_param("i", $id);
+      
+
+      $sql2 = "UPDATE recurso SET recurso_estado = '1' ";  //WHERE  recurso_nombre = ?
+      $stmt2 = $conn->prepare($sql2);
+      $stmt2->bind_param("s", $nombreNet);
+      $stmt2->execute();
+      
   }
 
   if ($stmt->execute() === TRUE) {
