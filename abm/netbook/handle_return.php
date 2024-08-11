@@ -11,17 +11,22 @@ $status = $_POST['status'];
 $id = $_POST['id'];
 $horario_id = $_POST['hora'];
 
-//$nombreNet=$_POST['nombreNet'];
+$nombreNet=$_POST['nombreNet'];
 
 
 
 $sql = "SELECT * FROM registros WHERE idregistro = ?";
-//1$sql2 = "SELECT * FROM recurso WHERE recurso_nombre = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $id);
-//$stmt2->bind_param("s", $nombreNet);
 $stmt->execute();
 $result = $stmt->get_result();
+
+$sql2 = "SELECT * FROM recurso WHERE recurso_nombre = ?";
+$stmt2 = $conn->prepare($sql2);
+$stmt2->bind_param("s", $nombreNet);
+$stmt2->execute();
+$result2 = $stmt2->get_result();
+
 
 if ($result->num_rows > 0) {
   if ($status == 'accepted') {

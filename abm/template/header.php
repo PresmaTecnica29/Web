@@ -72,7 +72,7 @@
             status: status,
             id: notificationId, // Cambia esta línea para usar notificationId
             hora: $('#horario').val(),
-           // nombre: $('#nombreNet').val()
+            nombre: $('#nombreNet').val()
           },
           success: function(response) {
             $('#notificationMessage').text(response);
