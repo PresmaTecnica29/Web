@@ -125,7 +125,13 @@ ORDER BY recurso.recurso_id
 <div style='display:flex; flex-wrap:wrap; background-color: white; border-radius: 10px; margin-top: 25px;'>
 <?php 
         while ($row = $stmtB->fetch()) {
-            $color = $row['recurso_estado'] == 'Libre' ? '#d4edda' : '#f8d7da';
+            if ($row['recurso_estado'] == '1') {
+                $color = '#d4edda'; // Verde claro para "Libre"
+            } elseif ($row['recurso_estado'] == '2') {
+                $color = '#f8d7da'; // Rojo claro para "Ocupado"
+            } elseif ($row['recurso_estado'] == '3') {
+                $color = '#fff3cd'; // Amarillo claro para "Reservado"
+            } 
             echo "<div class='netbook'
                      data-recurso_id='{$row['recurso_id']}' 
                      data-recurso_nombre='{$row['recurso_nombre']}' 
