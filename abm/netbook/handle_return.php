@@ -35,6 +35,11 @@ if ($result->num_rows > 0) {
       $sql = "UPDATE registros SET opcion = 'Denied' WHERE idregistro = ?";
       $stmt = $conn->prepare($sql);
       $stmt->bind_param("i", $id);
+      
+      $sql3 = "UPDATE registros SET devuelto = 'Accepted' WHERE idregistro = ?";
+      $stmt3 = $conn->prepare($sql3);
+      $stmt3->bind_param("i", $id);
+      $stmt3->execute();
 
       $sql2 = "UPDATE recurso SET recurso_estado = '1' WHERE  recurso_nombre = ?";  
       $stmt2 = $conn->prepare($sql2);
