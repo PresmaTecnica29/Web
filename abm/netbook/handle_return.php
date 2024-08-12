@@ -10,20 +10,21 @@ if ($conn->connect_error) {
 $status = $_POST['status']; 
 $id = $_POST['id'];
 $horario_id = $_POST['hora'];
-//$nombre=$_POST['nombre'];
+$nombreNet= $_POST['nombreNet'];
 
 
 
 $sql = "SELECT * FROM registros WHERE idregistro = ?";
-//$sql2 = "SELECT * FROM recurso WHERE recurso_nombre = ?";
 $stmt = $conn->prepare($sql);
-//$stmt2 = $conn->prepare($sql2);
 $stmt->bind_param("i", $id);
-//$stmt2->bind_param("s", $Nombre);
 $stmt->execute();
-//$stmt2->execute();
 $result = $stmt->get_result();
-//$result2 = $stmt2->get_result();
+
+$sql2 = "SELECT * FROM recurso WHERE recurso_nombre = ?";
+$stmt2 = $conn->prepare($sql2);
+$stmt2->bind_param("s", $nombreNet);
+$stmt2->execute();
+$result2 = $stmt2->get_result();
 
 if ($result->num_rows > 0) {
   if ($status == 'accepted') {
@@ -32,13 +33,13 @@ if ($result->num_rows > 0) {
       $stmt->bind_param("ii", $horario_id, $id);
   } else if ($status == 'denied') {
       $sql = "UPDATE registros SET opcion = 'Denied' WHERE idregistro = ?";
-      //$sql2 = "UPDATE recurso SET recurso_estado = '1' WHERE  recurso_nombre = ?";  
-      //$stmt2 = $conn->prepare($sql2);
-      //$recurso_nombre=$Nombre;
       $stmt = $conn->prepare($sql);
       $stmt->bind_param("i", $id);
-      //$stmt2->bind_param("s", $nombre);
-      //$stmt2->execute($nombre); 
+
+      $sql2 = "UPDATE recurso SET recurso_estado = '1' WHERE  recurso_nombre = ?";  
+      $stmt2 = $conn->prepare($sql2);
+      $stmt2->bind_param("s", $nombreNet);
+      $stmt2->execute(); 
   }
  
 

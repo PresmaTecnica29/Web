@@ -63,7 +63,7 @@
       $('#returnDevolucionModal').on('hidden.bs.modal', function() {
         isModalOpen = false;
       });
-  //$Name = $_GET['nombre'];
+      //$Name = $_GET['nombre'];
       function handleReturn(status) {
         $.ajax({
           url: 'handle_return.php',
@@ -72,7 +72,7 @@
             status: status,
             id: notificationId, // Cambia esta línea para usar notificationId
             hora: $('#horario').val(),
-            //nombre: $Name
+            nombreNet: $('#nombreNet').val()
           },
           success: function(response) {
             $('#notificationMessage').text(response);
@@ -91,7 +91,7 @@
           data: {
             status: status,
             id: notificationIddev,
-            
+
           },
           success: function(response) {
             $('#devolucionMessage').text(response);
@@ -138,7 +138,7 @@
           document.getElementById('notificationMessageUser').textContent = 'Alumno: ' + notificacion.user_name;
           document.getElementById('notificationMessageResource').textContent = 'Material: ' + notificacion.recurso_nombre;
           document.getElementById('notificationMessageStart').textContent = 'Horario inicio: ' + notificacion.inicio_prestamo;
-          
+
           notificationId = notificacion.idregistro; // Agrega esta línea para almacenar el id de la notificación
 
           $('#acceptReturn, #denyReturn').show();
@@ -161,8 +161,8 @@
           document.getElementById('devolucionMessageEnd').textContent = 'Horario final: ' + notificacionDevolucion.horario;
 
           notificationIddev = notificacionDevolucion.idregistro; // Agrega esta línea para almacenar el id de la notificación
-          notificacionNom= 
-          $('#acceptDevolucion, #denyDevolucion').show();
+          notificacionNom =
+            $('#acceptDevolucion, #denyDevolucion').show();
 
           // Abrir el modal
           $('#returnDevolucionModal').modal('show');
@@ -175,6 +175,9 @@
   <style>
     .img>img {
       margin-right: 5px;
+    }
+    #nombreNet {
+      visibility: hidden;
     }
 
     footer {
@@ -202,12 +205,12 @@
               echo '<li><a href="../netbook/qr.php" class="nav-link px-2 text-white">Recursos</a></li>';
             }
           } ?>
-          <li><a href="/Web/index.php?logout" class="nav-link px-2 text-white">Cerrar sesion</a></li>
+          <li><a href="/web/Web/index.php?logout" class="nav-link px-2 text-white">Cerrar sesion</a></li>
         </ul>
 
         <div class="contenedor" bis_skin_checked="1">
-                    <div class="caja-advertencia"><?php echo $_SESSION['user_name']; ?></div>
-                    <img class="ñiquito" src="../../views/templates/logofinal.png">
+          <div class="caja-advertencia"><?php echo $_SESSION['user_name']; ?></div>
+          <img class="ñiquito" src="../../views/templates/logofinal.png">
         </div>
       </div>
     </div>

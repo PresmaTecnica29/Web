@@ -151,9 +151,14 @@ if ($error) {
               <option value="<?= $dato['id']; ?>" class="input"><?= $dato['horario'] ?></option>
             <?php endforeach; ?>
           </select>
+          
+            <label for="nombreNet"></label>
+            <select name="nombreNet" id="nombreNet" class="input">
+              <option  value='<?= ($notification['recurso_nombre'])?>' class="input"> <?= ($notification['recurso_nombre'])?></option>
+            </select>
+          
         </div>
-      </div>
-
+   
       <div class="modal-footer">
         <button type="button" class="btn btn-success" id="acceptReturn">Aceptar</button>
         <button type="button" class="btn btn-danger" id="denyReturn">Rechazar</button>
