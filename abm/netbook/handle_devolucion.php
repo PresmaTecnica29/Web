@@ -10,6 +10,8 @@ if ($conn->connect_error) {
 }
 $status = $_POST['status']; 
 $id = $_POST['id'];
+$nombreNetDevo= $_POST['nombreNetDevo'];
+
 
 $sql = "SELECT * FROM registros WHERE idregistro = ?";
 $stmt = $conn->prepare($sql);
@@ -26,6 +28,11 @@ if ($result->num_rows > 0) {
       $sql = "UPDATE registros SET devuelto = 'Denied' WHERE idregistro = ?"; 
       $stmt = $conn->prepare($sql);
       $stmt->bind_param("i", $id);
+
+      $sql2 = "UPDATE recurso SET recurso_estado = '2' WHERE  recurso_nombre = ?";  
+      $stmt2 = $conn->prepare($sql2);
+      $stmt2->bind_param("s", $nombreNetDevo);
+      $stmt2->execute();
   }
 
   if ($stmt->execute() === TRUE) {

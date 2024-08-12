@@ -75,16 +75,18 @@ if ($error) {
 <div class="container">
   <div class="row">
     <div class="col-md-12">
+      
       <a href="agregarMaterial.php" class="btn btn-primary mt-4">Agregar material</a>
-      <a href="visual.php" class="btn btn-primary mt-4">Forma visual</a>
-      <a href="devuelto.php" class="btn btn-primary mt-4">Ver devueltos</a>
+      
+      
       <hr>
 
       <form method="post" class="form-inline">
         <div class="form-group mr-3">
-          <input type="text" id="apellido" name="apellido" placeholder="Buscar por Apellido" class="form-control">
+          <input type="text" id="apellido" name="apellido" placeholder="Buscar" class="form-control">
         </div>
         <input name="csrf" type="hidden" value="<?php echo escapar($_SESSION['csrf']); ?>"><br>
+        <a href="devuelto.php" class="btn btn-primary mt-4">Ver devueltos</a>
       </form>
     </div>
   </div>
@@ -151,14 +153,13 @@ if ($error) {
               <option value="<?= $dato['id']; ?>" class="input"><?= $dato['horario'] ?></option>
             <?php endforeach; ?>
           </select>
-          
-            <label for="nombreNet"></label>
+        </div>
+        <label for="nombreNet"></label>
             <select name="nombreNet" id="nombreNet" class="input">
               <option  value='<?= ($notification['recurso_nombre'])?>' class="input"> <?= ($notification['recurso_nombre'])?></option>
             </select>
-          
-        </div>
-   
+      </div>
+
       <div class="modal-footer">
         <button type="button" class="btn btn-success" id="acceptReturn">Aceptar</button>
         <button type="button" class="btn btn-danger" id="denyReturn">Rechazar</button>
@@ -183,6 +184,10 @@ if ($error) {
         <p id="devolucionMessageResource">Material: <?php echo isset($notificationDevolucion['recurso_nombre']) ? $notificationDevolucion['recurso_nombre'] : ''; ?></p>
         <p id="devolucionMessageStart">Horario inicio: <?php echo isset($notificationDevolucion['inicio_prestamo']) ? $notificationDevolucion['inicio_prestamo'] : ''; ?></p>
         <p id="devolucionMessageEnd">Horario final: <?php echo isset($notificationDevolucion['horario']) ? $notificationDevolucion['horario'] : ''; ?></p>
+        <label for="nombreNetDevo"></label>
+            <select name="nombreNetDevo" id="nombreNetDevo" class="input" style='display:none'>
+              <option  value='<?= ($notificationDevolucion['recurso_nombre'])?>' class="input"> <?= ($notificationDevolucion['recurso_nombre'])?></option>
+            </select>
       </div>
 
       <div class="modal-footer">

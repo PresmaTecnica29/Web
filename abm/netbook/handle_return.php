@@ -12,8 +12,6 @@ $id = $_POST['id'];
 $horario_id = $_POST['hora'];
 $nombreNet= $_POST['nombreNet'];
 
-
-
 $sql = "SELECT * FROM registros WHERE idregistro = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $id);
@@ -35,7 +33,7 @@ if ($result->num_rows > 0) {
       $sql = "UPDATE registros SET opcion = 'Denied' WHERE idregistro = ?";
       $stmt = $conn->prepare($sql);
       $stmt->bind_param("i", $id);
-      
+
       $sql3 = "UPDATE registros SET devuelto = 'Accepted' WHERE idregistro = ?";
       $stmt3 = $conn->prepare($sql3);
       $stmt3->bind_param("i", $id);
@@ -46,12 +44,7 @@ if ($result->num_rows > 0) {
       $stmt2->bind_param("s", $nombreNet);
       $stmt2->execute(); 
   }
- 
 
-        
-    
-     
-  
   if ($stmt->execute() === TRUE) {
       echo "La devolución ha sido " . ($status == 'accepted' ? 'aceptada' : 'rechazada') . ".";
   } else {

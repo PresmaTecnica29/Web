@@ -63,7 +63,7 @@
       $('#returnDevolucionModal').on('hidden.bs.modal', function() {
         isModalOpen = false;
       });
-      //$Name = $_GET['nombre'];
+
       function handleReturn(status) {
         $.ajax({
           url: 'handle_return.php',
@@ -91,7 +91,8 @@
           data: {
             status: status,
             id: notificationIddev,
-
+            nombreNetDevo: $('#nombreNetDevo').val()
+            
           },
           success: function(response) {
             $('#devolucionMessage').text(response);
@@ -162,7 +163,7 @@
 
           notificationIddev = notificacionDevolucion.idregistro; // Agrega esta línea para almacenar el id de la notificación
           notificacionNom =
-            $('#acceptDevolucion, #denyDevolucion').show();
+          $('#acceptDevolucion, #denyDevolucion').show();
 
           // Abrir el modal
           $('#returnDevolucionModal').modal('show');
@@ -176,6 +177,7 @@
     .img>img {
       margin-right: 5px;
     }
+
     #nombreNet {
       visibility: hidden;
     }
@@ -205,12 +207,15 @@
               echo '<li><a href="../netbook/qr.php" class="nav-link px-2 text-white">Recursos</a></li>';
             }
           } ?>
-          <li><a href="/web/Web/index.php?logout" class="nav-link px-2 text-white">Cerrar sesion</a></li>
+          <li><a href="../netbook/visual.php" class="nav-link px-2 text-white">Visual</a></li>
+
+          <li><a href="/Web/index.php?logout" class="nav-link px-2 text-white">Cerrar sesion</a></li>
+
         </ul>
 
         <div class="contenedor" bis_skin_checked="1">
-          <div class="caja-advertencia"><?php echo $_SESSION['user_name']; ?></div>
-          <img class="ñiquito" src="../../views/templates/logofinal.png">
+                    <div class="caja-advertencia"><?php echo $_SESSION['user_name']; ?></div>
+                    <img class="ñiquito" src="../../views/templates/logofinal.png">
         </div>
       </div>
     </div>
