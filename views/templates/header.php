@@ -44,7 +44,7 @@
         <?php
         if (isset($_SESSION['user_rol'])) {
             if ($_SESSION['user_rol'] == 5) {
-                echo '<a href="abm/netbook/qr.php" class="card">Creacion Qr</a>';
+                echo '<a href="abm/netbook/qr.php" class="card">Recursos</a>';
             }
         } ?>
     </div>

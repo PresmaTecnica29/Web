@@ -56,7 +56,7 @@ if ($error) {
 
       <form method="post" class="form-inline">
         <div class="form-group mr-3">
-          <input type="text" id="apellido" name="apellido" placeholder="Buscar por Apellido" class="form-control">
+          <input type="text" id="apellido" name="apellido" placeholder="Buscar por Usuario" class="form-control">
         </div>
         <input name="csrf" type="hidden" value="<?php echo escapar($_SESSION['csrf']); ?>"><br>
       </form>
@@ -72,7 +72,7 @@ if ($error) {
         <thead>
           <tr>
             <th>#</th>
-            <th>Nombre</th>
+            <th>Usuario</th>
             <th>Email</th>
             <th>Rol</th>
             <th>Activado</th>
