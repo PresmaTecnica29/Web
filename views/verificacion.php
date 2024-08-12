@@ -1,7 +1,7 @@
 
 <!-- register form -->
 <?php
-require_once("C:\wamp64\www\Web\config\db.php");
+require_once("..\config\db.php");
 $conexion = conexion();
 
 $datos = []; // Valor predeterminado

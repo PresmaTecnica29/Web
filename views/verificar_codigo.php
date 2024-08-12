@@ -1,27 +1,31 @@
 <?php
-require "enviar_gmails.php";
-// create a database connection
-$this->db_connection = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+require "../classes/enviar_gmails.php";
+require "../config/db.php";
 
-// change character set to utf8 and check it
-if (!$this->db_connection->set_charset("utf8")) {
-    $this->errors[] = $this->db_connection->error;
+$conexion = conexion();
+
+if (isset($_POST['login_input_email']) && isset($_POST['registerinput_verfcode'])) {
+    $user_email = $_POST['user_email'];
+    $codeinput = $_POST['registerinput_verfcode'];
+
+    $sql = "SELECT user_id FROM users WHERE user_email = :user_email";
+    $stmt = $conexion->prepare($sql);
+    $stmt->bindParam(':user_email', $user_email, PDO::PARAM_STR);
+    $stmt->execute();
+
+    $fetchid = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($fetchid) {
+        $userid = $fetchid["user_id"];
+        if (verifyCode($userid, $codeinput)) {
+            echo "Código verificado correctamente.";
+        } else {
+            echo "Código de verificación incorrecto.";
+        }
+    } else {
+        echo "Usuario no encontrado.";
+    }
+} else {
+    echo "Faltan datos en la solicitud.";
 }
-
-// if no connection errors (= working database connection)
-if (!$this->db_connection->connect_errno) {
-$user_email = $this->db_connection->real_escape_string(strip_tags($_POST['user_email'], ENT_QUOTES));
-
-$sql = "SELECT user_id FROM users WHERE user_email = '$user_email'";
-$query_check_user_id = $this->db_connection->query($sql);
-$fetchid = $query_check_user_id->fetch_assoc();
-$userid = $fetchid["user_id"];
-$codeinput = $_POST['registerinput_verfcode'];
-if (verifyCode($userid, $codeinput)) {
-
-    echo 
-}
-
-
-
-}
+?>

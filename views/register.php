@@ -81,26 +81,36 @@ if ($conexion) {
         <a href="views\verificacion.php" id="verificacion">VERIFICACION
       </div>
       <div class="field">
-        <input type="submit" name="register" value="Register" class="input" onclick="submitForm()"/>
-    <script>
-        function submitForm() {
-            var form = document.getElementById('formregistrar');
-            var formData = new FormData(form);
+        <input type="submit" name="register" value="Register" class="input" onclick = "submitForm()"/>
+        <script>
+    function submitForm(event) {
+      event.preventDefault(); 
+      var form = document.getElementById('formregistrar');
+        var formData = new FormData(form);
 
-            fetch('register.php', {
-                method: 'POST',
-                body: formData
-            }).then(response => {
-            });
+        // Enviar datos a register.php
+        fetch('register.php', {
+            method: 'POST',
+            body: formData
+        }).then(response => response.text())
+          .then(result => {
+              console.log('Registro:', result);
+          }).catch(error => {
+              console.error('Error en registro:', error);
+          });
 
-            fetch('verificar_codigo.php', {
-                method: 'POST',
-                body: formData
-            }).then(response => {
-            });
-            
-          }
-    </script>
+        // Enviar datos a verificar_codigo.php
+        fetch('../views/verificar_codigo.php', {
+            method: 'POST',
+            body: formData
+        }).then(response => response.text())
+          .then(result => {
+              console.log('Verificación:', result);
+          }).catch(error => {
+              console.error('Error en verificación:', error);
+          });
+    }
+</script>
       </div>
       <a href="index.php" id="back">Volver a la pagina de inicio de sesion</a>
       </form>
