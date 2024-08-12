@@ -50,7 +50,7 @@ $conexion = conexion();
 $statement = $conexion->prepare("SELECT id, DATE_FORMAT(horario, '%H:%i') AS horario FROM horario");
 $statement->execute();
 $datos = $statement->fetchAll();
-$titulo = isset($_POST['apellido']) ? 'Lista de prestamos (' . $_POST['apellido'] . ')' : 'Lista de alumnos';
+$titulo = isset($_POST['apellido']) ? 'Lista de prestamos (' . $_POST['apellido'] . ')' : 'Prestamos Activos';
 ?>
 
 
@@ -77,7 +77,7 @@ if ($error) {
     <div class="col-md-12">
       <a href="agregarMaterial.php" class="btn btn-primary mt-4">Agregar material</a>
       <a href="visual.php" class="btn btn-primary mt-4">Forma visual</a>
-      <a href="devuelto.php" class="btn btn-primary mt-4">Ver devueltos</a>
+      <a href="devuelto.php" class="btn btn-primary mt-4">sVer devuelto</a>
       <hr>
 
       <form method="post" class="form-inline">
