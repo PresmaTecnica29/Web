@@ -64,7 +64,6 @@ if ($error) {
     <div class="col-md-12">
     
       <a href="agregarMaterial.php" class="btn btn-primary mt-4">Agregar material</a>
-      <a href="visual.php" class="btn btn-primary mt-4">Forma visual</a>
       <hr>
 
       <form method="post" class="form-inline">

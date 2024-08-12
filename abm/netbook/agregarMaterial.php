@@ -97,7 +97,7 @@ if (isset($resultado)) {
         <br>
         <div class="form-group">
           <input name="csrf" type="hidden" value="<?php echo escapar($_SESSION['csrf']); ?>">
-          <a class="btn btn-primary" href="abm.php" style= 'background-color: red'>Cancelar</a>
+          <a class="btn btn-primary" href="qr.php" style= 'background-color: red'>Cancelar</a>
           <input type="submit" name="submit" class="btn btn-primary" value="Aceptar" style='margin-left:1px; background-color: green'>
         </div>
       </form>

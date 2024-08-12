@@ -211,6 +211,8 @@
 
           <li><a href="/Web/index.php?logout" class="nav-link px-2 text-white">Cerrar sesion</a></li>
 
+          <li><a href="../abmPersonas/FAQ.php" class="nav-link px-2 text-white">FAQ</a></li>
+
         </ul>
 
         <div class="contenedor" bis_skin_checked="1">

@@ -101,8 +101,8 @@ if (isset($resultado)) {
         <br>
         <div class="form-group">
           <input name="csrf" type="hidden" value="<?php echo escapar($_SESSION['csrf']); ?>">
-          <input type="submit" name="submit" class="btn btn-primary" value="Enviar">
-          <a class="btn btn-primary" href="abm.php">Regresar al inicio</a>
+          <a class="btn btn-primary" href="abmPersonas.php" style='background-color: red'>Volver Atras</a>
+          <input type="submit" name="submit" class="btn btn-primary" value="Aceptar" style='background-color: green'>
         </div>
       </form>
     </div>

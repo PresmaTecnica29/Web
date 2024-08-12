@@ -76,17 +76,14 @@ if ($error) {
   <div class="row">
     <div class="col-md-12">
       
-      <a href="agregarMaterial.php" class="btn btn-primary mt-4">Agregar material</a>
-      <a href="visual.php" class="btn btn-primary mt-4">Forma visual</a>
-      <a href="devuelto.php" class="btn btn-primary mt-4">sVer devuelto</a>
+      <a href="devuelto.php" class="btn btn-primary mt-4">Ver Devueltos</a>
       <hr>
 
       <form method="post" class="form-inline">
         <div class="form-group mr-3">
-          <input type="text" id="apellido" name="apellido" placeholder="Buscar" class="form-control">
+          <input type="text" id="apellido" name="apellido" placeholder="Buscar por Usuario" class="form-control">
         </div>
         <input name="csrf" type="hidden" value="<?php echo escapar($_SESSION['csrf']); ?>"><br>
-        <a href="devuelto.php" class="btn btn-primary mt-4">Ver devueltos</a>
       </form>
     </div>
   </div>

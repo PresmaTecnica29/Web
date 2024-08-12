@@ -51,7 +51,7 @@ if ($error) {
 <div class="container">
   <div class="row">
     <div class="col-md-12">
-      <a href="agregarUsuario.php" class="btn btn-primary mt-4">Crear alumno</a>
+      <a href="agregarUsuario.php" class="btn btn-primary mt-4">Crear Usuario</a>
       <hr>
 
       <form method="post" class="form-inline">
