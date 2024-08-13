@@ -75,21 +75,27 @@ error_reporting(E_ALL);
         <h1>Preguntas Frecuentes (FAQ)</h1>
 
         <div class="faq-item">
-            <button class="faq-question" style='color: #464640'>¿Pregunta 1?</button>
+            <button class="faq-question" style='color: #464640'>¿Un alumno puede sacar varios equipos?</button>
             <div class="faq-answer">
                 <p>Respuesta a la pregunta 1.</p>
             </div>
         </div>
 
         <div class="faq-item">
-            <button class="faq-question" style='color: #464640'>¿Pregunta 2?</button>
+            <button class="faq-question" style='color: #464640'>¿Se puede extender el lapso del préstamo ?</button>
             <div class="faq-answer">
                 <p>Respuesta a la pregunta 2.</p>
             </div>
         </div>
 
         <div class="faq-item">
-            <button class="faq-question" style='color: #464640'>¿Pregunta 3?</button>
+            <button class="faq-question" style='color: #464640'>¿Como poner una computadora en mantenimiento?</button>
+            <div class="faq-answer">
+                <p>Respuesta a la pregunta 3.</p>
+            </div>
+        </div>
+        <div class="faq-item">
+            <button class="faq-question" style='color: #464640'>¿Qué pasa si se vence el lapso del préstamo?</button>
             <div class="faq-answer">
                 <p>Respuesta a la pregunta 3.</p>
             </div>
