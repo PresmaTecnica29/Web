@@ -83,7 +83,7 @@ if ($error) {
       <table class="table">
         <thead>
           <tr>
-            <th>#</th>
+            <th>ID</th>
             <th>Material</th>
             <th>Estado</th>
             <th>Area</th>
