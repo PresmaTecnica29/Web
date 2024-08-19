@@ -18,7 +18,8 @@ $conexion = conexion();
 $error = false;
     $nombre = $_GET['nombre'];
     $stmt = $conexion -> prepare("UPDATE `recurso` SET `recurso_estado` = '1' WHERE `recurso_nombre` = ?");
-    $stmt->execute([$nombre]);  
+    $stmt->execute([$nombre]); 
+    $sql = "UPDATE registros SET devuelto = 'Accepted' WHERE idregistro = ?"; 
 ?>
 
 <div style='background-color:white'>

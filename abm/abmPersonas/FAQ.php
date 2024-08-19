@@ -47,7 +47,7 @@ error_reporting(E_ALL);
 
         .faq-question {
             width: 100%;
-            background-color: #f6f33e;
+            background-color: #0d6efd;
             color: #fff;
             padding: 15px;
             border: none;
@@ -75,29 +75,60 @@ error_reporting(E_ALL);
         <h1>Preguntas Frecuentes (FAQ)</h1>
 
         <div class="faq-item">
-            <button class="faq-question" style='color: #464640'>¿Un alumno puede sacar varios equipos?</button>
+            <button class="faq-question" style='color: #e4e4e4'>¿Un usuario puede sacar varios equipos?</button>
             <div class="faq-answer">
-                <p>Respuesta a la pregunta 1.</p>
+                <p>El prestamo de computadoras esta limitado a 1 por usuario, ningun usuario puede tener mas de un prestamo activo al mismo tiempo. Si se quiere usar otra computadora diferente de la ya retirada el usuario debera devolver la computadora que posee y pedir otro prestamo.</p>
             </div>
         </div>
 
         <div class="faq-item">
-            <button class="faq-question" style='color: #464640'>¿Se puede extender el lapso del préstamo ?</button>
+            <button class="faq-question" style='color: #e4e4e4'>¿Se puede extender el lapso del préstamo ?</button>
             <div class="faq-answer">
-                <p>Respuesta a la pregunta 2.</p>
+                <p>Si, se pueden extender los lapsos de prestamo desde la pagina de registros</p>
             </div>
         </div>
 
         <div class="faq-item">
-            <button class="faq-question" style='color: #464640'>¿Como poner una computadora en mantenimiento?</button>
+            <button class="faq-question" style='color: #e4e4e4'>¿Como poner una computadora en mantenimiento?</button>
             <div class="faq-answer">
-                <p>Respuesta a la pregunta 3.</p>
+                <p>Las computadoras pueden presentar una falla en su sistema que imposibilite su uso o alguno de sus componentes puede dejar de funcionar. Una computadora en estas condiciones no puede ser usada hasta ser restaurada. </p>
+                    
+                <p>Para deshabilitar una computadora y ponerla en estado de Mantenimiento dirigase a la pagina "Recursos" y busque la computadora que desea deshabilitar. Una vez la encuentre, haga click en el boton "Poner en Mantenimiento" ubicado en el lado derecho de la pantalla.
+                Tenga en cuenta que una computadora en Mantenimiento no puede ser prestada a ningun usuario. </p>
+                    
+                <p>Para habilitar nuevamente una computadora y dejarla lista para ser prestada tendra que buscar la misma computadora y clickear en el boton "Habilitar" que se encuentra a un costado del visto previamente, esto lo que hara sera cambiar el estado de la computadora seleccionada a "Libre".
+                </p>
             </div>
         </div>
         <div class="faq-item">
-            <button class="faq-question" style='color: #464640'>¿Qué pasa si se vence el lapso del préstamo?</button>
+            <button class="faq-question" style='color: #e4e4e4  '>¿Qué pasa si se vence el lapso del préstamo?</button>
             <div class="faq-answer">
-                <p>Respuesta a la pregunta 3.</p>
+                <p>Como dijo Maradona:     Eeeeeeeeeeeeeeeeeeeeeeehhhhhhhhh...</p>
+            </div>
+        </div>
+        <div class="faq-item">
+            <button class="faq-question" style='color: #e4e4e4  '>¿Pregunta 5?</button>
+            <div class="faq-answer">
+                <p>Respuesta a la pregunta 5.</p>
+            </div>
+        </div>
+        <div class="faq-item">
+            <button class="faq-question" style='color: #e4e4e4  '>¿Pregunta 6?</button>
+            <div class="faq-answer">
+                <p>Respuesta a la pregunta 6.</p>
+            </div>
+        </div>
+        <div class="faq-item">
+            <button class="faq-question" style='color: #e4e4e4  '>¿Pregunta 7?</button>
+            <div class="faq-answer">
+                <p>Respuesta a la pregunta 7.</p>
+            </div>
+        </div>
+        <div class="faq-item">
+            <button class="faq-question" style='color: #e4e4e4  '>¿Pregunta 8?</button>
+            <div class="faq-answer">
+                <p>Respuesta a la pregunta 8.</p>
+                <img src="https://www.google.com/imgres?q=lo%20suponia%20meme&imgurl=https%3A%2F%2Fi.pinimg.com%2F236x%2F4f%2Ffb%2Faa%2F4ffbaaff551f4713c5c7708b5ad2b768.jpg&imgrefurl=https%3A%2F%2Fes.pinterest.com%2Falexopro777zzzzzz%2Flo-suponia%2F&docid=J1HrKXzTqz8alM&tbnid=nJhbYioFkwd_-M&vet=12ahUKEwiYl5SxkveHAxXnLEQIHbMDHkEQM3oECGQQAA..i&w=236&h=386&hcb=2&ved=2ahUKEwiYl5SxkveHAxXnLEQIHbMDHkEQM3oECGQQAA" alt="Ejemplo de imagen en línea">
             </div>
         </div>
 

@@ -177,7 +177,7 @@ ORDER BY recurso.recurso_id
                          data-recurso_estado='{$row['recurso_estado']}' 
                          data-reservado-por='{$row['user_name']}' 
                          style='background-color: {$color}; width: 50px; height: 50px; margin: 10px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.15); display: flex; justify-content: center; align-items: center; text-align: center;'>
-                        <img src='netbook.png' alt='Netbook' style='width: 50%;'>
+                        <img src='netbook.png' alt='Netbookkkkkkkk' style='width: 50%;'>
                         <p>{$row['recurso_nombre']}</p>
                       </div>";
             }
@@ -228,7 +228,7 @@ ORDER BY recurso.recurso_id
     <div id='myModal' class='modal'>
         <div class='modal-content' style="width: 500px;">
             <span class='close'>&times;</span>
-            <p id='modal-text'>Some text in the Modal..</p>
+            <p id='modal-text'>holi</p>
         </div>
     </div>
 </div>

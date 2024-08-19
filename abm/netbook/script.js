@@ -5,7 +5,7 @@ $(document).ready(function() {
         var nombre = $(this).data('recurso_nombre');
         var reservadoPor = $(this).data('reservado-por');
         var estado = $(this).data('recurso_estado');
-        if (estado === 'En mantenimiento') {
+        if (estado === 'Mantenimiento') {
             $('#modal-text').html('ID: ' + id + '<br>Nombre: ' + nombre + '<br>Esta netbook está en mantenimiento');
         } else if (estado === 'Ocupado') {
             $('#modal-text').html('ID: ' + id + '<br>Nombre: ' + nombre + '<br>Esta netbook fue reservada por ' + reservadoPor);
