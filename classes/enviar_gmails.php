@@ -45,14 +45,14 @@ function generateVerificationCode($length = 6) {
 
 function storeVerificationCode($userId, $code) {
     // Conexión a la base de datos
-    $pdo = new PDO('mysql:host=localhost;dbname=login', 'root', '');
+    $pdo = new PDO('mysql:host=localhost;dbname=bdwebet29', 'root', '');
     $stmt = $pdo->prepare('INSERT INTO verification_codes (user_id, code) VALUES (?, ?)');
     $stmt->execute([$userId, $code]);
 }
 
 function verifyCode($userId, $code) {
     // Conexión a la base de datos
-    $pdo = new PDO('mysql:host=localhost;dbname=login', 'root', '');
+    $pdo = new PDO('mysql:host=localhost;dbname=bdwebet29', 'root', '');
     $stmt = $pdo->prepare('SELECT * FROM verification_codes WHERE user_id = ? AND code = ? DESC LIMIT 1');
     $stmt->execute([$userId, $code]);
     $result = $stmt->fetch(PDO::FETCH_ASSOC);

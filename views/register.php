@@ -81,41 +81,34 @@ if ($conexion) {
         <a href="views\verificacion.php" id="verificacion">VERIFICACION
       </div>
       <div class="field">
-        <input type="submit" name="register" value="Register" class="input" onclick = "submitForm()"/>
-        <script>
-    function submitForm(event) {
-      event.preventDefault(); 
-      var form = document.getElementById('formregistrar');
-        var formData = new FormData(form);
-
-        // Enviar datos a register.php
-        fetch('register.php', {
-            method: 'POST',
-            body: formData
-        }).then(response => response.text())
-          .then(result => {
-              console.log('Registro:', result);
-          }).catch(error => {
-              console.error('Error en registro:', error);
-          });
-
-        // Enviar datos a verificar_codigo.php
-        fetch('../views/verificar_codigo.php', {
-            method: 'POST',
-            body: formData
-        }).then(response => response.text())
-          .then(result => {
-              console.log('Verificación:', result);
-          }).catch(error => {
-              console.error('Error en verificación:', error);
-          });
-    }
-</script>
+        <input type="submit" name="register" value="Register" class="input"/>
       </div>
       <a href="index.php" id="back">Volver a la pagina de inicio de sesion</a>
       </form>
     </form>
   </div>
+  <script>
+        document.getElementById('formregistrar').onsubmit = function(event) {
+            event.preventDefault(); // Previene el envío del formulario
+
+            var email = document.getElementById('login_input_email').value;
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "views/verificar_codigo.php", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+            var data = "user_email=" + encodeURIComponent(email)
+
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    console.log(xhr.responseText); // Muestra la respuesta en la consola
+                    alert(xhr.responseText); // Muestra la respuesta en un mensaje emergente
+                }
+            };
+
+            xhr.send(data);
+        };
+    </script>
 </body>
 
 </html>

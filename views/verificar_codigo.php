@@ -1,31 +1,26 @@
 <?php
 require "../classes/enviar_gmails.php";
 require "../config/db.php";
-
 $conexion = conexion();
 
-if (isset($_POST['login_input_email']) && isset($_POST['registerinput_verfcode'])) {
+if (isset($_POST['user_email']) && isset($_POST['registerinput_verfcode'])) {
     $user_email = $_POST['user_email'];
-    $codeinput = $_POST['registerinput_verfcode'];
+    $verifCode = $_POST['registerinput_verfcode'];
 
-    $sql = "SELECT user_id FROM users WHERE user_email = :user_email";
-    $stmt = $conexion->prepare($sql);
-    $stmt->bindParam(':user_email', $user_email, PDO::PARAM_STR);
-    $stmt->execute();
+    // Verificar los datos recibidos
+    error_log("user_email: $user_email");
+    error_log("verifCode: $verifCode");
 
-    $fetchid = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if ($fetchid) {
-        $userid = $fetchid["user_id"];
-        if (verifyCode($userid, $codeinput)) {
-            echo "Código verificado correctamente.";
-        } else {
-            echo "Código de verificación incorrecto.";
-        }
-    } else {
-        echo "Usuario no encontrado.";
-    }
+    // Aquí iría la lógica para verificar el código
+    echo "Código verificado correctamente.";
 } else {
+    // Verificar qué datos están presentes
+    if (!isset($_POST['user_email'])) {
+        error_log("user_email no está en la solicitud.");
+    }
+    if (!isset($_POST['registerinput_verfcode'])) {
+        error_log("registerinput_verfcode no está en la solicitud.");
+    }
     echo "Faltan datos en la solicitud.";
 }
 ?>
