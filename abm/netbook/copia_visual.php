@@ -42,18 +42,20 @@
   }
   /* Estilo para los botones */
   .btn {
+    display: block;
+    width: 150px;
     padding: 10px;
+    margin: 20px auto;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: white;
     font-size: 16px;
     cursor: pointer;
     text-align: center;
-    width: 85px;
-    height: 85px;
-    background-color:#d4edda;
-    border-radius: 10px;
-    margin: 10px;
   }
   .btn:hover {
-    background-color: red;
+    background-color: #0056b3;
   }
   #netbookContainer {
     display: flex;
@@ -154,8 +156,6 @@ include "../template/header.php";
         <p>Mantenimiento</p>
     </div>
 </div>
-
-
 <div style='display: flex; justify-content:center;'>
 <div id="netbookContainer" style='display: flex; flex-wrap: wrap; width: 1000px;'>
     <div style='background-color: white; display: flex; flex-wrap: wrap; margin-top:35px; margin-left:110px;'>
@@ -245,10 +245,8 @@ include "../template/header.php";
     </div>
 </div>
 
-</div>
-    </div>
-
-    <button id="openModalMostrarDatos" class="btn" style='margin-left: 1%; background_color: blue;'>Mostrar Datos</button>
+<!-- Botón para abrir el modal -->
+<button id="openModalMostrarDatos" class="btn">Mostrar Datos</button>
 
 <!-- Modal: Mostrar Datos -->
 <div id="modalMostrarDatos" class="modal">
@@ -328,8 +326,6 @@ include "../template/header.php";
     }
   }
 </script>
-
-
 
 <?php include "../template/footer.php"; ?>
 </body>
