@@ -225,12 +225,7 @@ ORDER BY recurso.recurso_id
     </div>
 </div>
 
-    <div id='myModal' class='modal'>
-        <div class='modal-content' style="width: 500px;">
-            <span class='close'>&times;</span>
-            <p id='modal-text'>holi</p>
-        </div>
-    </div>
+
 </div>
 
 <?php include "../template/footer.php"; ?>

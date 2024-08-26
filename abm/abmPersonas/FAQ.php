@@ -82,9 +82,9 @@ error_reporting(E_ALL);
         </div>
 
         <div class="faq-item">
-            <button class="faq-question" style='color: #e4e4e4'>¿Se puede extender el lapso del préstamo ?</button>
+            <button class="faq-question" style='color: #e4e4e4'>¿Se puede extender el lapso del préstamo?</button>
             <div class="faq-answer">
-                <p>Si, se pueden extender los lapsos de prestamo desde la pagina de registros</p>
+                <p>Si, se pueden extender los lapsos de prestamo desde la pagina "Prestamos"</p>
             </div>
         </div>
 
@@ -96,42 +96,16 @@ error_reporting(E_ALL);
                 <p>Para deshabilitar una computadora y ponerla en estado de Mantenimiento dirigase a la pagina "Recursos" y busque la computadora que desea deshabilitar. Una vez la encuentre, haga click en el boton "Poner en Mantenimiento" ubicado en el lado derecho de la pantalla.
                 Tenga en cuenta que una computadora en Mantenimiento no puede ser prestada a ningun usuario. </p>
                     
-                <p>Para habilitar nuevamente una computadora y dejarla lista para ser prestada tendra que buscar la misma computadora y clickear en el boton "Habilitar" que se encuentra a un costado del visto previamente, esto lo que hara sera cambiar el estado de la computadora seleccionada a "Libre".
+                <p>Para habilitar nuevamente una computadora y dejarla lista para ser prestada tendra que buscar la misma computadora y hacer click en el boton "Habilitar" que se encuentra a un costado del visto previamente, esto lo que hara sera cambiar el estado de la computadora seleccionada a "Libre".
                 </p>
             </div>
         </div>
         <div class="faq-item">
             <button class="faq-question" style='color: #e4e4e4  '>¿Qué pasa si se vence el lapso del préstamo?</button>
             <div class="faq-answer">
-                <p>Como dijo Maradona:     Eeeeeeeeeeeeeeeeeeeeeeehhhhhhhhh...</p>
+                <p>Se le notificara al usuario directamente a su cuenta advirtiendo que ya finalizo su tiempo de uso y que debe devolver el material.</p>
             </div>
         </div>
-        <div class="faq-item">
-            <button class="faq-question" style='color: #e4e4e4  '>¿Pregunta 5?</button>
-            <div class="faq-answer">
-                <p>Respuesta a la pregunta 5.</p>
-            </div>
-        </div>
-        <div class="faq-item">
-            <button class="faq-question" style='color: #e4e4e4  '>¿Pregunta 6?</button>
-            <div class="faq-answer">
-                <p>Respuesta a la pregunta 6.</p>
-            </div>
-        </div>
-        <div class="faq-item">
-            <button class="faq-question" style='color: #e4e4e4  '>¿Pregunta 7?</button>
-            <div class="faq-answer">
-                <p>Respuesta a la pregunta 7.</p>
-            </div>
-        </div>
-        <div class="faq-item">
-            <button class="faq-question" style='color: #e4e4e4  '>¿Pregunta 8?</button>
-            <div class="faq-answer">
-                <p>Respuesta a la pregunta 8.</p>
-                <img src="https://www.google.com/imgres?q=lo%20suponia%20meme&imgurl=https%3A%2F%2Fi.pinimg.com%2F236x%2F4f%2Ffb%2Faa%2F4ffbaaff551f4713c5c7708b5ad2b768.jpg&imgrefurl=https%3A%2F%2Fes.pinterest.com%2Falexopro777zzzzzz%2Flo-suponia%2F&docid=J1HrKXzTqz8alM&tbnid=nJhbYioFkwd_-M&vet=12ahUKEwiYl5SxkveHAxXnLEQIHbMDHkEQM3oECGQQAA..i&w=236&h=386&hcb=2&ved=2ahUKEwiYl5SxkveHAxXnLEQIHbMDHkEQM3oECGQQAA" alt="Ejemplo de imagen en línea">
-            </div>
-        </div>
-
     </div>
 
     <script>
