@@ -4,329 +4,178 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Computadoras</title>
+<link rel="stylesheet" type="text/css" href="style.css">
 <style>
-  /* Estilos opcionales para los divs */
-  .hidden {
-    display: none;
-  }
-  /* Estilos del modal */
-  .modal {
-    display: none;
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0,0,0,0.4);
-  }
-  .modal-content {
-    background-color: #fefefe;
-    margin: 15% auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
-  }
-  .close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-  }
-  .close:hover,
-  .close:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
-  }
-  /* Estilo para los botones */
-  .btn {
-    display: block;
-    width: 150px;
-    padding: 10px;
-    margin: 20px auto;
-    border: none;
-    border-radius: 5px;
-    background-color: #007bff;
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
-    text-align: center;
-  }
-  .btn:hover {
-    background-color: #0056b3;
-  }
-  #netbookContainer {
-    display: flex;
-    flex-wrap: wrap;
-    width: 1000px;
-    margin: 0 auto;
-  }
-  .netbook {
-    background-color: white;
-    width: 100px;
-    height: 100px;
-    margin: 10px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.15);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-  }
+
 </style>
+
+<script>
+  // Obtener el horario actual
+var currentTime = new Date().getHours();
+
+// Obtener el horario de fin del préstamo de una computadora (ejemplo)
+var finPrestamo = 18; // Horario de fin del préstamo (en este caso, 18:00)
+
+// Comparar los horarios y mostrar u ocultar la computadora en la pantalla
+if (currentTime > finPrestamo) {
+    // Mostrar la computadora en la pantalla
+    document.getElementById("computadora").style.display = "block";
+} else {
+    // Ocultar la computadora en la pantalla
+    document.getElementById("computadora").style.display = "none";
+}
+</script>
+
 </head>
-<body>
 
 <?php
-$config = include('../../config/db.php');
-$conexion = conexion();
 include '../funciones.php';
 
 csrf();
 if (isset($_POST['submit']) && !hash_equals($_SESSION['csrf'], $_POST['csrf'])) {
-    die();
+  die();
 }
 
 $error = false;
+$config = include('../../config/db.php');
 
-$stmt = $conexion->query("
-SELECT *
-FROM recurso 
-LEFT JOIN registros 
-    ON recurso.recurso_id = registros.idrecurso 
-    AND registros.idregistro = (
-        SELECT MAX(idregistro) 
-        FROM registros AS r
-        WHERE r.idrecurso = recurso.recurso_id
-    )
-LEFT JOIN users 
-    ON registros.idusuario = users.user_id 
-WHERE recurso.recurso_id LIKE '%A'
-ORDER BY recurso.recurso_id
-");
 
-$stmtB = $conexion->query("
-SELECT *
-FROM recurso 
-LEFT JOIN registros 
-    ON recurso.recurso_id = registros.idrecurso 
-    AND registros.idregistro = (
-        SELECT MAX(idregistro) 
-        FROM registros AS r
-        WHERE r.idrecurso = recurso.recurso_id
-    )
-LEFT JOIN users 
-    ON registros.idusuario = users.user_id 
-WHERE recurso.recurso_id LIKE '%B'
-ORDER BY recurso.recurso_id
-");
+try {
+  $conexion = conexion();
 
-$stmtC = $conexion->query("
-SELECT *
-FROM recurso 
-LEFT JOIN registros 
-    ON recurso.recurso_id = registros.idrecurso 
-    AND registros.idregistro = (
-        SELECT MAX(idregistro) 
-        FROM registros AS r
-        WHERE r.idrecurso = recurso.recurso_id
-    )
-LEFT JOIN users 
-    ON registros.idusuario = users.user_id 
-WHERE recurso.recurso_id LIKE '%C'
-ORDER BY recurso.recurso_id
-");
+  if (isset($_POST['apellido'])) {
+    $consultaSQL = "SELECT registros.idregistro, users.user_name, DATE_FORMAT(registros.inicio_prestamo, '%d/%m %H:%i') AS inicio_prestamo, DATE_FORMAT(horario.horario, '%H:%i') AS fin_prestamo, COALESCE(registros.fechas_extendidas, '----') AS fechas_extendidas, recurso.recurso_nombre FROM registros INNER JOIN users ON registros.idusuario = users.user_id INNER JOIN recurso ON recurso.recurso_id = registros.idrecurso INNER JOIN horario ON horario.id = registros.fin_prestamo WHERE registros.opcion = 'Accepted' AND registros.devuelto = 'Pending' OR registros.devuelto = 'Denied' AND users.user_name LIKE '%" . $_POST['apellido'] . "%' ORDER BY registros.idregistro DESC";
+  } else {
+    $consultaSQL = "SELECT registros.idregistro, users.user_name, DATE_FORMAT(registros.inicio_prestamo, '%d/%m %H:%i') AS inicio_prestamo, DATE_FORMAT(horario.horario, '%H:%i') AS fin_prestamo, COALESCE(registros.fechas_extendidas, '----') AS fechas_extendidas, recurso.recurso_nombre FROM registros INNER JOIN users ON registros.idusuario = users.user_id INNER JOIN recurso ON recurso.recurso_id = registros.idrecurso INNER JOIN horario ON horario.id = registros.fin_prestamo WHERE registros.opcion = 'Accepted' AND registros.devuelto = 'Pending' OR registros.devuelto = 'Denied' ORDER BY registros.idregistro desc ";
+  }
 
-include "../template/header.php";
+  $sentencia = $conexion->prepare($consultaSQL);
+  $sentencia->execute();
+
+  $alumnos = $sentencia->fetchAll();
+} catch (PDOException $error) {
+  $error = $error->getMessage();
+}
+$conexion = conexion();
+$statement = $conexion->prepare("SELECT id, DATE_FORMAT(horario, '%H:%i') AS horario FROM horario");
+$statement->execute();
+$datos = $statement->fetchAll();
+$titulo = isset($_POST['apellido']) ? 'Lista de prestamos (' . $_POST['apellido'] . ')' : 'Prestamos Expirados';
+
+$currentTime = date('H:i:s'); // Obtener la hora actual en formato 24 horas
+
+if (isset($_POST['apellido'])) {
+    $consultaSQL = "SELECT registros.idregistro, users.user_name, DATE_FORMAT(registros.inicio_prestamo, '%d/%m %H:%i') AS inicio_prestamo, 
+               DATE_FORMAT(horario.horario, '%H:%i') AS fin_prestamo, COALESCE(registros.fechas_extendidas, '----') AS fechas_extendidas, 
+               recurso.recurso_nombre 
+        FROM registros 
+        INNER JOIN users ON registros.idusuario = users.user_id 
+        INNER JOIN recurso ON recurso.recurso_id = registros.idrecurso 
+        INNER JOIN horario ON horario.id = registros.fin_prestamo 
+        WHERE registros.opcion = 'Accepted' AND registros.devuelto = 'Pending' OR registros.devuelto = 'Denied' 
+              AND users.user_name LIKE :apellido 
+              AND horario.horario < :currentTime
+        ORDER BY registros.idregistro DESC";
+} else {
+    $consultaSQL = "SELECT registros.idregistro, users.user_name, DATE_FORMAT(registros.inicio_prestamo, '%d/%m %H:%i') AS inicio_prestamo, 
+               DATE_FORMAT(horario.horario, '%H:%i') AS fin_prestamo, COALESCE(registros.fechas_extendidas, '----') AS fechas_extendidas, 
+               recurso.recurso_nombre 
+        FROM registros 
+        INNER JOIN users ON registros.idusuario = users.user_id 
+        INNER JOIN recurso ON recurso.recurso_id = registros.idrecurso 
+        INNER JOIN horario ON horario.id = registros.fin_prestamo 
+        WHERE registros.opcion = 'Accepted' AND registros.devuelto = 'Pending' OR registros.devuelto = 'Denied' 
+              AND horario.horario < :currentTime
+        ORDER BY registros.idregistro DESC";
+}
+
+$sentencia = $conexion->prepare($consultaSQL);
+
+if (isset($_POST['apellido'])) {
+    $sentencia->bindValue(':apellido', '%' . $_POST['apellido'] . '%', PDO::PARAM_STR);
+}
+
+$sentencia->bindValue(':currentTime', $currentTime, PDO::PARAM_STR);
+$sentencia->execute();
+
+$alumnos = $sentencia->fetchAll();
 ?>
 
-<div class="colores">
-    <div>
-        <div id="c1"></div>
-        <p>Libre</p>
-    </div>
-    <div>
-        <div id="c2"></div>
-        <p>Reservado</p>
-    </div>
-    <div>
-        <div id="c3"></div>
-        <p>Mantenimiento</p>
-    </div>
-</div>
-<div style='display: flex; justify-content:center;'>
-<div id="netbookContainer" style='display: flex; flex-wrap: wrap; width: 1000px;'>
-    <div style='background-color: white; display: flex; flex-wrap: wrap; margin-top:35px; margin-left:110px;'>
-    
-    <form id="miFormulario" style='margin-top:10px;'>
-      <label for="opciones">Selecciona una opción:</label>
-      <select id="opciones" name="opciones">
-        <option value="opcion1">Carrito 1</option>
-        <option value="opcion2">Carrito 2</option>
-        <option value="opcion3">Carrito 3</option>
-      </select>
-    </form>
 
-    <div id="opcion1Div" class="hidden">
-        <div style='display:flex; flex-wrap:wrap; background-color: white; border-radius: 10px; margin-top: 25px;'>
-            <?php 
-            while ($row = $stmt->fetch()) {
-                if ($row['recurso_estado'] == '1') {
-                    $color = '#d4edda'; // Verde claro para "Libre"
-                } elseif ($row['recurso_estado'] == '2') {
-                    $color = '#f8d7da'; // Rojo claro para "Ocupado"
-                } elseif ($row['recurso_estado'] == '3') {
-                    $color = '#fff3cd'; // Amarillo claro para "Reservado"
-                } 
-                echo "<div class='netbook'
-                         data-recurso_id='{$row['recurso_id']}' 
-                         data-recurso_nombre='{$row['recurso_nombre']}' 
-                         data-recurso_estado='{$row['recurso_estado']}' 
-                         data-reservado-por='{$row['user_name']}' 
-                         style='background-color: {$color}; width: 50px; height: 50px; margin: 10px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.15); display: flex; justify-content: center; align-items: center; text-align: center;'>
-                        <img src='netbook.png' alt='Netbook' style='width: 50%;'>
-                        <p>{$row['recurso_nombre']}</p>
-                      </div>";
-            }
-            ?>
+<?php include "../template/header.php"; ?>
+
+<?php
+if ($error) {
+?>
+  <div class="container mt-2">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="alert alert-danger" role="alert">
+          <?= $error ?>
         </div>
-    </div>
-
-    <div id="opcion2Div" class="hidden">
-        <div style='display:flex; flex-wrap:wrap; background-color: white; border-radius: 10px; margin-top: 25px;'>
-            <?php 
-            while ($row = $stmtB->fetch()) {
-                if ($row['recurso_estado'] == '1') {
-                    $color = '#d4edda'; // Verde claro para "Libre"
-                } elseif ($row['recurso_estado'] == '2') {
-                    $color = '#f8d7da'; // Rojo claro para "Ocupado"
-                } elseif ($row['recurso_estado'] == '3') {
-                    $color = '#fff3cd'; // Amarillo claro para "Reservado"
-                } 
-                echo "<div class='netbook'
-                         data-recurso_id='{$row['recurso_id']}' 
-                         data-recurso_nombre='{$row['recurso_nombre']}' 
-                         data-recurso_estado='{$row['recurso_estado']}' 
-                         data-reservado-por='{$row['user_name']}' 
-                         style='background-color: {$color}; width: 50px; height: 50px; margin: 10px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.15); display: flex; justify-content: center; align-items: center; text-align: center;'>
-                        <img src='netbook.png' alt='Netbook' style='width: 50%;'>
-                        <p>{$row['recurso_nombre']}</p>
-                      </div>";
-            }
-            ?>
-        </div>   
-    </div>
-
-    <div id="opcion3Div" class="hidden">
-    <div style='display:flex; flex-wrap:wrap; background-color: white; border-radius: 10px; margin-top: 25px;'>
-            <?php 
-            while ($row = $stmtC->fetch()) {
-                if ($row['recurso_estado'] == '1') {
-                    $color = '#d4edda'; // Verde claro para "Libre"
-                } elseif ($row['recurso_estado'] == '2') {
-                    $color = '#f8d7da'; // Rojo claro para "Ocupado"
-                } elseif ($row['recurso_estado'] == '3') {
-                    $color = '#fff3cd'; // Amarillo claro para "Reservado"
-                } 
-                echo "<div class='netbook'
-                         data-recurso_id='{$row['recurso_id']}' 
-                         data-recurso_nombre='{$row['recurso_nombre']}' 
-                         data-recurso_estado='{$row['recurso_estado']}' 
-                         data-reservado-por='{$row['user_name']}' 
-                         style='background-color: {$color}; width: 50px; height: 50px; margin: 10px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.15); display: flex; justify-content: center; align-items: center; text-align: center;'>
-                        <img src='netbook.png' alt='Netbook' style='width: 50%;'>
-                        <p>{$row['recurso_nombre']}</p>
-                      </div>";
-            }
-            ?>
-        </div>   
-    </div>
-</div>
-
-<!-- Botón para abrir el modal -->
-<button id="openModalMostrarDatos" class="btn">Mostrar Datos</button>
-
-<!-- Modal: Mostrar Datos -->
-<div id="modalMostrarDatos" class="modal">
-  <div class="modal-content">
-    <span class="close closeMostrarDatos">&times;</span>
-    <h2>Datos de la Consulta</h2>
-    <div id="modalOpcion1Div">
-      <div style="display:flex; flex-wrap:wrap; background-color: white; border-radius: 10px; margin-top: 25px;">
-        <?php 
-        $stmt->execute(); // Volver a ejecutar la consulta para el modal
-        while ($row = $stmt->fetch()) {
-            if ($row['recurso_estado'] == '1') {
-                $color = '#d4edda'; // Verde claro para "Libre"
-            } elseif ($row['recurso_estado'] == '2') {
-                $color = '#f8d7da'; // Rojo claro para "Ocupado"
-            } elseif ($row['recurso_estado'] == '3') {
-                $color = '#fff3cd'; // Amarillo claro para "Reservado"
-            } 
-            echo "<div class='netbook'
-                     data-recurso_id='{$row['recurso_id']}' 
-                     data-recurso_nombre='{$row['recurso_nombre']}' 
-                     data-recurso_estado='{$row['recurso_estado']}' 
-                     data-reservado-por='{$row['user_name']}' 
-                     style='background-color: {$color};'>
-                    <img src='netbook.png' alt='Netbook' style='width: 50%;'>
-                    <p>{$row['recurso_nombre']}</p>
-                  </div>";
-        }
-        ?>
       </div>
+    </div>
+  </div>
+<?php
+}
+?>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <a href="abm.php" class="btn btn-primary mt-4">Ver activos</a>
+      <hr>
+
+      <form method="post" class="form-inline">
+        <div class="form-group mr-3">
+          <input type="text" id="apellido" name="apellido" placeholder="Buscar por Apellido" class="form-control">
+        </div>
+        <input name="csrf" type="hidden" value="<?php echo escapar($_SESSION['csrf']); ?>"><br>
+      </form>
     </div>
   </div>
 </div>
 
-<script>
-  // Capturar el evento de cambio en el select
-  document.getElementById('opciones').addEventListener('change', function() {
-    var seleccion = document.getElementById('opciones').value;
-    if (seleccion === 'opcion1') {
-      mostrarDiv('opcion1Div');
-    } else if (seleccion === 'opcion2') {
-      mostrarDiv('opcion2Div');
-    } else if (seleccion === 'opcion3') {
-      mostrarDiv('opcion3Div');
-    }
-  });
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <h2 class="mt-3">
+        <?= $titulo ?>
+      </h2>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Usuario</th>
+            <th>Fin prestamo</th>
+            <th>Material retirado</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php
+          if ($alumnos && $sentencia->rowCount() > 0) {
+            foreach ($alumnos as $fila) {
+          ?>
+              <tr>
+                <td><?php echo escapar($fila["idregistro"]); ?></td>
+                <td><?php echo escapar($fila["user_name"]); ?></td>
+                <td><?php echo escapar($fila["fin_prestamo"]); ?></td>
+                <td><?php echo escapar($fila["recurso_nombre"]); ?></td>
+              </tr>
+          <?php
+            }
+          }
+          ?>
+        <tbody>
+      </table>
+    </div>
+  </div>
+</div>
 
-  function mostrarDiv(idDiv) {
-    var divs = document.querySelectorAll('div[id$="Div"]');
-    divs.forEach(function(div) {
-      div.classList.add('hidden');
-    });
-    var divMostrar = document.getElementById(idDiv);
-    divMostrar.classList.remove('hidden');
-  }
 
-  document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('opciones').value = 'opcion1';
-    document.getElementById('opciones').dispatchEvent(new Event('change'));
-  });
 
-  var modalMostrarDatos = document.getElementById("modalMostrarDatos");
-  var btnMostrarDatos = document.getElementById("openModalMostrarDatos");
-  var spanCerrarMostrarDatos = document.getElementsByClassName("closeMostrarDatos")[0];
 
-  btnMostrarDatos.onclick = function() {
-    modalMostrarDatos.style.display = "block";
-  }
 
-  spanCerrarMostrarDatos.onclick = function() {
-    modalMostrarDatos.style.display = "none";
-  }
 
-  window.onclick = function(event) {
-    if (event.target == modalMostrarDatos) {
-      modalMostrarDatos.style.display = "none";
-    }
-  }
-</script>
 
 <?php include "../template/footer.php"; ?>
-</body>
-</html>

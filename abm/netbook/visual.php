@@ -4,74 +4,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Computadoras</title>
+<link rel="stylesheet" type="text/css" href="style.css">
 <style>
   /* Estilos opcionales para los divs */
   .hidden {
     display: none;
-  }
-  /* Estilos del modal */
-  .modal {
-    display: none;
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0,0,0,0.4);
-  }
-  .modal-content {
-    background-color: #fefefe;
-    margin: 15% auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
-  }
-  .close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
   }
   .close:hover,
   .close:focus {
     color: black;
     text-decoration: none;
     cursor: pointer;
-  }
-  /* Estilo para los botones */
-  .btn {
-    padding: 10px;
-    font-size: 16px;
-    cursor: pointer;
-    text-align: center;
-    width: 85px;
-    height: 85px;
-    background-color:#d4edda;
-    border-radius: 10px;
-    margin: 10px;
-  }
-  .btn:hover {
-    background-color: red;
-  }
-  #netbookContainer {
-    display: flex;
-    flex-wrap: wrap;
-    width: 1000px;
-    margin: 0 auto;
-  }
-  .netbook {
-    background-color: white;
-    width: 100px;
-    height: 100px;
-    margin: 10px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.15);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
   }
 </style>
 </head>
@@ -248,40 +191,7 @@ include "../template/header.php";
 </div>
     </div>
 
-    <button id="openModalMostrarDatos" class="btn" style='margin-left: 1%; background_color: blue;'>Mostrar Datos</button>
-
-<!-- Modal: Mostrar Datos -->
-<div id="modalMostrarDatos" class="modal">
-  <div class="modal-content">
-    <span class="close closeMostrarDatos">&times;</span>
-    <h2>Datos de la Consulta</h2>
-    <div id="modalOpcion1Div">
-      <div style="display:flex; flex-wrap:wrap; background-color: white; border-radius: 10px; margin-top: 25px;">
-        <?php 
-        $stmt->execute(); // Volver a ejecutar la consulta para el modal
-        while ($row = $stmt->fetch()) {
-            if ($row['recurso_estado'] == '1') {
-                $color = '#d4edda'; // Verde claro para "Libre"
-            } elseif ($row['recurso_estado'] == '2') {
-                $color = '#f8d7da'; // Rojo claro para "Ocupado"
-            } elseif ($row['recurso_estado'] == '3') {
-                $color = '#fff3cd'; // Amarillo claro para "Reservado"
-            } 
-            echo "<div class='netbook'
-                     data-recurso_id='{$row['recurso_id']}' 
-                     data-recurso_nombre='{$row['recurso_nombre']}' 
-                     data-recurso_estado='{$row['recurso_estado']}' 
-                     data-reservado-por='{$row['user_name']}' 
-                     style='background-color: {$color};'>
-                    <img src='netbook.png' alt='Netbook' style='width: 50%;'>
-                    <p>{$row['recurso_nombre']}</p>
-                  </div>";
-        }
-        ?>
-      </div>
-    </div>
-  </div>
-</div>
+    <a href="copia_visual.php" class="boton" title="Muestra las netbooks que han pasado su tiempo de prestamo" style='margin-left:20px;'>Expirados</a>
 
 <script>
   // Capturar el evento de cambio en el select
@@ -309,24 +219,6 @@ include "../template/header.php";
     document.getElementById('opciones').value = 'opcion1';
     document.getElementById('opciones').dispatchEvent(new Event('change'));
   });
-
-  var modalMostrarDatos = document.getElementById("modalMostrarDatos");
-  var btnMostrarDatos = document.getElementById("openModalMostrarDatos");
-  var spanCerrarMostrarDatos = document.getElementsByClassName("closeMostrarDatos")[0];
-
-  btnMostrarDatos.onclick = function() {
-    modalMostrarDatos.style.display = "block";
-  }
-
-  spanCerrarMostrarDatos.onclick = function() {
-    modalMostrarDatos.style.display = "none";
-  }
-
-  window.onclick = function(event) {
-    if (event.target == modalMostrarDatos) {
-      modalMostrarDatos.style.display = "none";
-    }
-  }
 </script>
 
 
