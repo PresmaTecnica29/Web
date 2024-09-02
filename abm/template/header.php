@@ -5,14 +5,12 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
-  <link rel="stylesheet" href="views/templates/stylelog.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
   <script src="script.js"></script>
   <script>
-    $(document).ready(function () {
+    $(document).ready(function() {
 
       <?php if (!empty($notification)) { ?>
         $('#returnNotificationModal').modal('show');
@@ -23,7 +21,7 @@
       <?php } ?>
 
 
-      $('#acceptReturn').click(function () {
+      $('#acceptReturn').click(function() {
         if ($('#horario').val() == null || $('#horario').val() == '') {
           alert('Por favor, elija un horario.');
         } else {
@@ -31,14 +29,14 @@
         }
       });
 
-      $('#denyReturn').click(function () {
+      $('#denyReturn').click(function() {
         handleReturn('denied');
       });
-      $('#acceptDevolucion').click(function () {
+      $('#acceptDevolucion').click(function() {
         handleDevolucion('accepted');
       });
 
-      $('#denyDevolucion').click(function () {
+      $('#denyDevolucion').click(function() {
         handleDevolucion('denied');
       });
 
@@ -46,15 +44,15 @@
       let notificationId;
       let notificacionIddev;
 
-      $('#returnNotificationModal').on('shown.bs.modal', function () {
+      $('#returnNotificationModal').on('shown.bs.modal', function() {
         isModalOpen = true;
       });
 
-      $('#returnNotificationModal').on('hidden.bs.modal', function () {
+      $('#returnNotificationModal').on('hidden.bs.modal', function() {
         isModalOpen = false;
       });
 
-      $('#returnDevolucionModal').on('shown.bs.modal', function () {
+      $('#returnDevolucionModal').on('shown.bs.modal', function() {
         if (!isModalOpen) {
           isModalOpen = true;
         } else {
@@ -62,7 +60,7 @@
         }
       });
 
-      $('#returnDevolucionModal').on('hidden.bs.modal', function () {
+      $('#returnDevolucionModal').on('hidden.bs.modal', function() {
         isModalOpen = false;
       });
 
@@ -76,11 +74,11 @@
             hora: $('#horario').val(),
             nombreNet: $('#nombreNet').val()
           },
-          success: function (response) {
+          success: function(response) {
             $('#notificationMessage').text(response);
             $('#acceptReturn, #denyReturn').hide();
           },
-          error: function (error) {
+          error: function(error) {
             alert('Hubo un error al manejar la devolución. Por favor, inténtalo de nuevo.');
           }
         });
@@ -94,13 +92,13 @@
             status: status,
             id: notificationIddev,
             nombreNetDevo: $('#nombreNetDevo').val()
-
+            
           },
-          success: function (response) {
+          success: function(response) {
             $('#devolucionMessage').text(response);
             $('#acceptDevolucion, #denyDevolucion').hide();
           },
-          error: function (error) {
+          error: function(error) {
             alert('Hubo un error al manejar la devolución. Por favor, inténtalo de nuevo.');
           }
         });
@@ -108,7 +106,7 @@
 
       const source = new EventSource('actualizar.php');
 
-      source.onmessage = function (event) {
+      source.onmessage = function(event) {
         const alumnos = JSON.parse(event.data);
         let html = '';
         alumnos.forEach(alumno => {
@@ -132,7 +130,7 @@
 
       let sourceModal = new EventSource('actualizarModal.php');
 
-      sourceModal.onmessage = function (event) {
+      sourceModal.onmessage = function(event) {
         const notificacion = JSON.parse(event.data);
 
         // Comprobar si el modal está abierto
@@ -152,7 +150,7 @@
       };
       let sourceDevolucion = new EventSource('actualizarDevolucion.php');
 
-      sourceDevolucion.onmessage = function (event) {
+      sourceDevolucion.onmessage = function(event) {
         const notificacionDevolucion = JSON.parse(event.data);
 
         // Comprobar si el modal está abierto
@@ -165,7 +163,7 @@
 
           notificationIddev = notificacionDevolucion.idregistro; // Agrega esta línea para almacenar el id de la notificación
           notificacionNom =
-            $('#acceptDevolucion, #denyDevolucion').show();
+          $('#acceptDevolucion, #denyDevolucion').show();
 
           // Abrir el modal
           $('#returnDevolucionModal').modal('show');
@@ -198,8 +196,7 @@
 <body>
   <header class="p-3 bg-dark text-white">
     <div class="container" bis_skin_checked="1">
-      <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start"
-        bis_skin_checked="1">
+      <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start" bis_skin_checked="1">
         <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
           <li><a href='../../index.php' class="nav-link px-2 text-secondary">Inicio</a></li>
           <li><a href='../netbook/abm.php' class="nav-link px-2 text-white">Prestamos</a></li>
@@ -219,35 +216,9 @@
         </ul>
 
         <div class="contenedor" bis_skin_checked="1">
-          <div class="caja-advertencia"><?php echo $_SESSION['user_name']; ?></div>
-          <img class="ñiquito" src="views/templates/logofinal.png">
+                    <div class="caja-advertencia"><?php echo $_SESSION['user_name']; ?></div>
+                    <img class="ñiquito" src="../../views/templates/logofinal.png">
         </div>
       </div>
     </div>
   </header>
-
-  <div class="cuerpo">
-    <a href="abm/netbook/abm.php" class="card">
-      Registros
-    </a>
-    <a href="abm/netbook/visual.php" class="card">
-      Visual
-    </a>
-    <?php
-    if (isset($_SESSION['user_rol'])) {
-      if ($_SESSION['user_rol'] == 5) {
-        echo '<a href="abm/netbook/qr.php" class="card">Recursos</a>';
-      }
-    } ?>
-  </div>
-  <footer class="bg-light text-center text-lg-start">
-    <!-- Copyright -->
-    <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
-      © 2024 Copyright:
-      <a class="text-dark" href="https://www.tecnica29de6.edu.ar/">Escuela Tecnica N°29 DE 6 Reconquista de Buenos
-        Aires</a>
-    </div>
-    <!-- Copyright -->
-  </footer>
-</body>
-</body>

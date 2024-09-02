@@ -16,5 +16,5 @@ if ($seguridad && $seguridad['must_change_password']) { // Añade una verificaci
     {
         return htmlspecialchars($html, ENT_QUOTES | ENT_SUBSTITUTE, "UTF-8");
     }
-    require_once("abm/template/header.php");
+    require_once("templates/header.php");
 }
