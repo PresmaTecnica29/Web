@@ -22,7 +22,7 @@ if (isset($login)) {
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="views\estilo.css">
+  <link rel="stylesheet" href="views\style_log_in.css">
   <link rel="icon" href="views/templates/logofinal.png" type="image/png">
   <title>Inico de sesion</title>
 </head>
