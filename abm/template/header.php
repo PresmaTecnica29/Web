@@ -208,7 +208,6 @@
             }
           } ?>
           <li><a href="../netbook/visual.php" class="nav-link px-2 text-white">Visual</a></li>
-          <li><a href="../netbook/copia_visual.php" class="nav-link px-2 text-white">Visual 2</a></li>
 
           <li><a href="/Web/index.php?logout" class="nav-link px-2 text-white">Cerrar sesion</a></li>
 

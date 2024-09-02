@@ -191,7 +191,7 @@ include "../template/header.php";
 </div>
     </div>
 
-    <a href="copia_visual.php" class="boton" title="Muestra las netbooks que han pasado su tiempo de prestamo" style='margin-left:20px;'>Expirados</a>
+    <a href="expirados.php" class="boton" title="Muestra las netbooks que han pasado su tiempo de prestamo" style='margin-left:20px;'>Expirados</a>
 
 <script>
   // Capturar el evento de cambio en el select
