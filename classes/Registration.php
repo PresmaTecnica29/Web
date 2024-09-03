@@ -1,5 +1,5 @@
 <?php
-
+require "enviar_gmails.php";
 /**
  * Class registration
  * handles the user registration
@@ -36,7 +36,7 @@ class Registration
      */
     private function registerNewUser()
     {
-        $dominiosValidos = array("@alu.tecnica29de6.edu.ar", "@tecnica29de6.edu.ar");
+        $dominiosValidos = array("@alu.tecnica29de6.edu.ar","@tecnica29de6.edu.ar");
         if (empty($_POST['user_name'])) {
             $this->errors[] = "Usuario vacio";
         } elseif (empty($_POST['user_password_new']) || empty($_POST['user_password_repeat'])) {
@@ -97,19 +97,20 @@ class Registration
                 $query_check_user_name = $this->db_connection->query($sql);
 
                 if ($query_check_user_name->num_rows == 1) {
-                    $this->errors[] = "Perdon, este nombre de usuario/email ya estan en uso.";
-                } else {
-                    // write new user's data into database
-                    $sql = "INSERT INTO users (`user_name`, `user_password_hash`, `user_email`,`idRol` ) VALUES ('$user_name','$user_password_hash','$user_email','$user_rol')";
-                    $query_new_user_insert = $this->db_connection->query($sql);
-
-                    // if user has been added successfully
-                    if ($query_new_user_insert) {
-                        $this->messages[] = "Tu cuenta ya fue creada. Ya puedes iniciar sesion.";
-                    } else {
-                        $this->errors[] = "Perdon, tu registracion fallo. Porfavor intentalo devuelta.";
-                    }
-                }
+                    $this->errors[] = "Perdon, este nombre de usuario/email ya estan en uso.";}
+                    else {
+                $sql = "INSERT INTO users (`user_name`, `user_password_hash`, `user_email`,`idRol` ) VALUES ('$user_name','$user_password_hash','$user_email','$user_rol')";
+                $query_new_user_insert = $this->db_connection->query($sql);  
+                $code = generateVerificationCode();
+                sendVerificationCode($user_email, $code);
+                $consultaid = "SELECT user_id FROM users WHERE user_email = '$user_email'";
+                $query_check_user_id = $this->db_connection->query($consultaid);
+                $consultaid2 = $query_check_user_id->fetch_assoc();
+                $userid = $consultaid2["user_id"];
+                storeVerificationCode($userid, $code);
+                header("Location: views/verificacion.php");
+                exit();
+               }
             } else {
                 $this->errors[] = "Sorry, no database connection.";
             }
