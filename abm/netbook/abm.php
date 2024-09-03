@@ -13,24 +13,24 @@ $config = include('../../config/db.php');
 try {
   $conexion = conexion();
 
-  $consultaSQL = "SELECT registros.idregistro, users.user_name, recurso.recurso_nombre, DATE_FORMAT(registros.inicio_prestamo, '%d/%m %H:%i') AS inicio_prestamo, registros.opcion FROM registros inner join recurso on recurso.recurso_id = registros.idrecurso inner join users on registros.idusuario = users.user_id  where registros.opcion = 'Pending' LIMIT 1";
+  $consultaSQL = "SELECT registros.idregistro, users.user_name, recurso.recurso_nombre, DATE_FORMAT(registros.inicio_prestamo, '%d/%m %H:%i') AS inicio_prestamo, registros.opcion FROM registros inner join recurso on recurso.recurso_id = registros.idrecurso inner join users on registros.idusuario = users.user_id  where registros.opcion = 'Pending' ";
   $sentencia = $conexion->prepare($consultaSQL);
   $sentencia->execute();
 
   $notification = null;
   if ($sentencia->rowCount() > 0) {
     // Si hay una devolución pendiente, se almacenará en $notification
-    $notification = $sentencia->fetch(PDO::FETCH_ASSOC);
+    $notifications = $sentencia->fetchAll(PDO::FETCH_ASSOC);
   }
 
-  $consultaSQL = "SELECT registros.idregistro, users.user_name, recurso.recurso_nombre, DATE_FORMAT(registros.inicio_prestamo, '%d/%m %H:%i') AS inicio_prestamo, DATE_FORMAT(horario.horario, '%H:%i') AS horario, registros.devuelto FROM registros inner join recurso on recurso.recurso_id = registros.idrecurso inner join users on registros.idusuario = users.user_id inner join horario on horario.id = registros.fin_prestamo  where registros.devuelto = 'Pending' LIMIT 1";
+  $consultaSQL = "SELECT registros.idregistro, users.user_name, recurso.recurso_nombre, DATE_FORMAT(registros.inicio_prestamo, '%d/%m %H:%i') AS inicio_prestamo, DATE_FORMAT(horario.horario, '%H:%i') AS horario, registros.devuelto FROM registros inner join recurso on recurso.recurso_id = registros.idrecurso inner join users on registros.idusuario = users.user_id inner join horario on horario.id = registros.fin_prestamo  where registros.devuelto = 'Pending'";
   $sentencia = $conexion->prepare($consultaSQL);
   $sentencia->execute();
 
   $notificationDevolucion = null;
   if ($sentencia->rowCount() > 0) {
     // Si hay una devolución pendiente, se almacenará en $notification
-    $notificationDevolucion = $sentencia->fetch(PDO::FETCH_ASSOC);
+    $notificationDevolucion = $sentencia->fetchAll(PDO::FETCH_ASSOC);
   }
 
   if (isset($_POST['apellido'])) {
@@ -128,7 +128,7 @@ if ($error) {
     </div>
   </div>
 </div>
-<div class="modal" tabindex="-1" role="dialog" id="returnNotificationModal">
+<!-- <div class="modal" tabindex="-1" role="dialog" id="returnNotificationModal"> -->
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -139,6 +139,45 @@ if ($error) {
       </div>
 
       <div class="modal-body">
+
+
+      <?php
+if (!empty($notifications)) {
+    echo '<table border="1">';
+    echo '<thead>';
+    echo '<tr>';
+    echo '<th>Seleccionar</th>';  // Añadido para el checkbox
+    echo '<th>Alumno</th>';
+    echo '<th>Material</th>';
+    echo '<th>Horario inicio</th>';
+    echo '</tr>';
+    echo '</thead>';
+    echo '<tbody>';
+
+    // Recorre cada notificación en el array $notifications
+    foreach ($notifications as $notification) {
+        echo '<tr>';
+        echo '<td><input type="checkbox" name="notifications[]" value="' . $notification['idregistro'] . '"></td>'; // Añadido el checkbox
+        echo '<td>' . $notification['user_name'] . '</td>';
+        echo '<td>' . $notification['recurso_nombre'] . '</td>';
+        echo '<td>' . $notification['inicio_prestamo'] . '</td>';
+        echo '</tr>';
+    }
+
+    echo '</tbody>';
+    echo '</table>';
+    echo '<div class="modal-footer">';
+    echo '<button type="button" class="btn btn-success" id="acceptDevolucion">Aceptar</button>';
+    echo '<button type="button" class="btn btn-danger" id="denyDevolucion">Rechazar</button>';
+    echo '</div>';
+} else {
+    echo 'No hay notificaciones pendientes.';
+}
+?>
+
+
+<br>
+
         <p id="notificationMessageUser">Alumno: <?php echo isset($notification['user_name']) ? $notification['user_name'] : ''; ?></p>
         <p id="notificationMessageResource">Material: <?php echo isset($notification['recurso_nombre']) ? $notification['recurso_nombre'] : ''; ?></p>
         <p id="notificationMessageStart">Horario inicio: <?php echo isset($notification['inicio_prestamo']) ? $notification['inicio_prestamo'] : ''; ?></p>
