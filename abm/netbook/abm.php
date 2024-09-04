@@ -1,3 +1,75 @@
+<style>
+  /* Estilos para la tabla */
+  table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+  }
+
+  th, td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+  }
+
+  th {
+      background-color: #e0e0e0;;
+  }
+
+  /* Estilos para las filas */
+  tr:hover {
+      background-color: #f5f5f5;
+  }
+
+  /* Estilos para el select */
+  select {
+      width: 100%;
+      padding: 8px;
+      margin: 4px 0;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+  }
+
+  /* Estilos para el contenedor del select */
+  .form-group {
+      margin: 0;
+  }
+
+  /* Estilos para los botones */
+  .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      padding: 10px;
+  }
+
+  .btn {
+      padding: 10px 20px;
+      margin-left: 10px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+  }
+
+  .btn-success {
+      background-color: #28a745;
+      color: white;
+  }
+
+  .btn-success:hover {
+      background-color: #218838;
+  }
+
+  .btn-danger {
+      background-color: #dc3545;
+      color: white;
+  }
+
+  .btn-danger:hover {
+      background-color: #c82333;
+  }
+</style>
+
 <?php
 include '../funciones.php';
 
@@ -129,80 +201,75 @@ if ($error) {
   </div>
 </div>
 <!-- <div class="modal" tabindex="-1" role="dialog" id="returnNotificationModal"> -->
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Notificación de Peticion</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-
-      <div class="modal-body">
-
-
-      <?php
-if (!empty($notifications)) {
-    echo '<table border="1">';
-    echo '<thead>';
-    echo '<tr>';
-    echo '<th>Seleccionar</th>';  // Añadido para el checkbox
-    echo '<th>Alumno</th>';
-    echo '<th>Material</th>';
-    echo '<th>Horario inicio</th>';
-    echo '</tr>';
-    echo '</thead>';
-    echo '<tbody>';
-
-    // Recorre cada notificación en el array $notifications
-    foreach ($notifications as $notification) {
-        echo '<tr>';
-        echo '<td><input type="checkbox" name="notifications[]" value="' . $notification['idregistro'] . '"></td>'; // Añadido el checkbox
-        echo '<td>' . $notification['user_name'] . '</td>';
-        echo '<td>' . $notification['recurso_nombre'] . '</td>';
-        echo '<td>' . $notification['inicio_prestamo'] . '</td>';
-        echo '</tr>';
-    }
-
-    echo '</tbody>';
-    echo '</table>';
-    echo '<div class="modal-footer">';
-    echo '<button type="button" class="btn btn-success" id="acceptDevolucion">Aceptar</button>';
-    echo '<button type="button" class="btn btn-danger" id="denyDevolucion">Rechazar</button>';
-    echo '</div>';
-} else {
-    echo 'No hay notificaciones pendientes.';
-}
-?>
-
-
-<br>
-
-        <p id="notificationMessageUser">Alumno: <?php echo isset($notification['user_name']) ? $notification['user_name'] : ''; ?></p>
-        <p id="notificationMessageResource">Material: <?php echo isset($notification['recurso_nombre']) ? $notification['recurso_nombre'] : ''; ?></p>
-        <p id="notificationMessageStart">Horario inicio: <?php echo isset($notification['inicio_prestamo']) ? $notification['inicio_prestamo'] : ''; ?></p>
-        <div class="form-group">
-          <label for="horario">Horario</label>
-          <select name="horario" id="horario" class="input">
-            <option value='' disabled hidden selected>Elegir un horario</option>
-            <?php foreach ($datos as $dato) : ?>
-              <option value="<?= $dato['id']; ?>" class="input"><?= $dato['horario'] ?></option>
-            <?php endforeach; ?>
-          </select>
+<div class="modal" tabindex="-1" role="dialog" id="returnNotificationModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Notificación de Peticion</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <?php
+                if (!empty($notifications)) {
+                    echo '<table border="1">';
+                    echo '<thead>';
+                    echo '<tr>';
+                    echo '<th>#</th>';  // Añadido para el checkbox
+                    echo '<th>Alumno</th>';
+                    echo '<th>Material</th>';
+                    echo '<th>Horario inicio</th>';
+                    echo '<th>Horario de devolución</th>';
+                    echo '<th></th>';
+                    echo '</tr>';
+                    echo '</thead>';
+                    echo '<tbody>';
+                
+                    foreach ($notifications as $notification) {
+                        echo '<tr>';
+                        echo '<td><input type="checkbox" name="notifications[]" value="' . $notification['idregistro'] . '" onchange="checkSelected()"></td>';
+                        echo '<td><p id="notificationMessageUser">' . $notification['user_name'] . '</p></td>';
+                        echo '<td><p id="notificationMessageResource">' . $notification['recurso_nombre'] . '</p></td>';
+                        echo '<td><p id="notificationMessageStart">' . $notification['inicio_prestamo'] . '</p></td>';
+                
+                        echo '<td>';
+                        echo '<div class="form-group">';
+                        echo '<select name="horario[' . $notification['idregistro'] . ']" class="input">';
+                        echo '<option value="" disabled hidden selected>Elegir un horario</option>';
+                        
+                        foreach ($datos as $dato) {
+                            echo '<option value="' . $dato['id'] . '">' . $dato['horario'] . '</option>';
+                        }
+                        echo '</select>';
+                        echo '</div>';
+                
+                        echo '<td>';
+                        echo '<label for="nombreNetDevo"></label>';
+                        echo '<select name="nombreNet" id="nombreNet" class="input">';
+                        echo '<option value="' . $notification['recurso_nombre'] . '">' . $notification['recurso_nombre'] . '</option>';
+                        echo '</select>';
+                        echo '</td>';
+                    }
+                
+                    echo '</tbody>';
+                    echo '</table>';
+                    echo '<div class="modal-footer">';
+                    echo '<button type="button" class="btn btn-success" id="acceptDevolucion" disabled>Aceptar</button>';
+                    echo '<button type="button" class="btn btn-danger" id="denyDevolucion" disabled>Rechazar</button>';
+                    echo '</div>';
+                } else {
+                    echo 'No hay notificaciones pendientes.';
+                }
+                ?>
+            </div>
         </div>
-        <label for="nombreNet"></label>
-            <select name="nombreNet" id="nombreNet" class="input">
-              <option  value='<?= ($notification['recurso_nombre'])?>' class="input"> <?= ($notification['recurso_nombre'])?></option>
-            </select>
-      </div>
-
-      <div class="modal-footer">
-        <button type="button" class="btn btn-success" id="acceptReturn">Aceptar</button>
-        <button type="button" class="btn btn-danger" id="denyReturn">Rechazar</button>
-      </div>
     </div>
-  </div>
 </div>
+
+
+
+
 
 <div class="modal" tabindex="-1" role="dialog" id="returnDevolucionModal">
   <div class="modal-dialog" role="document">

@@ -53,6 +53,7 @@ class Login
             // change character set to utf8 and check it
             if (!$this->db_connection->set_charset("utf8")) {
                 $this->errors[] = $this->db_connection->error;
+                
             }
 
             // if no connection errors (= working database connection)

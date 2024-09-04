@@ -10,6 +10,29 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
   <script src="script.js"></script>
   <script>
+document.addEventListener('DOMContentLoaded', function() {
+    function checkSelected() {
+        var checkboxes = document.querySelectorAll('input[name="notifications[]"]:checked');
+        var acceptButton = document.getElementById('acceptDevolucion');
+        var denyButton = document.getElementById('denyDevolucion');
+
+        if (checkboxes.length > 0) {
+            acceptButton.disabled = false;
+            denyButton.disabled = false;
+        } else {
+            acceptButton.disabled = true;
+            denyButton.disabled = true;
+        }
+    }
+
+    document.querySelectorAll('input[name="notifications[]"]').forEach(function(checkbox) {
+        checkbox.addEventListener('change', checkSelected);
+    });
+
+    checkSelected();
+});
+</script>
+  <script>
     $(document).ready(function() {
 
       <?php if (!empty($notification)) { ?>
@@ -85,24 +108,31 @@
       }
 
       function handleDevolucion(status) {
-        $.ajax({
-          url: 'handle_devolucion.php',
-          type: 'POST',
-          data: {
+    // Obtener todos los checkboxes seleccionados
+    var selectedIds = Array.from(document.querySelectorAll('input[name="notifications[]"]:checked'))
+                            .map(checkbox => checkbox.value); // Recoge los IDs de las notificaciones seleccionadas
+    
+    // Obtener el nombre del recurso de devolución
+    var nombreNetDevo = $('#nombreNet').val(); // Asegúrate de que este es el ID correcto
+
+    $.ajax({
+        url: 'handle_devolucion.php',
+        type: 'POST',
+        data: {
             status: status,
-            id: notificationIddev,
-            nombreNetDevo: $('#nombreNetDevo').val()
-            
-          },
-          success: function(response) {
+            ids: selectedIds, // Envía todos los IDs seleccionados
+            nombreNetDevo: nombreNetDevo
+        },
+        success: function(response) {
             $('#devolucionMessage').text(response);
-            $('#acceptDevolucion, #denyDevolucion').hide();
-          },
-          error: function(error) {
+            $('#acceptDevolucion').hide();
+        },
+        error: function(error) {
             alert('Hubo un error al manejar la devolución. Por favor, inténtalo de nuevo.');
-          }
-        });
-      }
+        }
+    });
+}
+
 
       const source = new EventSource('actualizar.php');
 
@@ -136,9 +166,9 @@
         // Comprobar si el modal está abierto
         if (!isModalOpen && notificacion) {
           // Actualizar el contenido del modal
-          document.getElementById('notificationMessageUser').textContent = 'Alumno: ' + notificacion.user_name;
-          document.getElementById('notificationMessageResource').textContent = 'Material: ' + notificacion.recurso_nombre;
-          document.getElementById('notificationMessageStart').textContent = 'Horario inicio: ' + notificacion.inicio_prestamo;
+          document.getElementById('notificationMessageUser').textContent = notificacion.user_name;
+          document.getElementById('notificationMessageResource').textContent = notificacion.recurso_nombre;
+          document.getElementById('notificationMessageStart').textContent =   notificacion.inicio_prestamo;
 
           notificationId = notificacion.idregistro; // Agrega esta línea para almacenar el id de la notificación
 
@@ -156,10 +186,10 @@
         // Comprobar si el modal está abierto
         if (!isModalOpen && notificacionDevolucion) {
           // Actualizar el contenido del modal
-          document.getElementById('devolucionMessageUser').textContent = 'Alumno: ' + notificacionDevolucion.user_name;
-          document.getElementById('devolucionMessageResource').textContent = 'Material: ' + notificacionDevolucion.recurso_nombre;
-          document.getElementById('devolucionMessageStart').textContent = 'Horario inicio: ' + notificacionDevolucion.inicio_prestamo;
-          document.getElementById('devolucionMessageEnd').textContent = 'Horario final: ' + notificacionDevolucion.horario;
+          document.getElementById('devolucionMessageUser').textContent =  notificacionDevolucion.user_name;
+          document.getElementById('devolucionMessageResource').textContent =  notificacionDevolucion.recurso_nombre;
+          document.getElementById('devolucionMessageStart').textContent =  notificacionDevolucion.inicio_prestamo;
+          document.getElementById('devolucionMessageEnd').textContent =  notificacionDevolucion.horario;
 
           notificationIddev = notificacionDevolucion.idregistro; // Agrega esta línea para almacenar el id de la notificación
           notificacionNom =
@@ -179,7 +209,7 @@
     }
 
     #nombreNet {
-      visibility: hidden;
+      
     }
 
     footer {
