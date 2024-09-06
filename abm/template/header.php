@@ -5,35 +5,36 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
   <script src="script.js"></script>
   <script>
-document.addEventListener('DOMContentLoaded', function() {
-    function checkSelected() {
+    document.addEventListener('DOMContentLoaded', function () {
+      function checkSelected() {
         var checkboxes = document.querySelectorAll('input[name="notifications[]"]:checked');
-        var acceptButton = document.getElementById('acceptDevolucion');
-        var denyButton = document.getElementById('denyDevolucion');
+        var acceptButton = document.getElementById('acceptReturn');
+        var denyButton = document.getElementById('denyReturn');
 
         if (checkboxes.length > 0) {
-            acceptButton.disabled = false;
-            denyButton.disabled = false;
+          acceptButton.disabled = false;
+          denyButton.disabled = false;
         } else {
-            acceptButton.disabled = true;
-            denyButton.disabled = true;
+          acceptButton.disabled = true;
+          denyButton.disabled = true;
         }
-    }
+      }
 
-    document.querySelectorAll('input[name="notifications[]"]').forEach(function(checkbox) {
+      document.querySelectorAll('input[name="notifications[]"]').forEach(function (checkbox) {
         checkbox.addEventListener('change', checkSelected);
-    });
+      });
 
-    checkSelected();
-});
-</script>
+      checkSelected();
+    });
+  </script>
   <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
 
       <?php if (!empty($notification)) { ?>
         $('#returnNotificationModal').modal('show');
@@ -44,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function() {
       <?php } ?>
 
 
-      $('#acceptReturn').click(function() {
+      $('#acceptReturn').click(function () {
         if ($('#horario').val() == null || $('#horario').val() == '') {
           alert('Por favor, elija un horario.');
         } else {
@@ -52,14 +53,14 @@ document.addEventListener('DOMContentLoaded', function() {
         }
       });
 
-      $('#denyReturn').click(function() {
+      $('#denyReturn').click(function () {
         handleReturn('denied');
       });
-      $('#acceptDevolucion').click(function() {
+      $('#acceptDevolucion').click(function () {
         handleDevolucion('accepted');
       });
 
-      $('#denyDevolucion').click(function() {
+      $('#denyDevolucion').click(function () {
         handleDevolucion('denied');
       });
 
@@ -67,15 +68,15 @@ document.addEventListener('DOMContentLoaded', function() {
       let notificationId;
       let notificacionIddev;
 
-      $('#returnNotificationModal').on('shown.bs.modal', function() {
+      $('#returnNotificationModal').on('shown.bs.modal', function () {
         isModalOpen = true;
       });
 
-      $('#returnNotificationModal').on('hidden.bs.modal', function() {
+      $('#returnNotificationModal').on('hidden.bs.modal', function () {
         isModalOpen = false;
       });
 
-      $('#returnDevolucionModal').on('shown.bs.modal', function() {
+      $('#returnDevolucionModal').on('shown.bs.modal', function () {
         if (!isModalOpen) {
           isModalOpen = true;
         } else {
@@ -83,60 +84,71 @@ document.addEventListener('DOMContentLoaded', function() {
         }
       });
 
-      $('#returnDevolucionModal').on('hidden.bs.modal', function() {
+      $('#returnDevolucionModal').on('hidden.bs.modal', function () {
         isModalOpen = false;
       });
 
       function handleReturn(status) {
+        var selectedIds = Array.from(document.querySelectorAll('input[name="notifications[]"]:checked'))
+          .map(checkbox => checkbox.value); // Recoge los IDs de las notificaciones seleccionadas
+
         $.ajax({
           url: 'handle_return.php',
           type: 'POST',
           data: {
             status: status,
-            id: notificationId, // Cambia esta línea para usar notificationId
+            id: selectedIds, // Enviar los IDs como un array
             hora: $('#horario').val(),
             nombreNet: $('#nombreNet').val()
           },
-          success: function(response) {
-            $('#notificationMessage').text(response);
+          success: function (response) {
+            const result = JSON.parse(response);
+            if (result.success.length > 0) {
+              alert(result.success.join("\n"));
+            }
+            if (result.errors.length > 0) {
+              alert(result.errors.join("\n"));
+            }
+            $('#notificationMessage').text(result.success.join("\n") || result.errors.join("\n"));
             $('#acceptReturn, #denyReturn').hide();
           },
-          error: function(error) {
+          error: function (error) {
             alert('Hubo un error al manejar la devolución. Por favor, inténtalo de nuevo.');
           }
         });
       }
 
-      function handleDevolucion(status) {
-    // Obtener todos los checkboxes seleccionados
-    var selectedIds = Array.from(document.querySelectorAll('input[name="notifications[]"]:checked'))
-                            .map(checkbox => checkbox.value); // Recoge los IDs de las notificaciones seleccionadas
-    
-    // Obtener el nombre del recurso de devolución
-    var nombreNetDevo = $('#nombreNet').val(); // Asegúrate de que este es el ID correcto
 
-    $.ajax({
-        url: 'handle_devolucion.php',
-        type: 'POST',
-        data: {
+      function handleDevolucion(status) {
+        // Obtener todos los checkboxes seleccionados
+        var selectedIds = Array.from(document.querySelectorAll('input[name="notifications[]"]:checked'))
+          .map(checkbox => checkbox.value); // Recoge los IDs de las notificaciones seleccionadas
+
+        // Obtener el nombre del recurso de devolución
+        var nombreNetDevo = $('#nombreNet').val(); // Asegúrate de que este es el ID correcto
+
+        $.ajax({
+          url: 'handle_devolucion.php',
+          type: 'POST',
+          data: {
             status: status,
             ids: selectedIds, // Envía todos los IDs seleccionados
             nombreNetDevo: nombreNetDevo
-        },
-        success: function(response) {
+          },
+          success: function (response) {
             $('#devolucionMessage').text(response);
             $('#acceptDevolucion').hide();
-        },
-        error: function(error) {
+          },
+          error: function (error) {
             alert('Hubo un error al manejar la devolución. Por favor, inténtalo de nuevo.');
-        }
-    });
-}
+          }
+        });
+      }
 
 
       const source = new EventSource('actualizar.php');
 
-      source.onmessage = function(event) {
+      source.onmessage = function (event) {
         const alumnos = JSON.parse(event.data);
         let html = '';
         alumnos.forEach(alumno => {
@@ -160,7 +172,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
       let sourceModal = new EventSource('actualizarModal.php');
 
-      sourceModal.onmessage = function(event) {
+      sourceModal.onmessage = function (event) {
         const notificacion = JSON.parse(event.data);
 
         // Comprobar si el modal está abierto
@@ -168,7 +180,7 @@ document.addEventListener('DOMContentLoaded', function() {
           // Actualizar el contenido del modal
           document.getElementById('notificationMessageUser').textContent = notificacion.user_name;
           document.getElementById('notificationMessageResource').textContent = notificacion.recurso_nombre;
-          document.getElementById('notificationMessageStart').textContent =   notificacion.inicio_prestamo;
+          document.getElementById('notificationMessageStart').textContent = notificacion.inicio_prestamo;
 
           notificationId = notificacion.idregistro; // Agrega esta línea para almacenar el id de la notificación
 
@@ -180,20 +192,20 @@ document.addEventListener('DOMContentLoaded', function() {
       };
       let sourceDevolucion = new EventSource('actualizarDevolucion.php');
 
-      sourceDevolucion.onmessage = function(event) {
+      sourceDevolucion.onmessage = function (event) {
         const notificacionDevolucion = JSON.parse(event.data);
 
         // Comprobar si el modal está abierto
         if (!isModalOpen && notificacionDevolucion) {
           // Actualizar el contenido del modal
-          document.getElementById('devolucionMessageUser').textContent =  notificacionDevolucion.user_name;
-          document.getElementById('devolucionMessageResource').textContent =  notificacionDevolucion.recurso_nombre;
-          document.getElementById('devolucionMessageStart').textContent =  notificacionDevolucion.inicio_prestamo;
-          document.getElementById('devolucionMessageEnd').textContent =  notificacionDevolucion.horario;
+          document.getElementById('devolucionMessageUser').textContent = notificacionDevolucion.user_name;
+          document.getElementById('devolucionMessageResource').textContent = notificacionDevolucion.recurso_nombre;
+          document.getElementById('devolucionMessageStart').textContent = notificacionDevolucion.inicio_prestamo;
+          document.getElementById('devolucionMessageEnd').textContent = notificacionDevolucion.horario;
 
           notificationIddev = notificacionDevolucion.idregistro; // Agrega esta línea para almacenar el id de la notificación
           notificacionNom =
-          $('#acceptDevolucion, #denyDevolucion').show();
+            $('#acceptDevolucion, #denyDevolucion').show();
 
           // Abrir el modal
           $('#returnDevolucionModal').modal('show');
@@ -208,9 +220,7 @@ document.addEventListener('DOMContentLoaded', function() {
       margin-right: 5px;
     }
 
-    #nombreNet {
-      
-    }
+    #nombreNet {}
 
     footer {
       width: 100%;
@@ -226,7 +236,8 @@ document.addEventListener('DOMContentLoaded', function() {
 <body>
   <header class="p-3 bg-dark text-white">
     <div class="container" bis_skin_checked="1">
-      <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start" bis_skin_checked="1">
+      <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start"
+        bis_skin_checked="1">
         <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
           <li><a href='../../index.php' class="nav-link px-2 text-secondary">Inicio</a></li>
           <li><a href='../netbook/abm.php' class="nav-link px-2 text-white">Prestamos</a></li>
@@ -246,8 +257,8 @@ document.addEventListener('DOMContentLoaded', function() {
         </ul>
 
         <div class="contenedor" bis_skin_checked="1">
-                    <div class="caja-advertencia"><?php echo $_SESSION['user_name']; ?></div>
-                    <img class="ñiquito" src="../../views/templates/logofinal.png">
+          <div class="caja-advertencia"><?php echo $_SESSION['user_name']; ?></div>
+          <img class="ñiquito" src="../../views/templates/logofinal.png">
         </div>
       </div>
     </div>
