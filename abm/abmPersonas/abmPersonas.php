@@ -1,3 +1,12 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Computadoras</title>
+<link rel="stylesheet" type="text/css" href="../netbook/style.css">
+</head>
+
 <?php
 
 include '../funciones.php';
@@ -14,9 +23,9 @@ try {
   $conexion = conexion();
 
   if (isset($_POST['apellido'])) {
-    $consultaSQL = "SELECT user_id, user_name, user_email, rol_descripcion FROM users inner join rol on users.idRol =rol.idRol AND user_name LIKE '%" . $_POST['apellido'] . "%' limit 100";
+    $consultaSQL = "SELECT user_id, user_name, user_email, rol_descripcion, bloqueado FROM users inner join rol on users.idRol =rol.idRol AND user_name LIKE '%" . $_POST['apellido'] . "%' limit 100";
   } else {
-    $consultaSQL = "SELECT user_id, user_name, user_email, rol_descripcion FROM users inner join rol on users.idRol =rol.idRol limit 100";
+    $consultaSQL = "SELECT user_id, user_name, user_email, rol_descripcion, bloqueado FROM users inner join rol on users.idRol =rol.idRol limit 100";
   }
 
   $sentencia = $conexion->prepare($consultaSQL);
@@ -89,8 +98,15 @@ if ($error) {
                 <td><?php echo escapar($fila["user_email"]); ?></td>
                 <td><?php echo escapar($fila["rol_descripcion"]); ?></td>
                 <td>
-                  <a href="<?= 'borrarUsuario.php?id=' . escapar($fila["user_id"]) ?>">🗑️Borrar</a>
-                  <a href="<?= 'editarUsuario.php?id=' . escapar($fila["user_id"]) ?>">✏️Editar</a>
+                  <a href="<?= 'borrarUsuario.php?id=' . escapar($fila["user_id"]) ?>" class="boton">🗑️ Borrar</a>
+                  <a href="<?= 'editarUsuario.php?id=' . escapar($fila["user_id"]) ?>" class="boton">✏️ Editar</a>
+                  <?php if ($fila["bloqueado"] == 0): ?>
+                      <a href="<?= 'bloquearUsuario.php?id=' . escapar($fila["user_id"]) ?>" class="boton">❌ Bloquear</a>
+                    <?php endif; ?>
+                  <?php if ($fila["bloqueado"] == 1): ?>
+                    <a href="<?= 'desbloquearUsuario.php?id=' . escapar($fila["user_id"]) ?>" class="boton">✅ Desbloquear</a>
+                  <?php endif; ?>
+
                 </td>
               </tr>
           <?php
