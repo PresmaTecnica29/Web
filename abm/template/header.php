@@ -12,6 +12,7 @@
   <script src="script.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
+      // Función para verificar si hay checkboxes seleccionados y habilitar/deshabilitar botones
       function checkSelectedDevolucion() {
         var checkboxes = document.querySelectorAll('input[name="notificationDevolucion[]"]:checked');
         var acceptButton = document.getElementById('acceptDevolucion');
@@ -26,13 +27,30 @@
         }
       }
 
+      // Añadimos el evento a cada checkbox individualmente
       document.querySelectorAll('input[name="notificationDevolucion[]"]').forEach(function(checkbox) {
         checkbox.addEventListener('change', checkSelectedDevolucion);
       });
 
+      // Revisa si hay checkboxes seleccionados inicialmente
       checkSelectedDevolucion();
+
+      // Función para marcar o desmarcar todas las casillas
+      function toggleCheckboxesDevolucion(checked) {
+        var checkboxes = document.querySelectorAll('.checkboxDevolucion');
+        checkboxes.forEach(function(checkbox) {
+          checkbox.checked = checked;
+        });
+
+        // Llamamos a checkSelected para habilitar/deshabilitar los botones de aceptar y rechazar
+        checkSelectedDevolucion();
+      }
+
+      // Hacemos que la función toggleCheckboxesDevolucion esté disponible globalmente
+      window.toggleCheckboxesDevolucion = toggleCheckboxesDevolucion;
     });
   </script>
+
 
   <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -50,13 +68,30 @@
         }
       }
 
+      // Añadimos el evento a cada checkbox individualmente
       document.querySelectorAll('input[name="notifications[]"]').forEach(function(checkbox) {
         checkbox.addEventListener('change', checkSelected);
       });
 
+      // Revisa si hay checkboxes seleccionados inicialmente
       checkSelected();
+
+      // Función para marcar o desmarcar todas las casillas
+      function toggleCheckboxes(checked) {
+        var checkboxes = document.querySelectorAll('.checkboxNotification');
+        checkboxes.forEach(function(checkbox) {
+          checkbox.checked = checked;
+        });
+
+        // Llamamos a checkSelected para habilitar/deshabilitar los botones de aceptar y rechazar
+        checkSelected();
+      }
+
+      // Hacemos que la función toggleCheckboxes esté disponible globalmente
+      window.toggleCheckboxes = toggleCheckboxes;
     });
   </script>
+
   <script>
     $(document).ready(function() {
 
@@ -144,41 +179,41 @@
 
 
       function handleDevolucion(status) {
-    // Obtener todos los checkboxes seleccionados
-    var selectedIds = Array.from(document.querySelectorAll('input[name="notificationDevolucion[]"]:checked'))
-      .map(checkbox => checkbox.value); // Recoge los IDs de las notificaciones seleccionadas
+        // Obtener todos los checkboxes seleccionados
+        var selectedIds = Array.from(document.querySelectorAll('input[name="notificationDevolucion[]"]:checked'))
+          .map(checkbox => checkbox.value); // Recoge los IDs de las notificaciones seleccionadas
 
-    // Obtener el nombre del recurso de devolución
-    var nombreNetDevo = $('#nombreNetDevo').val();
+        // Obtener el nombre del recurso de devolución
+        var nombreNetDevo = $('#nombreNetDevo').val();
 
-    $.ajax({
-        url: 'handle_devolucion.php',
-        type: 'POST',
-        data: {
+        $.ajax({
+          url: 'handle_devolucion.php',
+          type: 'POST',
+          data: {
             status: status,
             ids: selectedIds, // Envía todos los IDs seleccionados
             nombreNetDevo: nombreNetDevo
-        },
-        success: function(response) {
+          },
+          success: function(response) {
             var result = JSON.parse(response);
             var successMessages = result.success.join("\n");
             var errorMessages = result.errors.join("\n");
 
             // Mostrar mensajes de éxito y error
             if (successMessages) {
-                $('#devolucionMessage').text(successMessages);
+              $('#devolucionMessage').text(successMessages);
             }
             if (errorMessages) {
-                alert(errorMessages);
+              alert(errorMessages);
             }
 
             $('#acceptDevolucion, #denyDevolucion').hide();
-        },
-        error: function() {
+          },
+          error: function() {
             alert('Hubo un error al manejar la devolución. Por favor, inténtalo de nuevo.');
-        }
-    });
-}
+          }
+        });
+      }
 
 
 
@@ -241,7 +276,7 @@
 
           notificationIddev = notificacionDevolucion.idregistro; // Agrega esta línea para almacenar el id de la notificación
           notificacionNom =
-          $('#acceptDevolucion, #denyDevolucion').show();
+            $('#acceptDevolucion, #denyDevolucion').show();
 
           // Abrir el modal
           $('#returnDevolucionModal').modal('show');
@@ -257,7 +292,7 @@
     }
 
     #nombreNet {
-      display:none ;
+      display: none;
     }
 
     footer {

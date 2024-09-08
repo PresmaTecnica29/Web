@@ -230,7 +230,8 @@ if ($error) {
 
           foreach ($notifications as $notification) {
             echo '<tr>';
-            echo '<td><input type="checkbox" name="notifications[]" value="' . $notification['idregistro'] . '" onchange="checkSelected()"></td>';
+            // Checkbox para cada notificación
+            echo '<td><input type="checkbox" name="notifications[]" value="' . $notification['idregistro'] . '" class="checkboxNotification"></td>';
             echo '<td><p id="notificationMessageUser">' . $notification['user_name'] . '</p></td>';
             echo '<td><p id="notificationMessageResource">' . $notification['recurso_nombre'] . '</p></td>';
             echo '<td><p id="notificationMessageStart">' . $notification['inicio_prestamo'] . '</p></td>';
@@ -243,8 +244,10 @@ if ($error) {
             foreach ($datos as $dato) {
               echo '<option value="' . $dato['id'] . '">' . $dato['horario'] . '</option>';
             }
+
             echo '</select>';
             echo '</div>';
+            echo '</td>';
 
             echo '<td>';
             echo '<label for="nombreNetDevo"></label>';
@@ -252,18 +255,32 @@ if ($error) {
             echo '<option value="' . $notification['recurso_nombre'] . '">' . $notification['recurso_nombre'] . '</option>';
             echo '</select>';
             echo '</td>';
+
+            echo '</tr>';
           }
 
           echo '</tbody>';
           echo '</table>';
+
+          // Footer con los botones
           echo '<div class="modal-footer">';
+
+          // Botones de aceptar y rechazar
+          echo '<div class="d-grid gap-2 d-md-flex justify-content-md-end">';
           echo '<button type="button" class="btn btn-success" id="acceptReturn" disabled>Aceptar</button>';
           echo '<button type="button" class="btn btn-danger" id="denyReturn" disabled>Rechazar</button>';
+          echo '</div>';
+          // Botones de marcar y desmarcar
+          echo '<div >';
+          echo '<button type="button" class="btn btn-secondary btn-sm btn btn-outline-ligth"   onclick="toggleCheckboxes(true)">Marcar todas</button>';
+          echo '<button type="button" class="btn btn-secondary btn-sm btn btn-outline-ligth"   onclick="toggleCheckboxes(false)">Desmarcar todas</button>';
+          echo '</div>';
           echo '</div>';
         } else {
           echo 'No hay notificaciones pendientes.';
         }
         ?>
+
       </div>
     </div>
   </div>
@@ -301,7 +318,7 @@ if ($error) {
           foreach ($notificationDevolucion as $devolucion) {
             echo '<tr>';
             // Checkbox para seleccionar devoluciones
-            echo '<td><input type="checkbox" name="notificationDevolucion[]" value="' . $devolucion['idregistro'] . '" onchange="checkSelected()"></td>';
+            echo '<td><input type="checkbox" name="notificationDevolucion[]" value="' . $devolucion['idregistro'] . '" class="checkboxDevolucion"></td>';
             echo '<td><p id="devolucionMessageUser">' . (isset($devolucion['user_name']) ? $devolucion['user_name'] : '') . '</p></td>';
             echo '<td><p id="devolucionMessageResource">' . (isset($devolucion['recurso_nombre']) ? $devolucion['recurso_nombre'] : '') . '</p></td>';
             echo '<td><p id="devolucionMessageStart">' . (isset($devolucion['inicio_prestamo']) ? $devolucion['inicio_prestamo'] : '') . '</p></td>';
@@ -316,22 +333,29 @@ if ($error) {
             echo '</option>';
             echo '</select>';
             echo '</td>';
-
             echo '</tr>';
           }
 
           echo '</tbody>';
           echo '</table>';
 
-          // Botones de aceptar y rechazar fuera del form
+          // Botones de aceptar, rechazar, marcar y desmarcar todas
           echo '<div class="modal-footer">';
+          echo '<div class="d-grid gap-2 d-md-flex justify-content-md-end">';
           echo '<button type="button" class="btn btn-success" id="acceptDevolucion" disabled>Aceptar</button>';
           echo '<button type="button" class="btn btn-danger" id="denyDevolucion" disabled>Rechazar</button>';
+          echo '</div>';
+
+          echo '<div>';
+          echo '<button type="button" class="btn btn-secondary btn-sm btn btn-outline-ligth" onclick="toggleCheckboxesDevolucion(true)">Marcar todas</button>';
+          echo '<button type="button" class="btn btn-secondary btn-sm btn btn-outline-ligth" onclick="toggleCheckboxesDevolucion(false)">Desmarcar todas</button>';
+          echo '</div>';
           echo '</div>';
         } else {
           echo '<p>No hay devoluciones pendientes.</p>';
         }
         ?>
+
 
 
 
