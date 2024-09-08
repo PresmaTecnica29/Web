@@ -5,7 +5,7 @@ $conn = new mysqli($config['db']['host'], $config['db']['user'], $config['db']['
 
 // Verificar conexión
 if ($conn->connect_error) {
-  die("Conexión fallida: " . $conn->connect_error);
+    die("Conexión fallida: " . $conn->connect_error);
 }
 
 $status = $_POST['status'];
@@ -16,7 +16,7 @@ $nombreNet = $_POST['nombreNet'];
 $ids = isset($_POST['id']) ? $_POST['id'] : array();
 
 if (!is_array($ids)) {
-  $ids = array($ids); // Asegúrate de que `ids` sea siempre un array
+    $ids = array($ids); // Asegúrate de que `ids` sea siempre un array
 }
 
 $successMessages = [];
@@ -41,9 +41,9 @@ foreach ($ids as $id) {
             $stmtUpdate = $conn->prepare($sqlUpdate);
             $stmtUpdate->bind_param("ii", $horario_id, $id);
             if ($stmtUpdate->execute() === TRUE) {
-                $successMessages[] = "La devolución con id $id ha sido aceptada.";
+                $successMessages[] = "EL prestmo con la id $id ha sido aceptada.";
             } else {
-                $errorMessages[] = "Error al actualizar la devolución con id $id: " . $conn->error;
+                $errorMessages[] = "Error al actualizar prestmo con la id  $id: " . $conn->error;
             }
         } else if ($status == 'denied') {
             $sqlUpdate = "UPDATE registros SET opcion = 'Denied' WHERE idregistro = ?";
@@ -56,14 +56,14 @@ foreach ($ids as $id) {
                 $stmt3->bind_param("i", $id);
                 $stmt3->execute();
 
-                $sqlUpdateResource = "UPDATE recurso SET recurso_estado = '1' WHERE recurso_nombre = ?";  
+                $sqlUpdateResource = "UPDATE recurso SET recurso_estado = '1' WHERE recurso_nombre = ?";
                 $stmtUpdateResource = $conn->prepare($sqlUpdateResource);
                 $stmtUpdateResource->bind_param("s", $nombreNet);
                 $stmtUpdateResource->execute();
 
-                $successMessages[] = "La devolución con id $id ha sido rechazada.";
+                $successMessages[] = "El prestmo con la id  $id ha sido rechazada.";
             } else {
-                $errorMessages[] = "Error al actualizar la devolución con id $id: " . $conn->error;
+                $errorMessages[] = "Error al actualizar prestmo con la id  $id: " . $conn->error;
             }
         }
     } else {
@@ -80,4 +80,3 @@ $response = [
     'errors' => $errorMessages
 ];
 echo json_encode($response);
-?>

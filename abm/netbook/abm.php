@@ -1,72 +1,74 @@
 <style>
   /* Estilos para la tabla */
   table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 20px;
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
   }
 
-  th, td {
-      padding: 12px;
-      text-align: left;
-      border-bottom: 1px solid #ddd;
+  th,
+  td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
   }
 
   th {
-      background-color: #e0e0e0;;
+    background-color: #e0e0e0;
+    ;
   }
 
   /* Estilos para las filas */
   tr:hover {
-      background-color: #f5f5f5;
+    background-color: #f5f5f5;
   }
 
   /* Estilos para el select */
   select {
-      width: 100%;
-      padding: 8px;
-      margin: 4px 0;
-      border: 1px solid #ccc;
-      border-radius: 4px;
+    width: 100%;
+    padding: 8px;
+    margin: 4px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
   }
 
   /* Estilos para el contenedor del select */
   .form-group {
-      margin: 0;
+    margin: 0;
   }
 
   /* Estilos para los botones */
   .modal-footer {
-      display: flex;
-      justify-content: flex-end;
-      padding: 10px;
+    display: flex;
+    justify-content: flex-end;
+    padding: 10px;
   }
 
   .btn {
-      padding: 10px 20px;
-      margin-left: 10px;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 16px;
+    padding: 10px 20px;
+    margin-left: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
   }
 
   .btn-success {
-      background-color: #28a745;
-      color: white;
+    background-color: #28a745;
+    color: white;
   }
 
   .btn-success:hover {
-      background-color: #218838;
+    background-color: #218838;
   }
 
   .btn-danger {
-      background-color: #dc3545;
-      color: white;
+    background-color: #dc3545;
+    color: white;
   }
 
   .btn-danger:hover {
-      background-color: #c82333;
+    background-color: #c82333;
   }
 </style>
 
@@ -147,7 +149,7 @@ if ($error) {
 <div class="container">
   <div class="row">
     <div class="col-md-12">
-      
+
       <a href="devuelto.php" class="btn btn-primary mt-4">Ver Devueltos</a>
       <hr>
 
@@ -202,71 +204,70 @@ if ($error) {
 </div>
 <!-- <div class="modal" tabindex="-1" role="dialog" id="returnNotificationModal"> -->
 <div class="modal" tabindex="-1" role="dialog" id="returnNotificationModal">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Notificación de Peticion</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <?php
-                if (!empty($notifications)) {
-                    echo '<table border="1">';
-                    echo '<thead>';
-                    echo '<tr>';
-                    echo '<th>#</th>';  // Añadido para el checkbox
-                    echo '<th>Alumno</th>';
-                    echo '<th>Material</th>';
-                    echo '<th>Horario inicio</th>';
-                    echo '<th>Horario de devolución</th>';
-                    echo '<th></th>';
-                    echo '</tr>';
-                    echo '</thead>';
-                    echo '<tbody>';
-                
-                    foreach ($notifications as $notification) {
-                        echo '<tr>';
-                        echo '<td><input type="checkbox" name="notifications[]" value="' . $notification['idregistro'] . '" onchange="checkSelected()"></td>';
-                        echo '<td><p id="notificationMessageUser">' . $notification['user_name'] . '</p></td>';
-                        echo '<td><p id="notificationMessageResource">' . $notification['recurso_nombre'] . '</p></td>';
-                        echo '<td><p id="notificationMessageStart">' . $notification['inicio_prestamo'] . '</p></td>';
-                
-                        echo '<td>';
-                        echo '<div class="form-group">';
-                        echo '<select name="horario[' . $notification['idregistro'] . ']" id="horario" class="input">';
-                        echo '<option value="" disabled hidden selected>Elegir un horario</option>';
-                        
-                        foreach ($datos as $dato) {
-                            echo '<option value="' . $dato['id'] . '">' . $dato['horario'] . '</option>';
-                        }
-                        echo '</select>';
-                        echo '</div>';
-                
-                        echo '<td>';
-                        echo '<label for="nombreNetDevo"></label>';
-                        echo '<select name="nombreNet" id="nombreNet" class="input">';
-                        echo '<option value="' . $notification['recurso_nombre'] . '">' . $notification['recurso_nombre'] . '</option>';
-                        echo '</select>';
-                        echo '</td>';
-                    }
-                
-                    echo '</tbody>';
-                    echo '</table>';
-                    echo '<div class="modal-footer">';
-                    echo '<button type="button" class="btn btn-success" id="acceptReturn" disabled>Aceptar</button>';
-                    echo '<button type="button" class="btn btn-danger" id="denyReturn" disabled>Rechazar</button>';
-                    echo '</div>';
-                } else {
-                    echo 'No hay notificaciones pendientes.';
-                }
-                ?>
-            </div>
-        </div>
-    </div>
-</div>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Notificación de Peticion</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <?php
+        if (!empty($notifications)) {
+          echo '<table border="1">';
+          echo '<thead>';
+          echo '<tr>';
+          echo '<th>#</th>';  // Añadido para el checkbox
+          echo '<th>Alumno</th>';
+          echo '<th>Material</th>';
+          echo '<th>Horario inicio</th>';
+          echo '<th>Horario de devolución</th>';
+          echo '<th></th>';
+          echo '</tr>';
+          echo '</thead>';
+          echo '<tbody>';
 
+          foreach ($notifications as $notification) {
+            echo '<tr>';
+            echo '<td><input type="checkbox" name="notifications[]" value="' . $notification['idregistro'] . '" onchange="checkSelected()"></td>';
+            echo '<td><p id="notificationMessageUser">' . $notification['user_name'] . '</p></td>';
+            echo '<td><p id="notificationMessageResource">' . $notification['recurso_nombre'] . '</p></td>';
+            echo '<td><p id="notificationMessageStart">' . $notification['inicio_prestamo'] . '</p></td>';
+
+            echo '<td>';
+            echo '<div class="form-group">';
+            echo '<select name="horario[' . $notification['idregistro'] . ']" id="horario" class="input">';
+            echo '<option value="" disabled hidden selected>Elegir un horario</option>';
+
+            foreach ($datos as $dato) {
+              echo '<option value="' . $dato['id'] . '">' . $dato['horario'] . '</option>';
+            }
+            echo '</select>';
+            echo '</div>';
+
+            echo '<td>';
+            echo '<label for="nombreNetDevo"></label>';
+            echo '<select name="nombreNet" id="nombreNet" class="input">';
+            echo '<option value="' . $notification['recurso_nombre'] . '">' . $notification['recurso_nombre'] . '</option>';
+            echo '</select>';
+            echo '</td>';
+          }
+
+          echo '</tbody>';
+          echo '</table>';
+          echo '<div class="modal-footer">';
+          echo '<button type="button" class="btn btn-success" id="acceptReturn" disabled>Aceptar</button>';
+          echo '<button type="button" class="btn btn-danger" id="denyReturn" disabled>Rechazar</button>';
+          echo '</div>';
+        } else {
+          echo 'No hay notificaciones pendientes.';
+        }
+        ?>
+      </div>
+    </div>
+  </div>
+</div>
 
 
 
@@ -275,55 +276,74 @@ if ($error) {
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Notificación de Devolución</h5>
+        <h5 class="modal-title">Notificación de Devolucion</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
+
       <div class="modal-body">
         <?php
-        if (!empty($notificationsDevolucion)) {
-            echo '<table border="1">';
-            echo '<thead>';
+        if (!empty($notificationDevolucion)) {
+          echo '<table border="1">';
+          echo '<thead>';
+          echo '<tr>';
+          echo '<th>#</th>';  // Añadido para el checkbox
+          echo '<th>Alumno</th>';
+          echo '<th>Material</th>';
+          echo '<th>Horario inicio</th>';
+          echo '<th>Horario final</th>';
+          echo '<th></th>';
+          echo '</tr>';
+          echo '</thead>';
+          echo '<tbody>';
+
+          foreach ($notificationDevolucion as $devolucion) {
             echo '<tr>';
-            echo '<th>#</th>';  // Añadido para el checkbox
-            echo '<th>Alumno</th>';
-            echo '<th>Material</th>';
-            echo '<th>Horario inicio</th>';
-            echo '<th>Horario de devolución</th>';
-            echo '<th>Acciones</th>';
+            // Checkbox para seleccionar devoluciones
+            echo '<td><input type="checkbox" name="notificationDevolucion[]" value="' . $devolucion['idregistro'] . '" onchange="checkSelected()"></td>';
+            echo '<td><p id="devolucionMessageUser">' . (isset($devolucion['user_name']) ? $devolucion['user_name'] : '') . '</p></td>';
+            echo '<td><p id="devolucionMessageResource">' . (isset($devolucion['recurso_nombre']) ? $devolucion['recurso_nombre'] : '') . '</p></td>';
+            echo '<td><p id="devolucionMessageStart">' . (isset($devolucion['inicio_prestamo']) ? $devolucion['inicio_prestamo'] : '') . '</p></td>';
+            echo '<td><p id="devolucionMessageEnd">' . (isset($devolucion['horario']) ? $devolucion['horario'] : '') . '</p></td>';
+
+            // Selector oculto con el nombre del recurso
+            echo '<td>';
+            echo '<label for="nombreNetDevo"></label>';
+            echo '<select name="nombreNetDevo[' . $devolucion['idregistro'] . ']" id="nombreNetDevo" class="input" style="display:none">';
+            echo '<option value="' . (isset($devolucion['recurso_nombre']) ? $devolucion['recurso_nombre'] : '') . '" class="input">';
+            echo (isset($devolucion['recurso_nombre']) ? $devolucion['recurso_nombre'] : '');
+            echo '</option>';
+            echo '</select>';
+            echo '</td>';
+
             echo '</tr>';
-            echo '</thead>';
-            echo '<tbody>';
-        
-            foreach ($notificationsDevolucion as $notification) {
-                echo '<tr>';
-                echo '<td><input type="checkbox" name="notificationsDevolucion[]" value="' . $notification['idregistro'] . '" onchange="checkSelectedDevolucion()"></td>';
-                echo '<td><p>' . $notification['user_name'] . '</p></td>';
-                echo '<td><p>' . $notification['recurso_nombre'] . '</p></td>';
-                echo '<td><p>' . $notification['inicio_prestamo'] . '</p></td>';
-                echo '<td><p>' . $notification['horario'] . '</p></td>';
-                echo '<td>';
-                echo '<select name="nombreNetDevo[' . $notification['idregistro'] . ']" class="input">';
-                echo '<option value="' . $notification['recurso_nombre'] . '">' . $notification['recurso_nombre'] . '</option>';
-                echo '</select>';
-                echo '</td>';
-                echo '</tr>';
-            }
-        
-            echo '</tbody>';
-            echo '</table>';
-            echo '<div class="modal-footer">';
-            echo '<button type="button" class="btn btn-success" id="acceptDevolucion" disabled>Aceptar</button>';
-            echo '<button type="button" class="btn btn-danger" id="denyDevolucion" disabled>Rechazar</button>';
-            echo '</div>';
+          }
+
+          echo '</tbody>';
+          echo '</table>';
+
+          // Botones de aceptar y rechazar fuera del form
+          echo '<div class="modal-footer">';
+          echo '<button type="button" class="btn btn-success" id="acceptDevolucion" disabled>Aceptar</button>';
+          echo '<button type="button" class="btn btn-danger" id="denyDevolucion" disabled>Rechazar</button>';
+          echo '</div>';
         } else {
-            echo 'No hay notificaciones de devolución pendientes.';
+          echo '<p>No hay devoluciones pendientes.</p>';
         }
         ?>
+
+
+
       </div>
     </div>
   </div>
+
+
+
+</div>
+</div>
+</div>
 </div>
 
 

@@ -11,7 +11,31 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
   <script src="script.js"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function() {
+      function checkSelectedDevolucion() {
+        var checkboxes = document.querySelectorAll('input[name="notificationDevolucion[]"]:checked');
+        var acceptButton = document.getElementById('acceptDevolucion');
+        var denyButton = document.getElementById('denyDevolucion');
+
+        if (checkboxes.length > 0) {
+          acceptButton.disabled = false;
+          denyButton.disabled = false;
+        } else {
+          acceptButton.disabled = true;
+          denyButton.disabled = true;
+        }
+      }
+
+      document.querySelectorAll('input[name="notificationDevolucion[]"]').forEach(function(checkbox) {
+        checkbox.addEventListener('change', checkSelectedDevolucion);
+      });
+
+      checkSelectedDevolucion();
+    });
+  </script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
       function checkSelected() {
         var checkboxes = document.querySelectorAll('input[name="notifications[]"]:checked');
         var acceptButton = document.getElementById('acceptReturn');
@@ -26,7 +50,7 @@
         }
       }
 
-      document.querySelectorAll('input[name="notifications[]"]').forEach(function (checkbox) {
+      document.querySelectorAll('input[name="notifications[]"]').forEach(function(checkbox) {
         checkbox.addEventListener('change', checkSelected);
       });
 
@@ -34,7 +58,7 @@
     });
   </script>
   <script>
-    $(document).ready(function () {
+    $(document).ready(function() {
 
       <?php if (!empty($notification)) { ?>
         $('#returnNotificationModal').modal('show');
@@ -45,7 +69,7 @@
       <?php } ?>
 
 
-      $('#acceptReturn').click(function () {
+      $('#acceptReturn').click(function() {
         if ($('#horario').val() == null || $('#horario').val() == '') {
           alert('Por favor, elija un horario.');
         } else {
@@ -53,14 +77,14 @@
         }
       });
 
-      $('#denyReturn').click(function () {
+      $('#denyReturn').click(function() {
         handleReturn('denied');
       });
-      $('#acceptDevolucion').click(function () {
+      $('#acceptDevolucion').click(function() {
         handleDevolucion('accepted');
       });
 
-      $('#denyDevolucion').click(function () {
+      $('#denyDevolucion').click(function() {
         handleDevolucion('denied');
       });
 
@@ -68,15 +92,15 @@
       let notificationId;
       let notificacionIddev;
 
-      $('#returnNotificationModal').on('shown.bs.modal', function () {
+      $('#returnNotificationModal').on('shown.bs.modal', function() {
         isModalOpen = true;
       });
 
-      $('#returnNotificationModal').on('hidden.bs.modal', function () {
+      $('#returnNotificationModal').on('hidden.bs.modal', function() {
         isModalOpen = false;
       });
 
-      $('#returnDevolucionModal').on('shown.bs.modal', function () {
+      $('#returnDevolucionModal').on('shown.bs.modal', function() {
         if (!isModalOpen) {
           isModalOpen = true;
         } else {
@@ -84,7 +108,7 @@
         }
       });
 
-      $('#returnDevolucionModal').on('hidden.bs.modal', function () {
+      $('#returnDevolucionModal').on('hidden.bs.modal', function() {
         isModalOpen = false;
       });
 
@@ -101,7 +125,7 @@
             hora: $('#horario').val(),
             nombreNet: $('#nombreNet').val()
           },
-          success: function (response) {
+          success: function(response) {
             const result = JSON.parse(response);
             if (result.success.length > 0) {
               alert(result.success.join("\n"));
@@ -112,7 +136,7 @@
             $('#notificationMessage').text(result.success.join("\n") || result.errors.join("\n"));
             $('#acceptReturn, #denyReturn').hide();
           },
-          error: function (error) {
+          error: function(error) {
             alert('Hubo un error al manejar la devolución. Por favor, inténtalo de nuevo.');
           }
         });
@@ -120,35 +144,47 @@
 
 
       function handleDevolucion(status) {
-        // Obtener todos los checkboxes seleccionados
-        var selectedIds = Array.from(document.querySelectorAll('input[name="notifications[]"]:checked'))
-          .map(checkbox => checkbox.value); // Recoge los IDs de las notificaciones seleccionadas
+    // Obtener todos los checkboxes seleccionados
+    var selectedIds = Array.from(document.querySelectorAll('input[name="notificationDevolucion[]"]:checked'))
+      .map(checkbox => checkbox.value); // Recoge los IDs de las notificaciones seleccionadas
 
-        // Obtener el nombre del recurso de devolución
-        var nombreNetDevo = $('#nombreNet').val(); // Asegúrate de que este es el ID correcto
+    // Obtener el nombre del recurso de devolución
+    var nombreNetDevo = $('#nombreNetDevo').val();
 
-        $.ajax({
-          url: 'handle_devolucion.php',
-          type: 'POST',
-          data: {
+    $.ajax({
+        url: 'handle_devolucion.php',
+        type: 'POST',
+        data: {
             status: status,
             ids: selectedIds, // Envía todos los IDs seleccionados
             nombreNetDevo: nombreNetDevo
-          },
-          success: function (response) {
-            $('#devolucionMessage').text(response);
-            $('#acceptDevolucion').hide();
-          },
-          error: function (error) {
+        },
+        success: function(response) {
+            var result = JSON.parse(response);
+            var successMessages = result.success.join("\n");
+            var errorMessages = result.errors.join("\n");
+
+            // Mostrar mensajes de éxito y error
+            if (successMessages) {
+                $('#devolucionMessage').text(successMessages);
+            }
+            if (errorMessages) {
+                alert(errorMessages);
+            }
+
+            $('#acceptDevolucion, #denyDevolucion').hide();
+        },
+        error: function() {
             alert('Hubo un error al manejar la devolución. Por favor, inténtalo de nuevo.');
-          }
-        });
-      }
+        }
+    });
+}
+
 
 
       const source = new EventSource('actualizar.php');
 
-      source.onmessage = function (event) {
+      source.onmessage = function(event) {
         const alumnos = JSON.parse(event.data);
         let html = '';
         alumnos.forEach(alumno => {
@@ -172,7 +208,7 @@
 
       let sourceModal = new EventSource('actualizarModal.php');
 
-      sourceModal.onmessage = function (event) {
+      sourceModal.onmessage = function(event) {
         const notificacion = JSON.parse(event.data);
 
         // Comprobar si el modal está abierto
@@ -192,7 +228,7 @@
       };
       let sourceDevolucion = new EventSource('actualizarDevolucion.php');
 
-      sourceDevolucion.onmessage = function (event) {
+      sourceDevolucion.onmessage = function(event) {
         const notificacionDevolucion = JSON.parse(event.data);
 
         // Comprobar si el modal está abierto
@@ -205,7 +241,7 @@
 
           notificationIddev = notificacionDevolucion.idregistro; // Agrega esta línea para almacenar el id de la notificación
           notificacionNom =
-            $('#acceptDevolucion, #denyDevolucion').show();
+          $('#acceptDevolucion, #denyDevolucion').show();
 
           // Abrir el modal
           $('#returnDevolucionModal').modal('show');
@@ -220,7 +256,9 @@
       margin-right: 5px;
     }
 
-    #nombreNet {}
+    #nombreNet {
+      display:none ;
+    }
 
     footer {
       width: 100%;
