@@ -266,9 +266,10 @@ if ($error) {
           echo '<div class="modal-footer">';
 
           // Botones de aceptar y rechazar
-          echo '<div class="d-grid gap-2 d-md-flex justify-content-md-end">';
-          echo '<button type="button" class="btn btn-success" id="acceptReturn" disabled>Aceptar</button>';
-          echo '<button type="button" class="btn btn-danger" id="denyReturn" disabled>Rechazar</button>';
+          echo '<div>';
+          echo '<button type="button" class="btn btn-success" id="acceptReturn" disabled style="padding-left: 22px; padding-right: 22px;">Aceptar</button>';
+
+          echo '<button type="button" class="btn btn-danger" id="denyReturn" style="padding-left: 28px; padding-right: 28px;" disabled>Rechazar</button>';
           echo '</div>';
           // Botones de marcar y desmarcar
           echo '<div >';
@@ -341,9 +342,9 @@ if ($error) {
 
           // Botones de aceptar, rechazar, marcar y desmarcar todas
           echo '<div class="modal-footer">';
-          echo '<div class="d-grid gap-2 d-md-flex justify-content-md-end">';
-          echo '<button type="button" class="btn btn-success" id="acceptDevolucion" disabled>Aceptar</button>';
-          echo '<button type="button" class="btn btn-danger" id="denyDevolucion" disabled>Rechazar</button>';
+          echo '<div>';
+          echo '<button type="button" class="btn btn-success" id="acceptDevolucion" style="padding-left: 22px; padding-right: 22px;" disabled>Aceptar</button>';
+          echo '<button type="button" class="btn btn-danger" id="denyDevolucion" style="padding-left: 28px; padding-right: 28px;" disabled>Rechazar</button>';
           echo '</div>';
 
           echo '<div>';
