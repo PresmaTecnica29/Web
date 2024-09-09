@@ -122,11 +122,27 @@ if (isset($alumno) && $alumno) {
           <br>
           <div class="form-group" style='margin-bottom:10px;'>
             <label for="rol">Rol</label>
-            <select name="rol" id="rol" class="input">
-              <?php foreach ($datos as $dato) : ?>
-                <option value="<?= $dato['idRol'] ?>" class="input"><?= $dato['rol_descripcion'] ?></option>
-              <?php endforeach; ?>
-            </select>
+            <?php
+              isset($_SESSION['user_rol'])
+                      // Solo se ejecutará este código si el rol del usuario es 5
+                      ?>
+                      <select name="rol_seleccionado" class="input">
+                          <?php 
+                          // Creamos un array para almacenar los roles de 4 para abajo
+                          $rolesPermitidos = [];
+
+                          // Recorremos los datos y filtramos los roles que sean menores a 5
+                          foreach ($datos as $dato) { 
+                              if ($dato['idRol'] < $_SESSION['user_rol']) {  // Solo mostramos los roles con id menores a 5
+                                  echo '<option value="' . $dato['idRol'] . '" class="input">' . $dato['rol_descripcion'] . '</option>';
+                              }
+                          }
+                          ?>
+                      </select>
+                      <?php
+                    }
+                
+              ?>
           </div>
           <div class="form-group">
             <input name="csrf" type="hidden" value="<?php echo escapar($_SESSION['csrf']); ?>">
@@ -138,7 +154,7 @@ if (isset($alumno) && $alumno) {
     </div>
   </div>
 <?php
-}
+
 ?>
 
 <?php require "../template/footer.php"; ?>
