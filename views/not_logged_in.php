@@ -50,7 +50,7 @@ if (isset($login)) {
       </div>
       <div class="field" id="op">
         <a href="cambiar_password.php" id="back">He olvido mi contraseña</a>
-        <a href="register.php" id="back">Registrar una nueva cuenta</a>
+        <a href="registerobj.php" id="back">Registrar una nueva cuenta</a>
       </div>
   </div>
   </form>

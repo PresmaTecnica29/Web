@@ -19,7 +19,7 @@ function sendVerificationCode($userEmail, $code,) {
         $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
         $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
         $mail->Username   = 'presma@tecnica29de6.edu.ar';                     //SMTP username
-        $mail->Password   = 'zilpgelenyajtkjt';                               //SMTP password
+        $mail->Password   = 'rdnbcymcztkmukww';                               //SMTP password
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
         $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
     
@@ -45,14 +45,14 @@ function generateVerificationCode($length = 6) {
 
 function storeVerificationCode($userId, $code) {
     // Conexión a la base de datos
-    $pdo = new PDO('mysql:host=localhost;dbname=bdwebet29', 'root', '');
+    $pdo = new PDO('mysql:host=localhost;dbname=login', 'root', '');
     $stmt = $pdo->prepare('INSERT INTO verification_codes (user_id, code) VALUES (?, ?)');
     $stmt->execute([$userId, $code]);
 }
 
 function verifyCode($userId, $code) {
     // Conexión a la base de datos
-    $pdo = new PDO('mysql:host=localhost;dbname=bdwebet29', 'root', '');
+    $pdo = new PDO('mysql:host=localhost;dbname=login', 'root', '');
     $stmt = $pdo->prepare('SELECT * FROM verification_codes WHERE user_id = ? AND code = ? DESC LIMIT 1');
     $stmt->execute([$userId, $code]);
     $result = $stmt->fetch(PDO::FETCH_ASSOC);

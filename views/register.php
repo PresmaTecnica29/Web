@@ -14,21 +14,7 @@ if (isset($registration)) {
 }
 ?>
 
-<!-- register form -->
-<?php
-require_once("config\db.php");
-$conexion = conexion();
 
-$datos = []; // Valor predeterminado
-
-if ($conexion) {
-  $statement = $conexion->prepare("SELECT `idRol`, `rol_descripcion` FROM `rol` where rol_descripcion <> 'Administrador' and rol_descripcion <> 'Alumno'");
-  $statement->execute();
-  $datos = $statement->fetchAll(); // Actualiza $datos si la conexión es exitosa
-} else {
-  echo "Error: No se pudo conectar a la base de datos.";
-}
-?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -37,14 +23,14 @@ if ($conexion) {
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="views\estilo.css">
+  <link rel="stylesheet" href="views/estilo.css">
   <link rel="icon" href="views/templates/logofinal.png" type="image/png">
   <title>Inicio de sesion</title>
 </head>
 </form>
 <body>  
 <div id="formulario">
-    <form id="formregistrar" class="form card" method="post" action="register.php" name="registerform">
+    <form id="formregistrar" class="form card" method="post" action="views\procesar_form.php" name="registerform">
       <div class="card_header">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
           <path fill="none" d="M0 0h24v24H0z"></path>
@@ -69,14 +55,6 @@ if ($conexion) {
         <input id="login_input_password_repeat" class="input" type="password" placeholder="Contraseña" name="user_password_repeat" pattern=".{6,}" required autocomplete="off" />
       </div>
       <div class="field">
-        <select name="rol" id="rol" class="input">
-         <option value="0">Selecciona una opcion</option>
-           <?php foreach ($datos as $dato) : ?>
-            <option value="<?= $dato['idRol'] ?>" class="input"><?= $dato['rol_descripcion'] ?></option>
-          <?php endforeach; ?>
-        </select>
-      </div>
-      <div class="field">
         <label for="verfcode">verfcode</label>
         <a href="views\verificacion.php" id="verificacion">VERIFICACION
       </div>
@@ -87,28 +65,6 @@ if ($conexion) {
       </form>
     </form>
   </div>
-  <script>
-        document.getElementById('formregistrar').onsubmit = function(event) {
-            event.preventDefault(); // Previene el envío del formulario
-
-            var email = document.getElementById('login_input_email').value;
-
-            var xhr = new XMLHttpRequest();
-            xhr.open("POST", "views/verificar_codigo.php", true);
-            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-
-            var data = "user_email=" + encodeURIComponent(email)
-
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState == 4 && xhr.status == 200) {
-                    console.log(xhr.responseText); // Muestra la respuesta en la consola
-                    alert(xhr.responseText); // Muestra la respuesta en un mensaje emergente
-                }
-            };
-
-            xhr.send(data);
-        };
-    </script>
 </body>
 
 </html>

@@ -109,7 +109,8 @@ class Registration
                 $userid = $consultaid2["user_id"];
                 storeVerificationCode($userid, $code);
                 header("Location: views/verificacion.php");
-                exit();
+exit();
+
                }
             } else {
                 $this->errors[] = "Sorry, no database connection.";
