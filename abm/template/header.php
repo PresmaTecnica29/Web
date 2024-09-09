@@ -11,6 +11,38 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
   <script src="script.js"></script>
   <script>
+  function selectAllTimesWithSelected() {
+    // Obtener el valor seleccionado del menú desplegable
+    const selectedHorario = document.getElementById('selectHorarioTodos').value;
+
+    if (!selectedHorario) {
+      alert('Por favor, selecciona un horario primero.');
+      return;
+    }
+
+    // Seleccionar todos los elementos select de horario
+    const selects = document.querySelectorAll('select[name^="horario"]');
+
+    // Recorre cada select y selecciona el horario seleccionado en el menú desplegable
+    selects.forEach(select => {
+      for (let i = 0; i < select.options.length; i++) {
+        if (select.options[i].value == selectedHorario) {
+          select.selectedIndex = i; // Selecciona la opción que coincide
+          break;
+        }
+      }
+    });
+  }
+
+  // Función para marcar o desmarcar todas las notificaciones
+  function toggleCheckboxes(check) {
+    const checkboxes = document.querySelectorAll('.checkboxNotification');
+    checkboxes.forEach(checkbox => checkbox.checked = check);
+  }
+</script>
+
+
+  <script>
     document.addEventListener('DOMContentLoaded', function() {
       // Función para verificar si hay checkboxes seleccionados y habilitar/deshabilitar botones
       function checkSelectedDevolucion() {
