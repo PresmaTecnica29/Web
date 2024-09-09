@@ -63,7 +63,7 @@ $datos = $statement->fetchAll();
 $titulo = isset($_POST['apellido']) ? 'Lista de prestamos (' . $_POST['apellido'] . ')' : 'Prestamos Expirados';
 
 date_default_timezone_set('America/Argentina/Buenos_Aires'); // Ajusta la zona horaria según tu ubicación
-$currentTime = date('H:i:s');
+$currentTime = date('Y-m-d H:i:s');
 
 if (isset($_POST['apellido'])) {
     $consultaSQL = "SELECT registros.idregistro, users.user_name, DATE_FORMAT(registros.inicio_prestamo, '%d/%m %H:%i') AS inicio_prestamo, 

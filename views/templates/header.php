@@ -19,7 +19,7 @@
                     <li><a href='abm/netbook/abm.php' class="nav-link px-2 text-white">Registros</a></li>
                     <?php
                     if (isset($_SESSION['user_rol'])) {
-                        if ($_SESSION['user_rol'] == 5) {
+                        if ($_SESSION['user_rol'] == 5 || $_SESSION['user_rol'] == 4) {
                             echo '<li><a href="abm/abmPersonas/abmPersonas.php" class="nav-link px-2 text-white">Usuarios</a></li>';
                             echo '<li><a href="abm/netbook/qr.php" class="nav-link px-2 text-white">Recursos</a></li>';
                         }
