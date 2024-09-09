@@ -92,9 +92,22 @@ if (isset($resultado)) {
         <div class="form-group">
           <label for="rol">Rol</label>
           <select name="rol" id="rol" class="input">
-            <?php foreach ($datos as $dato) : ?>
-              <option value="<?= $dato['idRol'] ?>" class="input"><?= $dato['rol_descripcion'] ?></option>
-            <?php endforeach; ?>
+            <?php
+            // Obtener el rol del usuario desde la sesión
+            $user_rol = isset($_SESSION['user_rol']) ? $_SESSION['user_rol'] : 5;
+
+            foreach ($datos as $dato) {
+                // Mostrar todas las opciones si el rol del usuario es 5
+                if ($user_rol == 5) {
+                    echo '<option value="' . $dato['idRol'] . '" class="input"> ' . $dato['rol_descripcion'] . ' </option>';
+                } else {
+                    // Filtrar opciones según el rol del usuario
+                    if ($dato['idRol'] <= $user_rol) {
+                        echo '<option value="' . $dato['idRol'] . '" class="input"> ' . $dato['rol_descripcion'] . ' </option>';
+                    }
+                }
+            }
+            ?>
           </select>
         </div>
         <br>
