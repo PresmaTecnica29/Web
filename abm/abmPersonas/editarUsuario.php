@@ -131,7 +131,7 @@ if (isset($alumno) && $alumno) {
           <div class="form-group">
             <input name="csrf" type="hidden" value="<?php echo escapar($_SESSION['csrf']); ?>">
             <input type="submit" name="submit" class="btn btn-primary" value="Actualizar">
-            <a class="btn btn-primary" href="">Regresar</a>
+            <a class="btn btn-primary" href="abmPersonas.php">Regresar</a>
           </div>
         </form>
       </div>

@@ -200,13 +200,8 @@
         <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
           <li><a href='../../index.php' class="nav-link px-2 text-secondary">Inicio</a></li>
           <li><a href='../netbook/abm.php' class="nav-link px-2 text-white">Prestamos</a></li>
-          <?php
-          if (isset($_SESSION['user_rol'])) {
-            if ($_SESSION['user_rol'] == 5) {
-              echo '<li><a href="../abmPersonas/abmPersonas.php" class="nav-link px-2 text-white">Usuarios</a></li>';
-              echo '<li><a href="../netbook/qr.php" class="nav-link px-2 text-white">Recursos</a></li>';
-            }
-          } ?>
+          <li><a href="../abmPersonas/abmPersonas.php" class="nav-link px-2 text-white">Usuarios</a></li>
+          <li><a href="../netbook/qr.php" class="nav-link px-2 text-white">Recursos</a></li>
           <li><a href="../netbook/visual.php" class="nav-link px-2 text-white">Visual</a></li>
 
           <li><a href="/Web/index.php?logout" class="nav-link px-2 text-white">Cerrar sesion</a></li>

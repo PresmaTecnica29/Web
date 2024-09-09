@@ -60,7 +60,16 @@ if ($error) {
 <div class="container">
   <div class="row">
     <div class="col-md-12">
-      <a href="agregarUsuario.php" class="btn btn-primary mt-4">Crear Usuario</a>
+    <?php
+          if (isset($_SESSION['user_rol'])) {
+              if ($_SESSION['user_rol'] == 5 || $_SESSION['user_rol'] == 4) {
+                  // Solo se ejecutará este código si el rol del usuario es 5 o 4
+                  ?>
+                  <a href="agregarUsuario.php" class="btn btn-primary mt-4">Crear Usuario</a>
+                  <?php
+                    }
+                  }
+                ?>
       <hr>
 
       <form method="post" class="form-inline">
@@ -84,7 +93,7 @@ if ($error) {
             <th>Usuario</th>
             <th>Email</th>
             <th>Rol</th>
-            <th>Activado</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -98,15 +107,41 @@ if ($error) {
                 <td><?php echo escapar($fila["user_email"]); ?></td>
                 <td><?php echo escapar($fila["rol_descripcion"]); ?></td>
                 <td>
+                    <?php
+          if (isset($_SESSION['user_rol'])) {
+              if ($_SESSION['user_rol'] == 5) {
+                  // Solo se ejecutará este código si el rol del usuario es 5 o 4
+                  ?>
                   <a href="<?= 'borrarUsuario.php?id=' . escapar($fila["user_id"]) ?>" class="boton">🗑️ Borrar</a>
+                  <?php
+                    }
+                  }
+                ?>
+                <?php
+          if (isset($_SESSION['user_rol'])) {
+              if ($_SESSION['user_rol'] == 5 || $_SESSION['user_rol'] == 4) {
+                  // Solo se ejecutará este código si el rol del usuario es 5 o 4
+                  ?>
                   <a href="<?= 'editarUsuario.php?id=' . escapar($fila["user_id"]) ?>" class="boton">✏️ Editar</a>
+                  <?php
+                    }
+                  }
+                ?>
+                <?php
+          if (isset($_SESSION['user_rol'])) {
+              if ($_SESSION['user_rol'] == 5 || $_SESSION['user_rol'] == 4) {
+                  // Solo se ejecutará este código si el rol del usuario es 5 o 4
+                  ?>
                   <?php if ($fila["bloqueado"] == 0): ?>
                       <a href="<?= 'bloquearUsuario.php?id=' . escapar($fila["user_id"]) ?>" class="boton">❌ Bloquear</a>
                     <?php endif; ?>
                   <?php if ($fila["bloqueado"] == 1): ?>
                     <a href="<?= 'desbloquearUsuario.php?id=' . escapar($fila["user_id"]) ?>" class="boton">✅ Desbloquear</a>
                   <?php endif; ?>
-
+                  <?php
+                    }
+                  }
+                ?>
                 </td>
               </tr>
           <?php

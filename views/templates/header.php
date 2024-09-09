@@ -23,7 +23,8 @@
                             echo '<li><a href="abm/abmPersonas/abmPersonas.php" class="nav-link px-2 text-white">Usuarios</a></li>';
                             echo '<li><a href="abm/netbook/qr.php" class="nav-link px-2 text-white">Recursos</a></li>';
                         }
-                    } ?>
+                    }
+                    ?>
                     <li><a href="/Web/index.php?logout" class="nav-link px-2 text-white">Cerrar sesion</a></li>
                 </ul>
 

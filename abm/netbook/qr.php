@@ -64,8 +64,12 @@
   <div class="container">
     <div class="row">
       <div class="col-md-12">
-
-        <a href="agregarMaterial.php" class="btn btn-primary mt-4">Agregar material</a>
+      <?php
+          if (isset($_SESSION['user_rol'])) {
+            if ($_SESSION['user_rol'] == 5) {
+              echo '<a href="agregarMaterial.php" class="btn btn-primary mt-4">Agregar material</a>';
+            }
+          } ?>
         <hr>
 
         <form method="post" class="form-inline">
@@ -106,6 +110,17 @@
                       class="boton" title="Crea un nuevo QR para esta netbook" style='margin-left:10px;'>Generar Qr</a>
                     <a href="<?= 'abrirqr.php?nombre=' . escapar($fila["recurso_nombre"]) ?>" class="boton"
                       title="Muestra el QR actual de esta netbook" style='margin-left:10px;'>Abrir Qr</a>
+
+                      <?php
+              if (isset($_SESSION['user_rol'])) {
+                  if ($_SESSION['user_rol'] == 5) {
+                      // Solo se ejecutará este código si el rol del usuario es 5 o 4
+                      ?>
+                      <a href="<?= 'borrarUsuario.php?id=' . escapar($fila["user_id"]) ?>" class="boton">🗑️ Borrar</a>
+                      <?php
+                        }
+                      }
+                    ?>
 
                     <?php if ($fila["recurso_estado"] == 1 || $fila["recurso_estado"] == 2 ): ?>
                       <!-- Botón que se muestra solo si recurso_estado es igual a 3 -->
