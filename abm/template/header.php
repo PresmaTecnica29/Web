@@ -11,6 +11,94 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
   <script src="script.js"></script>
   <script>
+    function selectAllTimesWithSelected() {
+      // Obtener el valor seleccionado del menú desplegable
+      const selectedHorario = document.getElementById('selectHorarioTodos').value;
+
+      if (!selectedHorario) {
+        alert('Por favor, selecciona un horario primero.');
+        return;
+      }
+
+      // Seleccionar todos los elementos select de horario
+      const selects = document.querySelectorAll('select[name^="horario"]');
+
+      // Recorre cada select y selecciona el horario seleccionado en el menú desplegable
+      selects.forEach(select => {
+        for (let i = 0; i < select.options.length; i++) {
+          if (select.options[i].value == selectedHorario) {
+            select.selectedIndex = i; // Selecciona la opción que coincide
+            break;
+          }
+        }
+      });
+    }
+
+    // Función para marcar o desmarcar todas las notificaciones
+    function toggleCheckboxes(check) {
+      const checkboxes = document.querySelectorAll('.checkboxNotification');
+      checkboxes.forEach(checkbox => checkbox.checked = check);
+    }
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Seleccionar el checkbox principal que marcará o desmarcará todas las casillas
+      var selectAllDevolucionCheckbox = document.getElementById('selectAllDevolucionCheckbox');
+      var checkboxes = document.querySelectorAll('input[name="notificationDevolucion[]"]');
+      var acceptButton = document.getElementById('acceptDevolucion');
+      var denyButton = document.getElementById('denyDevolucion');
+
+      // Función para verificar si hay casillas seleccionadas y habilitar/deshabilitar botones
+      function checkSelected() {
+        var selectedCheckboxes = document.querySelectorAll('input[name="notificationDevolucion[]"]:checked');
+
+        // Si hay al menos una casilla marcada, habilitamos los botones
+        if (selectedCheckboxes.length > 0) {
+          acceptButton.disabled = false;
+          denyButton.disabled = false;
+        } else {
+          // Si no hay ninguna casilla marcada, deshabilitamos los botones
+          acceptButton.disabled = true;
+          denyButton.disabled = true;
+        }
+      }
+
+      // Evento para marcar/desmarcar todas las casillas cuando se usa el checkbox principal
+      selectAllDevolucionCheckbox.addEventListener('change', function() {
+        var isChecked = selectAllDevolucionCheckbox.checked;
+
+        // Marcar o desmarcar todas las casillas
+        checkboxes.forEach(function(checkbox) {
+          checkbox.checked = isChecked;
+        });
+
+        // Llamar a la función para habilitar/deshabilitar los botones
+        checkSelected();
+      });
+
+      // Evento para cada checkbox individual, para verificar si se deben habilitar/deshabilitar los botones
+      checkboxes.forEach(function(checkbox) {
+        checkbox.addEventListener('change', function() {
+          // Llamar a la función para habilitar/deshabilitar los botones
+          checkSelected();
+
+          // Si todos los checkboxes están seleccionados, marcar el checkbox principal
+          if (document.querySelectorAll('input[name="notificationDevolucion[]"]:checked').length === checkboxes.length) {
+            selectAllDevolucionCheckbox.checked = true;
+          } else {
+            selectAllDevolucionCheckbox.checked = false;
+          }
+        });
+      });
+
+      // Llamar a la función inicialmente para asegurarse de que los botones estén en el estado correcto
+      checkSelected();
+    });
+  </script>
+
+
+
+  <script>
     document.addEventListener('DOMContentLoaded', function() {
       // Función para verificar si hay checkboxes seleccionados y habilitar/deshabilitar botones
       function checkSelectedDevolucion() {
@@ -91,6 +179,65 @@
       window.toggleCheckboxes = toggleCheckboxes;
     });
   </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Seleccionar el checkbox principal que marcará o desmarcará todas las casillas
+      var selectAllCheckbox = document.getElementById('selectAllCheckbox');
+      var checkboxes = document.querySelectorAll('input[name="notifications[]"]');
+      var acceptButton = document.getElementById('acceptReturn');
+      var denyButton = document.getElementById('denyReturn');
+
+      // Función para verificar si hay casillas seleccionadas y habilitar/deshabilitar botones
+      function checkSelected() {
+        var selectedCheckboxes = document.querySelectorAll('input[name="notifications[]"]:checked');
+
+        // Si hay al menos una casilla marcada, habilitamos los botones
+        if (selectedCheckboxes.length > 0) {
+          acceptButton.disabled = false;
+          denyButton.disabled = false;
+        } else {
+          // Si no hay ninguna casilla marcada, deshabilitamos los botones
+          acceptButton.disabled = true;
+          denyButton.disabled = true;
+        }
+      }
+
+      // Evento para marcar/desmarcar todas las casillas cuando se usa el checkbox principal
+      selectAllCheckbox.addEventListener('change', function() {
+        var isChecked = selectAllCheckbox.checked;
+
+        // Marcar o desmarcar todas las casillas
+        checkboxes.forEach(function(checkbox) {
+          checkbox.checked = isChecked;
+        });
+
+        // Llamar a la función para habilitar/deshabilitar los botones
+        checkSelected();
+      });
+
+      // Evento para cada checkbox individual, para verificar si se deben habilitar/deshabilitar los botones
+      checkboxes.forEach(function(checkbox) {
+        checkbox.addEventListener('change', function() {
+          // Llamar a la función para habilitar/deshabilitar los botones
+          checkSelected();
+
+          // Si todos los checkboxes están seleccionados, marcar el checkbox principal
+          if (document.querySelectorAll('input[name="notifications[]"]:checked').length === checkboxes.length) {
+            selectAllCheckbox.checked = true;
+          } else {
+            selectAllCheckbox.checked = false;
+          }
+        });
+      });
+
+      // Llamar a la función inicialmente para asegurarse de que los botones estén en el estado correcto
+      checkSelected();
+    });
+  </script>
+
+
+
+
 
   <script>
     $(document).ready(function() {

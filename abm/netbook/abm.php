@@ -218,7 +218,7 @@ if ($error) {
           echo '<table border="1">';
           echo '<thead>';
           echo '<tr>';
-          echo '<th>#</th>';  // Añadido para el checkbox
+          echo '<th><input type="checkbox" id="selectAllCheckbox"></th>'; // Checkbox para seleccionar/deseleccionar todos
           echo '<th>Alumno</th>';
           echo '<th>Material</th>';
           echo '<th>Horario inicio</th>';
@@ -262,6 +262,28 @@ if ($error) {
           echo '</tbody>';
           echo '</table>';
 
+          echo '<tfoot>';
+          echo '<tr>';
+          echo '<td colspan="6" style="text-align: right;">';
+          echo '<div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 0;">';
+          
+          // Menú desplegable para seleccionar el horario
+          echo '<select id="selectHorarioTodos" class="input" style="margin-right: auto; width: 60%;">';
+          echo '<option value="" disabled hidden selected>Elegir un horario para todos</option>';
+          foreach ($datos as $dato) {
+            echo '<option value="' . $dato['id'] . '">' . $dato['horario'] . '</option>';
+          }
+          echo '</select>';
+          
+          // Botón para aplicar el horario seleccionado a todos los selectores
+          echo '<button type="button" class="btn btn-outline-dark" onclick="selectAllTimesWithSelected()" style="padding-left: 36px; padding-right: 36px; margin-right: 15px;">Aplicar </button>';
+          
+          echo '</div>';
+          echo '</td>';
+          echo '</tr>';
+          echo '</tfoot>';
+          
+
           // Footer con los botones
           echo '<div class="modal-footer">';
 
@@ -281,6 +303,7 @@ if ($error) {
           echo 'No hay notificaciones pendientes.';
         }
         ?>
+        
 
       </div>
     </div>
@@ -306,7 +329,7 @@ if ($error) {
           echo '<table border="1">';
           echo '<thead>';
           echo '<tr>';
-          echo '<th>#</th>';  // Añadido para el checkbox
+          echo '<th><input type="checkbox" id="selectAllDevolucionCheckbox"></th>';  // Añadido para el checkbox
           echo '<th>Alumno</th>';
           echo '<th>Material</th>';
           echo '<th>Horario inicio</th>';
