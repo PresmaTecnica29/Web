@@ -23,11 +23,17 @@ try {
   $conexion = conexion();
 
   if (isset($_POST['apellido'])) {
-    $consultaSQL = "SELECT user_id, user_name, user_email, rol_descripcion, bloqueado FROM users inner join rol on users.idRol =rol.idRol AND user_name LIKE '%" . $_POST['apellido'] . "%' limit 100";
-  } else {
-    $consultaSQL = "SELECT user_id, user_name, user_email, rol_descripcion, bloqueado FROM users inner join rol on users.idRol =rol.idRol limit 100";
-  }
-
+    $consultaSQL = "SELECT user_id, user_name, user_email, rol.idRol, rol_descripcion, bloqueado 
+                    FROM users 
+                    INNER JOIN rol ON users.idRol = rol.idRol 
+                    WHERE user_name LIKE '%" . $_POST['apellido'] . "%' 
+                    LIMIT 100";
+} else {
+    $consultaSQL = "SELECT user_id, user_name, user_email, rol.idRol, rol_descripcion, bloqueado 
+                    FROM users 
+                    INNER JOIN rol ON users.idRol = rol.idRol 
+                    LIMIT 100";
+}
   $sentencia = $conexion->prepare($consultaSQL);
   $sentencia->execute();
 
@@ -122,8 +128,17 @@ if ($error) {
               if ($_SESSION['user_rol'] == 5 || $_SESSION['user_rol'] == 4) {
                   // Solo se ejecutará este código si el rol del usuario es 5 o 4
                   ?>
-                  <a href="<?= 'editarUsuario.php?id=' . escapar($fila["user_id"]) ?>" class="boton">✏️ Editar</a>
-                  <?php
+                <?php
+                if (isset($_SESSION['user_rol'])) {
+                  // Si el rol del usuario actual es mayor o igual al rol del usuario listado, se muestra el botón de edición
+                  if ($_SESSION['user_rol'] >= $fila["idRol"]) {
+                      ?>
+                      <a href="<?= 'editarUsuario.php?id=' . escapar($fila["user_id"]) ?>" class="boton">✏️ Editar</a>
+                      <?php
+                  }
+              }
+                ?>
+                <?php
                     }
                   }
                 ?>
@@ -132,13 +147,22 @@ if ($error) {
               if ($_SESSION['user_rol'] == 5 || $_SESSION['user_rol'] == 4) {
                   // Solo se ejecutará este código si el rol del usuario es 5 o 4
                   ?>
-                  <?php if ($fila["bloqueado"] == 0): ?>
+                <?php
+                if (isset($_SESSION['user_rol'])) {
+                  // Si el rol del usuario actual es mayor o igual al rol del usuario listado, se muestra el botón de edición
+                  if ($_SESSION['user_rol'] >= $fila["idRol"]) {
+                      ?>
+                      <?php if ($fila["bloqueado"] == 0): ?>
                       <a href="<?= 'bloquearUsuario.php?id=' . escapar($fila["user_id"]) ?>" class="boton">❌ Bloquear</a>
                     <?php endif; ?>
                   <?php if ($fila["bloqueado"] == 1): ?>
                     <a href="<?= 'desbloquearUsuario.php?id=' . escapar($fila["user_id"]) ?>" class="boton">✅ Desbloquear</a>
                   <?php endif; ?>
-                  <?php
+                      <?php
+                  }
+              }
+                ?>
+                <?php
                     }
                   }
                 ?>

@@ -213,7 +213,7 @@ include "../template/header.php";
   });
 </script>
 
-<a href="visual.php" class="boton" style='margin-left:20px;'>volver atras</a>
+<a href="visual.php" class="boton" style='margin-left:20px;'>Volver Atras</a>
 
 
 <?php include "../template/footer.php"; ?>

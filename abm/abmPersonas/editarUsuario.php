@@ -30,7 +30,7 @@ if (isset($_POST['submit'])) {
       "id"        => $_GET['id'],
       "nombre"    => $_POST['nombre'],
       "email"     => $_POST['email'],
-      "rol"      => $_POST['rol'],
+      "rol" => isset($_POST['idRol']) ? $_POST['idRol'] : null,  // Corregido
     ];
 
     $consultaSQL = "UPDATE users SET
@@ -123,26 +123,24 @@ if (isset($alumno) && $alumno) {
           <div class="form-group" style='margin-bottom:10px;'>
             <label for="rol">Rol</label>
             <?php
-              isset($_SESSION['user_rol'])
-                      // Solo se ejecutará este código si el rol del usuario es 5
-                      ?>
-                      <select name="rol_seleccionado" class="input">
-                          <?php 
-                          // Creamos un array para almacenar los roles de 4 para abajo
-                          $rolesPermitidos = [];
-
-                          // Recorremos los datos y filtramos los roles que sean menores a 5
-                          foreach ($datos as $dato) { 
-                              if ($dato['idRol'] < $_SESSION['user_rol']) {  // Solo mostramos los roles con id menores a 5
-                                  echo '<option value="' . $dato['idRol'] . '" class="input">' . $dato['rol_descripcion'] . '</option>';
-                              }
-                          }
-                          ?>
-                      </select>
-                      <?php
-                    }
-                
+              isset($_SESSION['user_rol']);
+              $user_rol = isset($_SESSION['user_rol']) ? $_SESSION['user_rol'] : 5;
               ?>
+              <select name="idRol" id="idRol" class="input"> <!-- Corregido el nombre a idRol -->
+                <?php
+                foreach ($datos as $dato) {
+                    // Mostrar todas las opciones si el rol del usuario es 5
+                    if ($user_rol == 5) {
+                        echo '<option value="' . $dato['idRol'] . '" ' . ($alumno['idRol'] == $dato['idRol'] ? 'selected' : '') . '>' . $dato['rol_descripcion'] . '</option>';
+                    } else {
+                        // Filtrar opciones según el rol del usuario
+                        if ($dato['idRol'] < $user_rol) {
+                            echo '<option value="' . $dato['idRol'] . '" ' . ($alumno['idRol'] == $dato['idRol'] ? 'selected' : '') . '>' . $dato['rol_descripcion'] . '</option>';
+                        }
+                    }
+                }
+                ?>
+              </select>
           </div>
           <div class="form-group">
             <input name="csrf" type="hidden" value="<?php echo escapar($_SESSION['csrf']); ?>">
@@ -153,8 +151,6 @@ if (isset($alumno) && $alumno) {
       </div>
     </div>
   </div>
-<?php
-
-?>
+<?php } ?>
 
 <?php require "../template/footer.php"; ?>

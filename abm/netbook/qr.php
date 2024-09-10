@@ -111,18 +111,13 @@
                     <a href="<?= 'abrirqr.php?nombre=' . escapar($fila["recurso_nombre"]) ?>" class="boton"
                       title="Muestra el QR actual de esta netbook" style='margin-left:10px;'>Abrir Qr</a>
 
-                      <?php
-              if (isset($_SESSION['user_rol'])) {
-                  if ($_SESSION['user_rol'] == 5) {
-                      // Solo se ejecutará este código si el rol del usuario es 5 o 4
-                      ?>
-                      <a href="<?= 'borrarUsuario.php?id=' . escapar($fila["user_id"]) ?>" class="boton">🗑️ Borrar</a>
-                      <?php
-                        }
-                      }
-                    ?>
 
-                    <?php if ($fila["recurso_estado"] == 1 || $fila["recurso_estado"] == 2 ): ?>
+                      <?php
+                if (isset($_SESSION['user_rol'])) {
+                    if ($_SESSION['user_rol'] == 5 || $_SESSION['user_rol'] == 4 || $_SESSION['user_rol'] == 3) {
+                        // Solo se ejecutará este código si el rol del usuario es 5 o 4
+                        ?>
+                        <?php if ($fila["recurso_estado"] == 1 || $fila["recurso_estado"] == 2 ): ?>
                       <!-- Botón que se muestra solo si recurso_estado es igual a 3 -->
                       <a href="<?= 'mantenimientonetbook.php?nombre=' . escapar($fila["recurso_nombre"]) ?>" class="boton"
                       title="Cambia el estado de la netbook a MANTENIMIENTO" style='margin-left:10px;'>Poner en Mantenimiento</a>
@@ -133,6 +128,11 @@
                       <a href="<?= 'habilitarnetbook.php?nombre=' . escapar($fila["recurso_nombre"]) ?>" class="boton"
                       title="Cambia el estado de la netbook a LIBRE" style='margin-left:10px; padding-left:78px; padding-right: 78px;'>Habilitar</a>
                     <?php endif; ?>
+                        <?php
+                          }
+                        }
+                      ?>
+
 
                   </td>
                 </tr>

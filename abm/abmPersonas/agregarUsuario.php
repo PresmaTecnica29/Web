@@ -102,7 +102,7 @@ if (isset($resultado)) {
                     echo '<option value="' . $dato['idRol'] . '" class="input"> ' . $dato['rol_descripcion'] . ' </option>';
                 } else {
                     // Filtrar opciones según el rol del usuario
-                    if ($dato['idRol'] <= $user_rol) {
+                    if ($dato['idRol'] < $user_rol) {
                         echo '<option value="' . $dato['idRol'] . '" class="input"> ' . $dato['rol_descripcion'] . ' </option>';
                     }
                 }
