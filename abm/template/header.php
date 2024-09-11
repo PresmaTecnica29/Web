@@ -5,10 +5,240 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
   <script src="script.js"></script>
+  <script>
+    function selectAllTimesWithSelected() {
+      // Obtener el valor seleccionado del menú desplegable
+      const selectedHorario = document.getElementById('selectHorarioTodos').value;
+
+      if (!selectedHorario) {
+        alert('Por favor, selecciona un horario primero.');
+        return;
+      }
+
+      // Seleccionar todos los elementos select de horario
+      const selects = document.querySelectorAll('select[name^="horario"]');
+
+      // Recorre cada select y selecciona el horario seleccionado en el menú desplegable
+      selects.forEach(select => {
+        for (let i = 0; i < select.options.length; i++) {
+          if (select.options[i].value == selectedHorario) {
+            select.selectedIndex = i; // Selecciona la opción que coincide
+            break;
+          }
+        }
+      });
+    }
+
+    // Función para marcar o desmarcar todas las notificaciones
+    function toggleCheckboxes(check) {
+      const checkboxes = document.querySelectorAll('.checkboxNotification');
+      checkboxes.forEach(checkbox => checkbox.checked = check);
+    }
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Seleccionar el checkbox principal que marcará o desmarcará todas las casillas
+      var selectAllDevolucionCheckbox = document.getElementById('selectAllDevolucionCheckbox');
+      var checkboxes = document.querySelectorAll('input[name="notificationDevolucion[]"]');
+      var acceptButton = document.getElementById('acceptDevolucion');
+      var denyButton = document.getElementById('denyDevolucion');
+
+      // Función para verificar si hay casillas seleccionadas y habilitar/deshabilitar botones
+      function checkSelected() {
+        var selectedCheckboxes = document.querySelectorAll('input[name="notificationDevolucion[]"]:checked');
+
+        // Si hay al menos una casilla marcada, habilitamos los botones
+        if (selectedCheckboxes.length > 0) {
+          acceptButton.disabled = false;
+          denyButton.disabled = false;
+        } else {
+          // Si no hay ninguna casilla marcada, deshabilitamos los botones
+          acceptButton.disabled = true;
+          denyButton.disabled = true;
+        }
+      }
+
+      // Evento para marcar/desmarcar todas las casillas cuando se usa el checkbox principal
+      selectAllDevolucionCheckbox.addEventListener('change', function() {
+        var isChecked = selectAllDevolucionCheckbox.checked;
+
+        // Marcar o desmarcar todas las casillas
+        checkboxes.forEach(function(checkbox) {
+          checkbox.checked = isChecked;
+        });
+
+        // Llamar a la función para habilitar/deshabilitar los botones
+        checkSelected();
+      });
+
+      // Evento para cada checkbox individual, para verificar si se deben habilitar/deshabilitar los botones
+      checkboxes.forEach(function(checkbox) {
+        checkbox.addEventListener('change', function() {
+          // Llamar a la función para habilitar/deshabilitar los botones
+          checkSelected();
+
+          // Si todos los checkboxes están seleccionados, marcar el checkbox principal
+          if (document.querySelectorAll('input[name="notificationDevolucion[]"]:checked').length === checkboxes.length) {
+            selectAllDevolucionCheckbox.checked = true;
+          } else {
+            selectAllDevolucionCheckbox.checked = false;
+          }
+        });
+      });
+
+      // Llamar a la función inicialmente para asegurarse de que los botones estén en el estado correcto
+      checkSelected();
+    });
+  </script>
+
+
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Función para verificar si hay checkboxes seleccionados y habilitar/deshabilitar botones
+      function checkSelectedDevolucion() {
+        var checkboxes = document.querySelectorAll('input[name="notificationDevolucion[]"]:checked');
+        var acceptButton = document.getElementById('acceptDevolucion');
+        var denyButton = document.getElementById('denyDevolucion');
+
+        if (checkboxes.length > 0) {
+          acceptButton.disabled = false;
+          denyButton.disabled = false;
+        } else {
+          acceptButton.disabled = true;
+          denyButton.disabled = true;
+        }
+      }
+
+      // Añadimos el evento a cada checkbox individualmente
+      document.querySelectorAll('input[name="notificationDevolucion[]"]').forEach(function(checkbox) {
+        checkbox.addEventListener('change', checkSelectedDevolucion);
+      });
+
+      // Revisa si hay checkboxes seleccionados inicialmente
+      checkSelectedDevolucion();
+
+      // Función para marcar o desmarcar todas las casillas
+      function toggleCheckboxesDevolucion(checked) {
+        var checkboxes = document.querySelectorAll('.checkboxDevolucion');
+        checkboxes.forEach(function(checkbox) {
+          checkbox.checked = checked;
+        });
+
+        // Llamamos a checkSelected para habilitar/deshabilitar los botones de aceptar y rechazar
+        checkSelectedDevolucion();
+      }
+
+      // Hacemos que la función toggleCheckboxesDevolucion esté disponible globalmente
+      window.toggleCheckboxesDevolucion = toggleCheckboxesDevolucion;
+    });
+  </script>
+
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      function checkSelected() {
+        var checkboxes = document.querySelectorAll('input[name="notifications[]"]:checked');
+        var acceptButton = document.getElementById('acceptReturn');
+        var denyButton = document.getElementById('denyReturn');
+
+        if (checkboxes.length > 0) {
+          acceptButton.disabled = false;
+          denyButton.disabled = false;
+        } else {
+          acceptButton.disabled = true;
+          denyButton.disabled = true;
+        }
+      }
+
+      // Añadimos el evento a cada checkbox individualmente
+      document.querySelectorAll('input[name="notifications[]"]').forEach(function(checkbox) {
+        checkbox.addEventListener('change', checkSelected);
+      });
+
+      // Revisa si hay checkboxes seleccionados inicialmente
+      checkSelected();
+
+      // Función para marcar o desmarcar todas las casillas
+      function toggleCheckboxes(checked) {
+        var checkboxes = document.querySelectorAll('.checkboxNotification');
+        checkboxes.forEach(function(checkbox) {
+          checkbox.checked = checked;
+        });
+
+        // Llamamos a checkSelected para habilitar/deshabilitar los botones de aceptar y rechazar
+        checkSelected();
+      }
+
+      // Hacemos que la función toggleCheckboxes esté disponible globalmente
+      window.toggleCheckboxes = toggleCheckboxes;
+    });
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Seleccionar el checkbox principal que marcará o desmarcará todas las casillas
+      var selectAllCheckbox = document.getElementById('selectAllCheckbox');
+      var checkboxes = document.querySelectorAll('input[name="notifications[]"]');
+      var acceptButton = document.getElementById('acceptReturn');
+      var denyButton = document.getElementById('denyReturn');
+
+      // Función para verificar si hay casillas seleccionadas y habilitar/deshabilitar botones
+      function checkSelected() {
+        var selectedCheckboxes = document.querySelectorAll('input[name="notifications[]"]:checked');
+
+        // Si hay al menos una casilla marcada, habilitamos los botones
+        if (selectedCheckboxes.length > 0) {
+          acceptButton.disabled = false;
+          denyButton.disabled = false;
+        } else {
+          // Si no hay ninguna casilla marcada, deshabilitamos los botones
+          acceptButton.disabled = true;
+          denyButton.disabled = true;
+        }
+      }
+
+      // Evento para marcar/desmarcar todas las casillas cuando se usa el checkbox principal
+      selectAllCheckbox.addEventListener('change', function() {
+        var isChecked = selectAllCheckbox.checked;
+
+        // Marcar o desmarcar todas las casillas
+        checkboxes.forEach(function(checkbox) {
+          checkbox.checked = isChecked;
+        });
+
+        // Llamar a la función para habilitar/deshabilitar los botones
+        checkSelected();
+      });
+
+      // Evento para cada checkbox individual, para verificar si se deben habilitar/deshabilitar los botones
+      checkboxes.forEach(function(checkbox) {
+        checkbox.addEventListener('change', function() {
+          // Llamar a la función para habilitar/deshabilitar los botones
+          checkSelected();
+
+          // Si todos los checkboxes están seleccionados, marcar el checkbox principal
+          if (document.querySelectorAll('input[name="notifications[]"]:checked').length === checkboxes.length) {
+            selectAllCheckbox.checked = true;
+          } else {
+            selectAllCheckbox.checked = false;
+          }
+        });
+      });
+
+      // Llamar a la función inicialmente para asegurarse de que los botones estén en el estado correcto
+      checkSelected();
+    });
+  </script>
+
+
+
+
+
   <script>
     $(document).ready(function() {
 
@@ -65,17 +295,27 @@
       });
 
       function handleReturn(status) {
+        var selectedIds = Array.from(document.querySelectorAll('input[name="notifications[]"]:checked'))
+          .map(checkbox => checkbox.value); // Recoge los IDs de las notificaciones seleccionadas
+
         $.ajax({
           url: 'handle_return.php',
           type: 'POST',
           data: {
             status: status,
-            id: notificationId, // Cambia esta línea para usar notificationId
+            id: selectedIds, // Enviar los IDs como un array
             hora: $('#horario').val(),
             nombreNet: $('#nombreNet').val()
           },
           success: function(response) {
-            $('#notificationMessage').text(response);
+            const result = JSON.parse(response);
+            if (result.success.length > 0) {
+              alert(result.success.join("\n"));
+            }
+            if (result.errors.length > 0) {
+              alert(result.errors.join("\n"));
+            }
+            $('#notificationMessage').text(result.success.join("\n") || result.errors.join("\n"));
             $('#acceptReturn, #denyReturn').hide();
           },
           error: function(error) {
@@ -84,25 +324,45 @@
         });
       }
 
+
       function handleDevolucion(status) {
+        // Obtener todos los checkboxes seleccionados
+        var selectedIds = Array.from(document.querySelectorAll('input[name="notificationDevolucion[]"]:checked'))
+          .map(checkbox => checkbox.value); // Recoge los IDs de las notificaciones seleccionadas
+
+        // Obtener el nombre del recurso de devolución
+        var nombreNetDevo = $('#nombreNetDevo').val();
+
         $.ajax({
           url: 'handle_devolucion.php',
           type: 'POST',
           data: {
             status: status,
-            id: notificationIddev,
-            nombreNetDevo: $('#nombreNetDevo').val()
-            
+            ids: selectedIds, // Envía todos los IDs seleccionados
+            nombreNetDevo: nombreNetDevo
           },
           success: function(response) {
-            $('#devolucionMessage').text(response);
+            var result = JSON.parse(response);
+            var successMessages = result.success.join("\n");
+            var errorMessages = result.errors.join("\n");
+
+            // Mostrar mensajes de éxito y error
+            if (successMessages) {
+              $('#devolucionMessage').text(successMessages);
+            }
+            if (errorMessages) {
+              alert(errorMessages);
+            }
+
             $('#acceptDevolucion, #denyDevolucion').hide();
           },
-          error: function(error) {
+          error: function() {
             alert('Hubo un error al manejar la devolución. Por favor, inténtalo de nuevo.');
           }
         });
       }
+
+
 
       const source = new EventSource('actualizar.php');
 
@@ -136,9 +396,9 @@
         // Comprobar si el modal está abierto
         if (!isModalOpen && notificacion) {
           // Actualizar el contenido del modal
-          document.getElementById('notificationMessageUser').textContent = 'Alumno: ' + notificacion.user_name;
-          document.getElementById('notificationMessageResource').textContent = 'Material: ' + notificacion.recurso_nombre;
-          document.getElementById('notificationMessageStart').textContent = 'Horario inicio: ' + notificacion.inicio_prestamo;
+          document.getElementById('notificationMessageUser').textContent = notificacion.user_name;
+          document.getElementById('notificationMessageResource').textContent = notificacion.recurso_nombre;
+          document.getElementById('notificationMessageStart').textContent = notificacion.inicio_prestamo;
 
           notificationId = notificacion.idregistro; // Agrega esta línea para almacenar el id de la notificación
 
@@ -156,14 +416,14 @@
         // Comprobar si el modal está abierto
         if (!isModalOpen && notificacionDevolucion) {
           // Actualizar el contenido del modal
-          document.getElementById('devolucionMessageUser').textContent = 'Alumno: ' + notificacionDevolucion.user_name;
-          document.getElementById('devolucionMessageResource').textContent = 'Material: ' + notificacionDevolucion.recurso_nombre;
-          document.getElementById('devolucionMessageStart').textContent = 'Horario inicio: ' + notificacionDevolucion.inicio_prestamo;
-          document.getElementById('devolucionMessageEnd').textContent = 'Horario final: ' + notificacionDevolucion.horario;
+          document.getElementById('devolucionMessageUser').textContent = notificacionDevolucion.user_name;
+          document.getElementById('devolucionMessageResource').textContent = notificacionDevolucion.recurso_nombre;
+          document.getElementById('devolucionMessageStart').textContent = notificacionDevolucion.inicio_prestamo;
+          document.getElementById('devolucionMessageEnd').textContent = notificacionDevolucion.horario;
 
           notificationIddev = notificacionDevolucion.idregistro; // Agrega esta línea para almacenar el id de la notificación
           notificacionNom =
-          $('#acceptDevolucion, #denyDevolucion').show();
+            $('#acceptDevolucion, #denyDevolucion').show();
 
           // Abrir el modal
           $('#returnDevolucionModal').modal('show');
@@ -179,7 +439,7 @@
     }
 
     #nombreNet {
-      visibility: hidden;
+      display: none;
     }
 
     footer {
@@ -196,32 +456,29 @@
 <body>
   <header class="p-3 bg-dark text-white">
     <div class="container" bis_skin_checked="1">
-      <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start" bis_skin_checked="1">
+      <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start"
+        bis_skin_checked="1">
         <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-        <?php
+          <li><a href='../../index.php' class="nav-link px-2 text-secondary">Inicio</a></li>
+          <li><a href='../netbook/abm.php' class="nav-link px-2 text-white">Prestamos</a></li>
+          <?php
           if (isset($_SESSION['user_rol'])) {
-              if ($_SESSION['user_rol'] == 5 || $_SESSION['user_rol'] == 4 || $_SESSION['user_rol'] == 3 || $_SESSION['user_rol'] == 2) {
-                  // Solo se ejecutará este código si el rol del usuario es 5 o 4
-                  ?>
-                  <li><a href='../netbook/abm.php' class="nav-link px-2 text-white">Prestamos</a></li>
-                  <?php
-                    }
-                  }
-                ?>
-        
-          <li><a href="../abmPersonas/abmPersonas.php" class="nav-link px-2 text-white">Usuarios</a></li>
-          <li><a href="../netbook/qr.php" class="nav-link px-2 text-white">Recursos</a></li>
+            if ($_SESSION['user_rol'] == 5) {
+              echo '<li><a href="../abmPersonas/abmPersonas.php" class="nav-link px-2 text-white">Usuarios</a></li>';
+              echo '<li><a href="../netbook/qr.php" class="nav-link px-2 text-white">Recursos</a></li>';
+            }
+          } ?>
           <li><a href="../netbook/visual.php" class="nav-link px-2 text-white">Visual</a></li>
 
-          <li><a href="../../index.php?logout" class="nav-link px-2 text-white">Cerrar sesion</a></li>
+          <li><a href="/Web/index.php?logout" class="nav-link px-2 text-white">Cerrar sesion</a></li>
 
           <li><a href="../abmPersonas/FAQ.php" class="nav-link px-2 text-white">FAQ</a></li>
 
         </ul>
 
         <div class="contenedor" bis_skin_checked="1">
-                    <div class="caja-advertencia"><?php echo $_SESSION['user_name']; ?></div>
-                    <img class="ñiquito" src="../../views/templates/logofinal.png">
+          <div class="caja-advertencia"><?php echo $_SESSION['user_name']; ?></div>
+          <img class="ñiquito" src="../../views/templates/logofinal.png">
         </div>
       </div>
     </div>
