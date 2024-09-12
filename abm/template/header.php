@@ -295,34 +295,45 @@
       });
 
       function handleReturn(status) {
-        var selectedIds = Array.from(document.querySelectorAll('input[name="notifications[]"]:checked'))
-          .map(checkbox => checkbox.value); // Recoge los IDs de las notificaciones seleccionadas
+    var selectedIds = Array.from(document.querySelectorAll('input[name="notifications[]"]:checked'))
+        .map(checkbox => checkbox.value); // Recoge los IDs de las notificaciones seleccionadas
 
-        $.ajax({
-          url: 'handle_return.php',
-          type: 'POST',
-          data: {
+    var horarios = {};
+    var fechasDevolucion = {};
+
+    // Recolectar los horarios y fechas de devolución para cada notificación seleccionada
+    selectedIds.forEach(function(id) {
+        horarios[id] = $('select[name="horario[' + id + ']"]').val(); // Obtener el horario seleccionado
+        fechasDevolucion[id] = $('input[name="fin_prestamo_fecha[' + id + ']"]').val(); // Obtener la fecha de devolución
+    });
+
+    $.ajax({
+        url: 'handle_return.php',
+        type: 'POST',
+        data: {
             status: status,
             id: selectedIds, // Enviar los IDs como un array
-            hora: $('#horario').val(),
-            nombreNet: $('#nombreNet').val()
-          },
-          success: function(response) {
+            horarios: horarios, // Enviar los horarios seleccionados
+            fechasDevolucion: fechasDevolucion, // Enviar las fechas de devolución
+            nombreNet: $('#nombreNet').val() // Enviar el valor de nombreNet
+        },
+        success: function(response) {
             const result = JSON.parse(response);
             if (result.success.length > 0) {
-              alert(result.success.join("\n"));
+                alert(result.success.join("\n"));
             }
             if (result.errors.length > 0) {
-              alert(result.errors.join("\n"));
+                alert(result.errors.join("\n"));
             }
             $('#notificationMessage').text(result.success.join("\n") || result.errors.join("\n"));
             $('#acceptReturn, #denyReturn').hide();
-          },
-          error: function(error) {
+        },
+        error: function(error) {
             alert('Hubo un error al manejar la devolución. Por favor, inténtalo de nuevo.');
-          }
-        });
-      }
+        }
+    });
+}
+
 
 
       function handleDevolucion(status) {
