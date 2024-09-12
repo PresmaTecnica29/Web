@@ -221,6 +221,7 @@ if ($error) {
     <div class="col-md-12">
 
       <a href="devuelto.php" class="btn btn-primary mt-4">Ver Devueltos</a>
+      <a href="expirados.php" class="btn btn-primary mt-4" title="Muestra las netbooks que han pasado su tiempo de prestamo" style='margin-left:20px;'>Expirados</a>
       <hr>
 
       <form method="post" class="form-inline">
