@@ -66,34 +66,38 @@ date_default_timezone_set('America/Argentina/Buenos_Aires'); // Ajusta la zona h
 $currentTime = date('Y-m-d H:i:s');
 
 if (isset($_POST['apellido'])) {
-    $consultaSQL = "SELECT registros.idregistro, users.user_name, DATE_FORMAT(registros.inicio_prestamo, '%d/%m %H:%i') AS inicio_prestamo, 
-               DATE_FORMAT(horario.horario, '%H:%i') AS fin_prestamo, COALESCE(registros.fechas_extendidas, '----') AS fechas_extendidas, 
-               recurso.recurso_nombre 
-        FROM registros 
-        INNER JOIN users ON registros.idusuario = users.user_id 
-        INNER JOIN recurso ON recurso.recurso_id = registros.idrecurso 
-        INNER JOIN horario ON horario.id = registros.fin_prestamo 
-        WHERE registros.opcion = 'Accepted' AND registros.devuelto = 'Pending' OR registros.devuelto = 'Denied' 
-              AND users.user_name LIKE :apellido 
-              AND horario.horario < :currentTime
-        ORDER BY registros.idregistro DESC";
+  $consultaSQL = "SELECT registros.idregistro, users.user_name, DATE_FORMAT(registros.inicio_prestamo, '%d/%m %H:%i') AS inicio_prestamo, 
+             CONCAT(DATE_FORMAT(registros.fin_prestamo_fecha, '%d/%m/%Y'), ' ', DATE_FORMAT(horario.horario, '%H:%i')) AS fin_prestamo, 
+             COALESCE(registros.fechas_extendidas, '----') AS fechas_extendidas, 
+             recurso.recurso_nombre 
+      FROM registros 
+      INNER JOIN users ON registros.idusuario = users.user_id 
+      INNER JOIN recurso ON recurso.recurso_id = registros.idrecurso 
+      INNER JOIN horario ON horario.id = registros.fin_prestamo 
+      WHERE registros.opcion = 'Accepted' 
+            AND (registros.devuelto = 'Pending' OR registros.devuelto = 'Denied') 
+            AND users.user_name LIKE :apellido 
+            AND CONCAT(registros.fin_prestamo_fecha, ' ', horario.horario) < :currentTime
+      ORDER BY registros.idregistro DESC";
 } else {
-    $consultaSQL = "SELECT registros.idregistro, users.user_name, DATE_FORMAT(registros.inicio_prestamo, '%d/%m %H:%i') AS inicio_prestamo, 
-               DATE_FORMAT(horario.horario, '%H:%i') AS fin_prestamo, COALESCE(registros.fechas_extendidas, '----') AS fechas_extendidas, 
-               recurso.recurso_nombre 
-        FROM registros 
-        INNER JOIN users ON registros.idusuario = users.user_id 
-        INNER JOIN recurso ON recurso.recurso_id = registros.idrecurso 
-        INNER JOIN horario ON horario.id = registros.fin_prestamo 
-        WHERE registros.opcion = 'Accepted' AND registros.devuelto = 'Pending' OR registros.devuelto = 'Denied' 
-              AND horario.horario < :currentTime
-        ORDER BY registros.idregistro DESC";
+  $consultaSQL = "SELECT registros.idregistro, users.user_name, DATE_FORMAT(registros.inicio_prestamo, '%d/%m %H:%i') AS inicio_prestamo, 
+             CONCAT(DATE_FORMAT(registros.fin_prestamo_fecha, '%d/%m/%Y'), ' ', DATE_FORMAT(horario.horario, '%H:%i')) AS fin_prestamo, 
+             COALESCE(registros.fechas_extendidas, '----') AS fechas_extendidas, 
+             recurso.recurso_nombre 
+      FROM registros 
+      INNER JOIN users ON registros.idusuario = users.user_id 
+      INNER JOIN recurso ON recurso.recurso_id = registros.idrecurso 
+      INNER JOIN horario ON horario.id = registros.fin_prestamo 
+      WHERE registros.opcion = 'Accepted' 
+            AND (registros.devuelto = 'Pending' OR registros.devuelto = 'Denied') 
+            AND CONCAT(registros.fin_prestamo_fecha, ' ', horario.horario) <= :currentTime
+      ORDER BY registros.idregistro DESC";
 }
 
 $sentencia = $conexion->prepare($consultaSQL);
 
 if (isset($_POST['apellido'])) {
-    $sentencia->bindValue(':apellido', '%' . $_POST['apellido'] . '%', PDO::PARAM_STR);
+  $sentencia->bindValue(':apellido', '%' . $_POST['apellido'] . '%', PDO::PARAM_STR);
 }
 
 $sentencia->bindValue(':currentTime', $currentTime, PDO::PARAM_STR);
