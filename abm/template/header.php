@@ -320,10 +320,10 @@
             nombreNet: nombresNet
           },
           success: function(response) {
-            console.log(response);
+    console.log(response);
     $('#devolucionMessage').text(response);
-    $('#acceptDevolucion, #denyDevolucion').hide();
-          },
+    $('#acceptReturn, #denyReturn').hide();
+},
 
           error: function(error) {
             alert('Hubo un error al manejar la devolución. Por favor, inténtalo de nuevo.');

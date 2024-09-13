@@ -49,7 +49,7 @@ foreach ($ids as $id) {
                 $errorMessages[] = "Error al actualizar la devolución con id $id: " . $conn->error;
             }
         } else if ($status == 'denied') {
-            $sqlUpdate = "UPDATE registros SET opcion = 'Denied' WHERE idregistro = ?";
+            $sqlUpdate = "UPDATE registros SET devuelto = 'Denied' WHERE idregistro = ?";
             $stmtUpdate = $conn->prepare($sqlUpdate);
             $stmtUpdate->bind_param("i", $id);
             if ($stmtUpdate->execute() === TRUE) {
