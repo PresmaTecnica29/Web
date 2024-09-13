@@ -496,7 +496,7 @@ if ($error) {
 
             // Selector oculto con el nombre del recurso
             echo '<td>';
-            echo '<select name="nombreNetDevo[' . $devolucion['idregistro'] . ']" id="nombreNetDevo_' . $devolucion['idregistro'] . '" class="input">';
+            echo '<select name="nombreNetDevo_[' . $devolucion['idregistro'] . ']" id="nombreNetDevo_' . $devolucion['idregistro'] . '" class="input">';
             echo '<option value="' . $devolucion['recurso_nombre'] . '">' . $devolucion['recurso_nombre'] . '</option>';
             echo '</select>';
             echo '</td>';

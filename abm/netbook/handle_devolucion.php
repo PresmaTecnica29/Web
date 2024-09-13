@@ -13,7 +13,7 @@ $status = $_POST['status']; // 'accepted' o 'denied'
 $nombreNetDevo = $_POST['nombreNetDevo']; // Nombres del recurso (array)
 
 // Verifica si `ids` está en el formato de array
-$ids = isset($_POST['ids']) ? $_POST['ids'] : array();
+$ids = isset($_POST['id']) ? $_POST['id'] : array();
 if (!is_array($ids)) {
     $ids = array($ids); // Asegúrate de que `ids` sea siempre un array
 }
@@ -29,6 +29,15 @@ foreach ($ids as $id) {
     $stmt->execute();
     $result = $stmt->get_result();
 
+    // Verificar si el nombre del recurso existe
+    $nombreNet = $nombreNetDevo[$id]; // Obtener el nombre del recurso específico para este ID
+    $sql2 = "SELECT * FROM recurso WHERE recurso_nombre = ?";
+    $stmt2 = $conn->prepare($sql2);
+    $stmt2->bind_param("s", $nombreNet);
+    $stmt2->execute();
+    $result2 = $stmt2->get_result();
+
+
     if ($result->num_rows > 0) {
         if ($status == 'accepted') {
             $sqlUpdate = "UPDATE registros SET devuelto = 'Accepted' WHERE idregistro = ?";
@@ -39,24 +48,20 @@ foreach ($ids as $id) {
             } else {
                 $errorMessages[] = "Error al actualizar la devolución con id $id: " . $conn->error;
             }
-        } else {
+        } else if ($status == 'denied') {
             $sqlUpdate = "UPDATE registros SET opcion = 'Denied' WHERE idregistro = ?";
             $stmtUpdate = $conn->prepare($sqlUpdate);
             $stmtUpdate->bind_param("i", $id);
             if ($stmtUpdate->execute() === TRUE) {
                 // Obtener el nombre del recurso correspondiente a este ID
-                $recursoNombre = isset($nombreNetDevo[$id]) ? $nombreNetDevo[$id] : '';
+                
 
                 // Actualizar el estado del recurso si el nombre del recurso existe
-                
-                    $sqlUpdateResource = "UPDATE recurso SET recurso_estado = '1' WHERE recurso_nombre = ?";
-                    $stmtUpdateResource = $conn->prepare($sqlUpdateResource);
-                    $stmtUpdateResource->bind_param("s", $recursoNombre);
-                    $stmtUpdateResource->execute();
-                
 
-
-                
+                $sqlUpdateResource = "UPDATE recurso SET recurso_estado = '1' WHERE recurso_nombre = ?";
+                $stmtUpdateResource = $conn->prepare($sqlUpdateResource);
+                $stmtUpdateResource->bind_param("s", $nombreNet);
+                $stmtUpdateResource->execute();
             } else {
                 $errorMessages[] = "Error al actualizar la devolución con id $id: " . $conn->error;
             }

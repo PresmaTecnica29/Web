@@ -320,8 +320,9 @@
             nombreNet: nombresNet
           },
           success: function(response) {
-            $('#notificationMessage').text(response);
-            $('#acceptReturn, #denyReturn').hide();
+            console.log(response);
+    $('#devolucionMessage').text(response);
+    $('#acceptDevolucion, #denyDevolucion').hide();
           },
 
           error: function(error) {
@@ -341,7 +342,7 @@
         var nombreNetDevo = {};
         selectedIds.forEach(function(id) {
           nombreNetDevo[id]= $('select[name="nombreNetDevo_[' + id + ']"]').val();
-          var select = document.getElementById('nombreNetDevo_' + id);
+          
          
         });
 
@@ -350,13 +351,14 @@
           type: 'POST',
           data: {
             status: status,
-            ids: selectedIds, // Envía todos los IDs seleccionados
+            id: selectedIds, // Envía todos los IDs seleccionados
             nombreNetDevo: nombreNetDevo
           },
           success: function(response) {
-            $('#devolucionMessage').text(response);
-            $('#acceptDevolucion, #denyDevolucion').hide();
-          },
+    console.log(response);
+    $('#devolucionMessage').text(response);
+    $('#acceptDevolucion, #denyDevolucion').hide();
+},
           error: function() {
             alert('Hubo un error al manejar la devolución. Por favor, inténtalo de nuevo.');
           }
