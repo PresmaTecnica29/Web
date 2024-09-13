@@ -295,44 +295,40 @@
       });
 
       function handleReturn(status) {
-    var selectedIds = Array.from(document.querySelectorAll('input[name="notifications[]"]:checked'))
-        .map(checkbox => checkbox.value); // Recoge los IDs de las notificaciones seleccionadas
+        var selectedIds = Array.from(document.querySelectorAll('input[name="notifications[]"]:checked'))
+          .map(checkbox => checkbox.value); // Recoge los IDs de las notificaciones seleccionadas
 
-    var horarios = {};
-    var fechasDevolucion = {};
+        var horarios = {};
+        var fechasDevolucion = {};
+        var nombresNet = {}; // Nuevo objeto para almacenar nombresNet específicos
 
-    // Recolectar los horarios y fechas de devolución para cada notificación seleccionada
-    selectedIds.forEach(function(id) {
-        horarios[id] = $('select[name="horario[' + id + ']"]').val(); // Obtener el horario seleccionado
-        fechasDevolucion[id] = $('input[name="fin_prestamo_fecha[' + id + ']"]').val(); // Obtener la fecha de devolución
-    });
+        // Recolectar los horarios, fechas de devolución y nombresNet para cada notificación seleccionada
+        selectedIds.forEach(function(id) {
+          horarios[id] = $('select[name="horario[' + id + ']"]').val(); // Obtener el horario seleccionado
+          fechasDevolucion[id] = $('input[name="fin_prestamo_fecha[' + id + ']"]').val(); // Obtener la fecha de devolución
+          nombresNet[id] = $('select[name="nombreNet[' + id + ']"]').val(); // Obtener el valor específico de nombreNet
+        });
 
-    $.ajax({
-        url: 'handle_return.php',
-        type: 'POST',
-        data: {
+        $.ajax({
+          url: 'handle_return.php',
+          type: 'POST',
+          data: {
             status: status,
             id: selectedIds, // Enviar los IDs como un array
             horarios: horarios, // Enviar los horarios seleccionados
             fechasDevolucion: fechasDevolucion, // Enviar las fechas de devolución
-            nombreNet: $('#nombreNet').val() // Enviar el valor de nombreNet
-        },
-        success: function(response) {
-            const result = JSON.parse(response);
-            if (result.success.length > 0) {
-                alert(result.success.join("\n"));
-            }
-            if (result.errors.length > 0) {
-                alert(result.errors.join("\n"));
-            }
-            $('#notificationMessage').text(result.success.join("\n") || result.errors.join("\n"));
+            nombreNet: nombresNet
+          },
+          success: function(response) {
+            $('#notificationMessage').text(response);
             $('#acceptReturn, #denyReturn').hide();
-        },
-        error: function(error) {
+          },
+
+          error: function(error) {
             alert('Hubo un error al manejar la devolución. Por favor, inténtalo de nuevo.');
-        }
-    });
-}
+          }
+        });
+      }
 
 
 
@@ -341,8 +337,13 @@
         var selectedIds = Array.from(document.querySelectorAll('input[name="notificationDevolucion[]"]:checked'))
           .map(checkbox => checkbox.value); // Recoge los IDs de las notificaciones seleccionadas
 
-        // Obtener el nombre del recurso de devolución
-        var nombreNetDevo = $('#nombreNetDevo').val();
+        // Obtener el nombre del recurso de devolución para cada notificación seleccionada
+        var nombreNetDevo = {};
+        selectedIds.forEach(function(id) {
+          nombreNetDevo[id]= $('select[name="nombreNetDevo_[' + id + ']"]').val();
+          var select = document.getElementById('nombreNetDevo_' + id);
+         
+        });
 
         $.ajax({
           url: 'handle_devolucion.php',
@@ -353,18 +354,7 @@
             nombreNetDevo: nombreNetDevo
           },
           success: function(response) {
-            var result = JSON.parse(response);
-            var successMessages = result.success.join("\n");
-            var errorMessages = result.errors.join("\n");
-
-            // Mostrar mensajes de éxito y error
-            if (successMessages) {
-              $('#devolucionMessage').text(successMessages);
-            }
-            if (errorMessages) {
-              alert(errorMessages);
-            }
-
+            $('#devolucionMessage').text(response);
             $('#acceptDevolucion, #denyDevolucion').hide();
           },
           error: function() {

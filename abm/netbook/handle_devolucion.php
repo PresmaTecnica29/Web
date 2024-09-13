@@ -10,9 +10,9 @@ if ($conn->connect_error) {
 }
 
 $status = $_POST['status']; // 'accepted' o 'denied'
-$nombreNetDevo = $_POST['nombreNetDevo']; // Nombre del recurso seleccionado
+$nombreNetDevo = $_POST['nombreNetDevo']; // Nombres del recurso (array)
 
-// Verifica si `id` está en el formato de array
+// Verifica si `ids` está en el formato de array
 $ids = isset($_POST['ids']) ? $_POST['ids'] : array();
 if (!is_array($ids)) {
     $ids = array($ids); // Asegúrate de que `ids` sea siempre un array
@@ -39,18 +39,24 @@ foreach ($ids as $id) {
             } else {
                 $errorMessages[] = "Error al actualizar la devolución con id $id: " . $conn->error;
             }
-        } else if ($status == 'denied') {
+        } else {
             $sqlUpdate = "UPDATE registros SET opcion = 'Denied' WHERE idregistro = ?";
             $stmtUpdate = $conn->prepare($sqlUpdate);
             $stmtUpdate->bind_param("i", $id);
             if ($stmtUpdate->execute() === TRUE) {
-                // Actualizar el estado del recurso
-                $sqlUpdateResource = "UPDATE recurso SET recurso_estado = '1' WHERE recurso_nombre = ?";
-                $stmtUpdateResource = $conn->prepare($sqlUpdateResource);
-                $stmtUpdateResource->bind_param("s", $nombreNetDevo);
-                $stmtUpdateResource->execute();
+                // Obtener el nombre del recurso correspondiente a este ID
+                $recursoNombre = isset($nombreNetDevo[$id]) ? $nombreNetDevo[$id] : '';
+
+                // Actualizar el estado del recurso si el nombre del recurso existe
                 
-                $successMessages[] = "La devolución con id $id ha sido rechazada.";
+                    $sqlUpdateResource = "UPDATE recurso SET recurso_estado = '1' WHERE recurso_nombre = ?";
+                    $stmtUpdateResource = $conn->prepare($sqlUpdateResource);
+                    $stmtUpdateResource->bind_param("s", $recursoNombre);
+                    $stmtUpdateResource->execute();
+                
+
+
+                
             } else {
                 $errorMessages[] = "Error al actualizar la devolución con id $id: " . $conn->error;
             }

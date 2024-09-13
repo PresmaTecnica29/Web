@@ -9,9 +9,9 @@ if ($conn->connect_error) {
 }
 
 $status = $_POST['status'];
-$horario_id = $_POST['horarios']; // Ahora recibe un array de horarios
-$nombreNet = $_POST['nombreNet'];
+$horarios = $_POST['horarios']; // Ahora recibe un array de horarios
 $fechasDevolucion = $_POST['fechasDevolucion']; // Ahora recibe un array de fechas de devolución
+$nombresNet = $_POST['nombresNet']; // Ahora recibe un array de nombresNet
 
 // Verifica si `id` está en el formato de array
 $ids = isset($_POST['id']) ? $_POST['id'] : array();
@@ -24,12 +24,15 @@ $successMessages = [];
 $errorMessages = [];
 
 foreach ($ids as $id) {
+    // Verificar si el ID de registro es válido
     $sql = "SELECT * FROM registros WHERE idregistro = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("i", $id);
     $stmt->execute();
     $result = $stmt->get_result();
 
+    // Verificar si el nombre del recurso existe
+    $nombreNet = $nombresNet[$id]; // Obtener el nombre del recurso específico para este ID
     $sql2 = "SELECT * FROM recurso WHERE recurso_nombre = ?";
     $stmt2 = $conn->prepare($sql2);
     $stmt2->bind_param("s", $nombreNet);
@@ -38,14 +41,14 @@ foreach ($ids as $id) {
 
     if ($result->num_rows > 0) {
         if ($status == 'accepted') {
-            $fin_prestamo_fecha = $fechasDevolucion[$id]; // Obtener la fecha de devolución correspondiente a este id
+            $fin_prestamo_fecha = $fechasDevolucion[$id]; // Obtener la fecha de devolución correspondiente a este ID
             $sqlUpdate = "UPDATE registros SET opcion = 'Accepted', fin_prestamo = ?, fin_prestamo_fecha = ? WHERE idregistro = ?";
             $stmtUpdate = $conn->prepare($sqlUpdate);
-            $stmtUpdate->bind_param("isi", $horario_id[$id], $fin_prestamo_fecha, $id); // Actualiza también la fecha
+            $stmtUpdate->bind_param("isi", $horarios[$id], $fin_prestamo_fecha, $id); // Actualiza también la fecha
             if ($stmtUpdate->execute() === TRUE) {
-                $successMessages[] = "El préstamo con la id $id ha sido aceptado.";
+                $successMessages[] = "El préstamo con la ID $id ha sido aceptado.";
             } else {
-                $errorMessages[] = "Error al actualizar el préstamo con la id $id: " . $conn->error;
+                $errorMessages[] = "Error al actualizar el préstamo con la ID $id: " . $conn->error;
             }
         } else if ($status == 'denied') {
             $sqlUpdate = "UPDATE registros SET opcion = 'Denied' WHERE idregistro = ?";
@@ -63,13 +66,13 @@ foreach ($ids as $id) {
                 $stmtUpdateResource->bind_param("s", $nombreNet);
                 $stmtUpdateResource->execute();
 
-                $successMessages[] = "El préstamo con la id $id ha sido rechazado.";
+                $successMessages[] = "El préstamo con la ID $id ha sido rechazado.";
             } else {
-                $errorMessages[] = "Error al actualizar el préstamo con la id $id: " . $conn->error;
+                $errorMessages[] = "Error al actualizar el préstamo con la ID $id: " . $conn->error;
             }
         }
     } else {
-        $errorMessages[] = "El id $id no es válido.";
+        $errorMessages[] = "El ID $id no es válido.";
     }
 }
 
@@ -81,4 +84,7 @@ $response = [
     'success' => $successMessages,
     'errors' => $errorMessages
 ];
+
 echo json_encode($response);
+?>
+  
