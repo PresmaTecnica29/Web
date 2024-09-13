@@ -235,12 +235,12 @@ if ($error) {
   <div class="row">
     <div class="col-md-12">
 
-      <a href="devuelto.php" class="btn btn-primary mt-4">Ver Devueltos</a>
+      <a href="devuelto.php" class="btn btn-primary mt-4" style='margin-left:0.1px;'>Ver Devueltos</a>
       <a href="expirados.php" class="btn btn-primary mt-4" title="Muestra las netbooks que han pasado su tiempo de prestamo" style='margin-left:10px;'>Expirados</a>
-      <hr>
+     
 
       <form method="post" class="form-inline">
-        <div class="form-group mr-3">
+        <div class="form-group mr-3" style='margin-top:20px;'>
           <input type="text" id="apellido" name="apellido" placeholder="Buscar por Usuario" class="form-control">
         </div>
         <input name="csrf" type="hidden" value="<?php echo escapar($_SESSION['csrf']); ?>"><br>
@@ -368,7 +368,7 @@ if ($error) {
           echo '</select>';
 
           // Botón para aplicar el horario seleccionado a todos los selectores
-          echo '<button type="button" class="btn btn-outline-dark" onclick="selectAllTimesWithSelected()" style="padding-left: 36px; padding-right: 36px; margin-right: 15px;">Aplicar horario a todos</button>';
+          echo '<button type="button" class="btn btn-secondary" onclick="selectAllTimesWithSelected()" style="padding-left: 36px; padding-right: 36px; margin-right: 15px; ">Aplicar horario a todos</button>';
 
           echo '</div>';
 
@@ -379,7 +379,7 @@ if ($error) {
           echo '<input type="date" id="selectFechaTodos" class="input" style="margin-right: auto; width: 60%;">';
 
           // Botón para aplicar la fecha seleccionada a todos
-          echo '<button type="button" class="btn btn-outline-dark" onclick="selectAllDatesWithSelected()" style="padding-left: 36px; padding-right: 36px; margin-right: 15px;">Aplicar fecha a todos</button>';
+          echo '<button type="button" class="btn btn-secondary" onclick="selectAllDatesWithSelected()" style="padding-left: 36px; padding-right: 36px; margin-right: 15px;">Aplicar fecha a todos</button>';
 
           echo '</div>';
           echo '</td>';

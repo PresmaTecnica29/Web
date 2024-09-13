@@ -466,7 +466,7 @@
           <li><a href='../netbook/abm.php' class="nav-link px-2 text-white">Prestamos</a></li>
           <?php
           if (isset($_SESSION['user_rol'])) {
-            if ($_SESSION['user_rol'] == 5) {
+            if ($_SESSION['user_rol'] == 5 || $_SESSION['user_rol'] == 4 || $_SESSION['user_rol'] == 3 || $_SESSION['user_rol'] == 2 || $_SESSION['user_rol'] == 1) {
               echo '<li><a href="../abmPersonas/abmPersonas.php" class="nav-link px-2 text-white">Usuarios</a></li>';
               echo '<li><a href="../netbook/qr.php" class="nav-link px-2 text-white">Recursos</a></li>';
             }

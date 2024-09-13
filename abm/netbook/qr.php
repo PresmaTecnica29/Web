@@ -93,10 +93,9 @@
               echo '<a href="agregarMaterial.php" class="btn btn-primary mt-4">Agregar material</a>';
             }
           } ?>
-        <hr>
 
         <form method="post" class="form-inline">
-          <div class="form-group mr-3">
+          <div class="form-group mr-3" style='margin-top:20px;'>
             <input type="text" id="apellido" name="apellido" placeholder="Buscar por Id" class="form-control">
           </div>
           <input name="csrf" type="hidden" value="<?php echo escapar($_SESSION['csrf']); ?>"><br>
