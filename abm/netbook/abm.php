@@ -142,6 +142,7 @@
 <?php
 include '../funciones.php';
 
+
 csrf();
 if (isset($_POST['submit']) && !hash_equals($_SESSION['csrf'], $_POST['csrf'])) {
   die();
@@ -150,26 +151,61 @@ if (isset($_POST['submit']) && !hash_equals($_SESSION['csrf'], $_POST['csrf'])) 
 $error = false;
 $config = include('../../config/db.php');
 
-
 try {
-  $conexion = conexion();
+  if (isset($_SESSION['user_area'])) {
+    $user_area = $_SESSION['user_area'];
 
-  $consultaSQL = "SELECT registros.idregistro, users.user_name, recurso.recurso_nombre, DATE_FORMAT(registros.inicio_prestamo, '%d/%m %H:%i') AS inicio_prestamo, registros.opcion FROM registros inner join recurso on recurso.recurso_id = registros.idrecurso inner join users on registros.idusuario = users.user_id  where registros.opcion = 'Pending' ";
-  $sentencia = $conexion->prepare($consultaSQL);
-  $sentencia->execute();
+    // Conexión a la base de datos
+    $conexion = conexion();
 
-  $notification = null;
-  if ($sentencia->rowCount() > 0) {
-    // Si hay una devolución pendiente, se almacenará en $notification
-    $notifications = $sentencia->fetchAll(PDO::FETCH_ASSOC);
-  }
+    // Consulta SQL para obtener las computadoras en el mismo área que el usuario, con la opción 'Pending'
+    $consultaSQL = "
+      SELECT 
+        registros.idregistro, 
+        users.user_name, 
+        recurso.recurso_nombre, 
+        DATE_FORMAT(registros.inicio_prestamo, '%d/%m %H:%i') AS inicio_prestamo, 
+        registros.opcion 
+      FROM 
+        registros 
+      INNER JOIN 
+        recurso ON recurso.recurso_id = registros.idrecurso 
+      INNER JOIN 
+        users ON registros.idusuario = users.user_id 
+      INNER JOIN 
+        tipo_recurso ON recurso.recurso_tipo = tipo_recurso.tipo_recurso_id 
+      INNER JOIN 
+        area ON tipo_recurso.tipo_recurso_area = area.id 
+      WHERE 
+        registros.opcion = 'Pending' 
+        AND area.id = :user_area";
+
+    // Preparar la consulta
+    $sentencia = $conexion->prepare($consultaSQL);
+
+    // Asignar el valor del área del usuario en el query
+    $sentencia->bindParam(':user_area', $user_area, PDO::PARAM_INT);
+
+    // Ejecutar la consulta
+    $sentencia->execute();
+
+    // Comprobar si hay resultados
+    $notifications = null;
+    if ($sentencia->rowCount() > 0) {
+        // Si hay computadoras pendientes en el área del usuario, se almacenan en $notifications
+        $notifications = $sentencia->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+} else {
+    echo "No se ha definido el área del usuario.";
+}
 
   $consultaSQL = "SELECT 
   registros.idregistro, 
   users.user_name, 
   recurso.recurso_nombre, 
   DATE_FORMAT(registros.inicio_prestamo, '%d/%m %H:%i') AS inicio_prestamo, 
-  DATE_FORMAT(horario.horario, '%H:%i') AS horario, 
+  DATE_FORMAT(horario.horario, '%d/%m %H:%i') AS horario, 
   DATE_FORMAT(registros.fin_prestamo_fecha, '%d/%m/%Y') AS fecha_devolucion,  -- Agregada la fecha de devolución
   registros.devuelto 
 FROM 
@@ -210,6 +246,7 @@ $statement = $conexion->prepare("SELECT id, DATE_FORMAT(horario, '%H:%i') AS hor
 $statement->execute();
 $datos = $statement->fetchAll();
 $titulo = isset($_POST['apellido']) ? 'Lista de prestamos (' . $_POST['apellido'] . ')' : 'Prestamos Activos';
+
 ?>
 
 
@@ -300,7 +337,7 @@ if ($error) {
       </div>
       <div class="modal-body">
         <?php
-        if (!empty($notifications)) {
+        if (!empty($notifications) ) {
             echo '<table border="1">';
             echo '<thead>';
             echo '<tr>';
