@@ -163,6 +163,7 @@ try {
       SELECT 
         registros.idregistro, 
         users.user_name, 
+        registros.idrecurso,
         recurso.recurso_nombre, 
         DATE_FORMAT(registros.inicio_prestamo, '%d/%m %H:%i') AS inicio_prestamo, 
         registros.opcion 
@@ -199,34 +200,55 @@ try {
 } else {
     echo "No se ha definido el área del usuario.";
 }
+if (isset($_SESSION['user_area'])) {
+  $user_area = $_SESSION['user_area'];
 
-  $consultaSQL = "SELECT 
-  registros.idregistro, 
-  users.user_name, 
-  recurso.recurso_nombre, 
-  DATE_FORMAT(registros.inicio_prestamo, '%d/%m %H:%i') AS inicio_prestamo, 
-  DATE_FORMAT(horario.horario, '%d/%m %H:%i') AS horario, 
-  DATE_FORMAT(registros.fin_prestamo_fecha, '%d/%m/%Y') AS fecha_devolucion,  -- Agregada la fecha de devolución
+  // Conexión a la base de datos
+  $conexion = conexion();
+
+  // Consulta SQL para obtener las computadoras en el mismo área que el usuario, con la opción 'Pending'
+  $consultaSQL = "
+    SELECT 
+      registros.idregistro, 
+      users.user_name, 
+      registros.idrecurso,
+      recurso.recurso_nombre, 
+      DATE_FORMAT(registros.inicio_prestamo, '%d/%m %H:%i') AS inicio_prestamo, 
+      registros.opcion, 
+      DATE_FORMAT(registros.fin_prestamo_fecha, '%d/%m/%Y') AS fecha_devolucion,
   registros.devuelto 
-FROM 
-  registros 
-INNER JOIN 
-  recurso ON recurso.recurso_id = registros.idrecurso 
-INNER JOIN 
-  users ON registros.idusuario = users.user_id 
-INNER JOIN 
-  horario ON horario.id = registros.fin_prestamo  
-WHERE 
-  registros.devuelto = 'Pending';
-";
+    FROM 
+      registros 
+    INNER JOIN 
+      recurso ON recurso.recurso_id = registros.idrecurso 
+    INNER JOIN 
+      users ON registros.idusuario = users.user_id 
+    INNER JOIN 
+      tipo_recurso ON recurso.recurso_tipo = tipo_recurso.tipo_recurso_id 
+    INNER JOIN 
+      area ON tipo_recurso.tipo_recurso_area = area.id 
+      INNER JOIN 
+  horario ON horario.id = registros.fin_prestamo
+    WHERE 
+      registros.devuelto = 'Pending' 
+      AND area.id = :user_area";
+
+  // Preparar la consulta
   $sentencia = $conexion->prepare($consultaSQL);
+
+  // Asignar el valor del área del usuario en el query
+  $sentencia->bindParam(':user_area', $user_area, PDO::PARAM_INT);
+
+  // Ejecutar la consulta
   $sentencia->execute();
 
+  // Comprobar si hay resultados
   $notificationDevolucion = null;
   if ($sentencia->rowCount() > 0) {
     // Si hay una devolución pendiente, se almacenará en $notification
     $notificationDevolucion = $sentencia->fetchAll(PDO::FETCH_ASSOC);
-  }
+   }
+}
 
   if (isset($_POST['apellido'])) {
     $consultaSQL = "SELECT registros.idregistro, users.user_name, DATE_FORMAT(registros.inicio_prestamo, '%d/%m %H:%i') AS inicio_prestamo, DATE_FORMAT(horario.horario, '%H:%i') AS fin_prestamo, COALESCE(registros.fechas_extendidas, '----') AS fechas_extendidas, recurso.recurso_nombre FROM registros INNER JOIN users ON registros.idusuario = users.user_id INNER JOIN recurso ON recurso.recurso_id = registros.idrecurso INNER JOIN horario ON horario.id = registros.fin_prestamo WHERE registros.opcion <> 'Pending' AND registros.devuelto <> 'Accepted' ORDER BY registros.idregistro desc;";
@@ -337,7 +359,7 @@ if ($error) {
       </div>
       <div class="modal-body">
         <?php
-        if (!empty($notifications) ) {
+        if (!empty($notifications) & ( $_SESSION['user_rol'] == 4 || $_SESSION['user_rol'] == 3)) {
             echo '<table border="1">';
             echo '<thead>';
             echo '<tr>';
@@ -381,8 +403,8 @@ if ($error) {
         
                 // Menú desplegable oculto con CSS
                 echo '<td>';
-                echo '<select name="nombreNet[' . $notification['idregistro'] . ']" id="nombreNet_' . $notification['idregistro'] . '" class="input" style="display:none;">'; // Aquí aplicamos el estilo display:none;
-                echo '<option value="' . $notification['recurso_nombre'] . '">' . $notification['recurso_nombre'] . '</option>';
+                echo '<select name="nombreNet[' . $notification['idregistro'] . ']" id="nombreNet" style="display:none">'; // Aquí aplicamos el estilo display:none class="input" style="display:none;;
+                echo '<option value="' . $notification['idrecurso'] . '">' . $notification['idrecurso'] . '</option>';
                 echo '</select>';
                 echo '</td>';
         
@@ -436,7 +458,6 @@ if ($error) {
             echo '<button type="button" class="btn btn-secondary btn-sm btn btn-outline-ligth" onclick="toggleCheckboxes(true)">Marcar todas</button>';
             echo '<button type="button" class="btn btn-secondary btn-sm btn btn-outline-ligth" onclick="toggleCheckboxes(false)">Desmarcar todas</button>';
             echo '</div>';
-        
             echo '</div>';
         } else {
             echo 'No hay notificaciones pendientes.';
@@ -503,7 +524,7 @@ if ($error) {
       <div class="modal-body">
         <?php
        
-       if (!empty($notificationDevolucion)) {
+       if (!empty($notificationDevolucion) & ( $_SESSION['user_rol'] == 4 || $_SESSION['user_rol'] == 3)) {
            echo '<table border="1">';
            echo '<thead>';
            echo '<tr>';
@@ -530,12 +551,13 @@ if ($error) {
                // Nueva celda para la fecha de devolución
                echo '<td><p id="devolucionFecha">' . (isset($devolucion['fecha_devolucion']) ? $devolucion['fecha_devolucion'] : 'No disponible') . '</p></td>';
        
-               // Selector oculto con el nombre del recurso
+               // Menú desplegable oculto con CSS
                echo '<td>';
-               echo '<select name="nombreNetDevo_[' . $devolucion['idregistro'] . ']" id="nombreNetDevo_' . $devolucion['idregistro'] . '" class="input" style="display:none;">'; // Aquí aplicamos el estilo display:none;
-               echo '<option value="' . $devolucion['recurso_nombre'] . '">' . $devolucion['recurso_nombre'] . '</option>';
+               echo '<select name="nombreNetDevo[' . $devolucion['idregistro'] . ']" id="nombreNetDevo" style="display:none">'; // Aquí aplicamos el estilo display:none class="input" style="display:none;;
+               echo '<option value="' . $devolucion['idrecurso'] . '">' . $devolucion['idrecurso'] . '</option>';
                echo '</select>';
                echo '</td>';
+       
        
                echo '</tr>';
            }

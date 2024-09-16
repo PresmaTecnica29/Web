@@ -11,7 +11,7 @@ if ($conn->connect_error) {
 $status = $_POST['status'];
 $horarios = $_POST['horarios']; // Ahora recibe un array de horarios
 $fechasDevolucion = $_POST['fechasDevolucion']; // Ahora recibe un array de fechas de devolución
-$nombresNet = $_POST['nombresNet']; // Ahora recibe un array de nombresNet
+$nombresNet = $_POST['nombreNet']; // Ahora recibe un array de nombresNet
 
 // Verifica si `id` está en el formato de array
 $ids = isset($_POST['id']) ? $_POST['id'] : array();
@@ -32,8 +32,8 @@ foreach ($ids as $id) {
     $result = $stmt->get_result();
 
     // Verificar si el nombre del recurso existe
-    $nombreNet = $nombresNet[$id]; // Obtener el nombre del recurso específico para este ID
-    $sql2 = "SELECT * FROM recurso WHERE recurso_nombre = ?";
+     // Obtener el nombre del recurso específico para este ID
+    $sql2 = "SELECT * FROM recurso WHERE recurso_id = ?";
     $stmt2 = $conn->prepare($sql2);
     $stmt2->bind_param("s", $nombreNet);
     $stmt2->execute();
@@ -55,18 +55,18 @@ foreach ($ids as $id) {
             $stmtUpdate = $conn->prepare($sqlUpdate);
             $stmtUpdate->bind_param("i", $id);
             if ($stmtUpdate->execute() === TRUE) {
+                $nombreNet = $nombresNet[$id];
                 // También se necesita actualizar la tabla de recursos
                 $sql3 = "UPDATE registros SET devuelto = 'Accepted' WHERE idregistro = ?";
                 $stmt3 = $conn->prepare($sql3);
                 $stmt3->bind_param("i", $id);
                 $stmt3->execute();
 
-                $sqlUpdateResource = "UPDATE recurso SET recurso_estado = '1' WHERE recurso_nombre = ?";
+                $sqlUpdateResource = "UPDATE recurso SET recurso_estado = '1' WHERE recurso_id = ?";
                 $stmtUpdateResource = $conn->prepare($sqlUpdateResource);
-                $stmtUpdateResource->bind_param("s", $nombreNet);
+                $stmtUpdateResource->bind_param("s", $nombreNet);   
                 $stmtUpdateResource->execute();
-
-                $successMessages[] = "El préstamo con la ID $id ha sido rechazado.";
+                $successMessages[] = "El préstamo con la ID $id ha sido rechazado. $nombreNet";
             } else {
                 $errorMessages[] = "Error al actualizar el préstamo con la ID $id: " . $conn->error;
             }

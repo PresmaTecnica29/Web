@@ -300,13 +300,13 @@
 
         var horarios = {};
         var fechasDevolucion = {};
-        var nombresNet = {}; // Nuevo objeto para almacenar nombresNet específicos
+        var nombreNet = {}; // Nuevo objeto para almacenar nombresNet específicos
 
         // Recolectar los horarios, fechas de devolución y nombresNet para cada notificación seleccionada
         selectedIds.forEach(function(id) {
           horarios[id] = $('select[name="horario[' + id + ']"]').val(); // Obtener el horario seleccionado
           fechasDevolucion[id] = $('input[name="fin_prestamo_fecha[' + id + ']"]').val(); // Obtener la fecha de devolución
-          nombresNet[id] = $('select[name="nombreNet[' + id + ']"]').val(); // Obtener el valor específico de nombreNet
+          nombreNet[id] = $('select[name="nombreNet[' + id + ']"]').val(); // Obtener el valor específico de nombreNet
         });
 
         $.ajax({
@@ -317,7 +317,7 @@
             id: selectedIds, // Enviar los IDs como un array
             horarios: horarios, // Enviar los horarios seleccionados
             fechasDevolucion: fechasDevolucion, // Enviar las fechas de devolución
-            nombreNet: nombresNet
+            nombreNet: nombreNet
           },
           success: function(response) {
     console.log(response);
@@ -341,7 +341,7 @@
         // Obtener el nombre del recurso de devolución para cada notificación seleccionada
         var nombreNetDevo = {};
         selectedIds.forEach(function(id) {
-          nombreNetDevo[id]= $('select[name="nombreNetDevo_[' + id + ']"]').val();
+          nombreNetDevo[id]= $('select[name="nombreNetDevo[' + id + ']"]').val();
           
          
         });
@@ -439,10 +439,6 @@
   <style>
     .img>img {
       margin-right: 5px;
-    }
-
-    #nombreNet {
-      display: none;
     }
 
     footer {

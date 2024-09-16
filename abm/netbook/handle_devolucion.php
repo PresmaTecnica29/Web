@@ -30,7 +30,7 @@ foreach ($ids as $id) {
     $result = $stmt->get_result();
 
     // Verificar si el nombre del recurso existe
-    $nombreNet = $nombreNetDevo[$id]; // Obtener el nombre del recurso específico para este ID
+   // Obtener el nombre del recurso específico para este ID
     $sql2 = "SELECT * FROM recurso WHERE recurso_nombre = ?";
     $stmt2 = $conn->prepare($sql2);
     $stmt2->bind_param("s", $nombreNet);
@@ -54,11 +54,11 @@ foreach ($ids as $id) {
             $stmtUpdate->bind_param("i", $id);
             if ($stmtUpdate->execute() === TRUE) {
                 // Obtener el nombre del recurso correspondiente a este ID
-                
+                 $nombreNet = $nombreNetDevo[$id]; 
 
                 // Actualizar el estado del recurso si el nombre del recurso existe
 
-                $sqlUpdateResource = "UPDATE recurso SET recurso_estado = '1' WHERE recurso_nombre = ?";
+                $sqlUpdateResource = "UPDATE recurso SET recurso_estado = '2' WHERE recurso_id = ?";
                 $stmtUpdateResource = $conn->prepare($sqlUpdateResource);
                 $stmtUpdateResource->bind_param("s", $nombreNet);
                 $stmtUpdateResource->execute();
