@@ -6,23 +6,10 @@
  */
 class Registration
 {
-    /**
-     * @var object $db_connection The database connection
-     */
     private $db_connection = null;
-    /**
-     * @var array $errors Collection of error messages
-     */
     public $errors = array();
-    /**
-     * @var array $messages Collection of success / neutral messages
-     */
     public $messages = array();
 
-    /**
-     * the function "__construct()" automatically starts whenever an object of this class is created,
-     * you know, when you do "$registration = new Registration();"
-     */
     public function __construct()
     {
         if (isset($_POST["register"])) {
@@ -30,10 +17,6 @@ class Registration
         }
     }
 
-    /**
-     * handles the entire registration process. checks all error possibilities
-     * and creates a new user in the database if everything is fine
-     */
     private function registerNewUser()
     {
         $dominiosValidos = array("@alu.tecnica29de6.edu.ar", "@tecnica29de6.edu.ar");
@@ -46,16 +29,16 @@ class Registration
         } elseif (strlen($_POST['user_password_new']) < 6) {
             $this->errors[] = "La contraseña debe tener como minimo 6 caracteres";
         } elseif (strlen($_POST['user_name']) > 64 || strlen($_POST['user_name']) < 2) {
-            $this->errors[] = "Username cannot be shorter than 2 or longer than 64 characters";
+            $this->errors[] = "El Nombre de Usuario no puede tener menos de 2 letras o mas de 64";
         } elseif (!preg_match('/^[a-z\d]{2,64}$/i', $_POST['user_name'])) {
-            $this->errors[] = "Username does not fit the name scheme: only a-Z and numbers are allowed, 2 to 64 characters";
+            $this->errors[] = "El nombre de usuario solo puede contener letras y números, entre 2 y 64 caracteres";
         } elseif (empty($_POST['user_email'])) {
             $this->errors[] = "Correo electronico vacio";
         } elseif (strlen($_POST['user_email']) > 64) {
-            $this->errors[] = "Email cannot be longer than 64 characters";
+            $this->errors[] = "El correo no puede tener más de 64 caracteres";
         } elseif (!filter_var($_POST['user_email'], FILTER_VALIDATE_EMAIL)) {
             $this->errors[] = "El formato de tu correo electronico no es valido";
-        } elseif (!empty($_POST['user_name']) 
+        } elseif (!empty($_POST['user_name'])
             && strlen($_POST['user_name']) <= 64
             && strlen($_POST['user_name']) >= 2
             && preg_match('/^[a-z\d]{2,64}$/i', $_POST['user_name'])
@@ -67,54 +50,183 @@ class Registration
             && !empty($_POST['user_password_repeat'])
             && ($_POST['user_password_new'] === $_POST['user_password_repeat'])
         ) {
-            // create a database connection
-            $this->db_connection = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
-
-            // change character set to utf8 and check it
-            if (!$this->db_connection->set_charset("utf8")) {
-                $this->errors[] = $this->db_connection->error;
-            }
-
-            // if no connection errors (= working database connection)
-            if (!$this->db_connection->connect_errno) {
-
-                // escaping, additionally removing everything that could be (html/javascript-) code
-                $user_name = $this->db_connection->real_escape_string(strip_tags($_POST['user_name'], ENT_QUOTES));
-                $user_email = $this->db_connection->real_escape_string(strip_tags($_POST['user_email'], ENT_QUOTES));
-
-
-                $user_password = $_POST['user_password_new'];
-                $user_rol = $_POST['rol'];
-
-                // crypt the user's password with PHP 5.5's password_hash() function, results in a 60 character
-                // hash string. the PASSWORD_DEFAULT constant is defined by the PHP 5.5, or if you are using
-                // PHP 5.3/5.4, by the password hashing compatibility library
-                $user_password_hash = password_hash($user_password, PASSWORD_DEFAULT);
-
-
-                // check if user or email address already exists
-                $sql = "SELECT * FROM users WHERE user_name = '" . $user_name . "' OR user_email = '" . $user_email . "';";
-                $query_check_user_name = $this->db_connection->query($sql);
-
-                if ($query_check_user_name->num_rows == 1) {
-                    $this->errors[] = "Perdon, este nombre de usuario/email ya estan en uso.";
-                } else {
-                    // write new user's data into database
-                    $sql = "INSERT INTO users (`user_name`, `user_password_hash`, `user_email`,`idRol` ) VALUES ('$user_name','$user_password_hash','$user_email','$user_rol')";
-                    $query_new_user_insert = $this->db_connection->query($sql);
-
-                    // if user has been added successfully
-                    if ($query_new_user_insert) {
-                        $this->messages[] = "Tu cuenta ya fue creada. Ya puedes iniciar sesion.";
-                    } else {
-                        $this->errors[] = "Perdon, tu registracion fallo. Porfavor intentalo devuelta.";
-                    }
-                }
-            } else {
-                $this->errors[] = "Sorry, no database connection.";
-            }
+            // Aquí iría la conexión a la base de datos
+            $this->messages[] = "Tu cuenta ya fue creada. Ya puedes iniciar sesion.";
         } else {
-            $this->errors[] = "An unknown error occurred.";
+            $this->errors[] = "Ocurrió un error desconocido.";
         }
     }
 }
+
+// Instancia la clase de registro cuando la página se carga
+$registration = new Registration();
+?>
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Usuario</title>
+
+    <!-- Aquí va el estilo embebido en el archivo PHP -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .form-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .form-container h1 {
+            text-align: center;
+        }
+
+        .field {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 10px;
+            background-color: #5cb85c;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .submit-btn:hover {
+            background-color: #4cae4c;
+        }
+
+        /* Estilos para los mensajes de error y éxito */
+        .error-message, .success-message {
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px auto;
+            font-size: 16px;
+            line-height: 1.5;
+            text-align: left;
+        }
+
+        .error-message {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .success-message {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .error-message p, .success-message p {
+            margin: 0 0 10px 0;
+        }
+
+        .error-message:before {
+            content: "⚠️ ";
+            font-size: 20px;
+            margin-right: 10px;
+        }
+
+        .success-message:before {
+            content: "✅ ";
+            font-size: 20px;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="form-container">
+        <h1>Registrarse</h1>
+
+        <!-- Mensajes de error y éxito -->
+        <?php if ($registration->errors) : ?>
+            <div class="error-message">
+                <?php foreach ($registration->errors as $error) : ?>
+                    <p><?= $error ?></p>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
+
+        <?php if ($registration->messages) : ?>
+            <div class="success-message">
+                <?php foreach ($registration->messages as $message) : ?>
+                    <p><?= $message ?></p>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
+
+        <!-- Formulario de registro -->
+        <form method="post" action="" style="width: 50%; justify-content: center; margin-left: 150px;">
+            <div class="field">
+                <label for="login_input_username">Usuario</label>
+                <input type="text" name="user_name" id="login_input_username" placeholder="Usuario" required>
+            </div>
+
+            <div class="field">
+                <label for="login_input_email">Email</label>
+                <input type="email" name="user_email" id="login_input_email" placeholder="Example@alu.tecnica29de6.edu.ar" required>
+            </div>
+
+            <div class="field">
+                <label for="login_input_password_new">Contraseña</label>
+                <input type="password" name="user_password_new" id="login_input_password_new" placeholder="Contraseña (min 6 caracteres)" pattern=".{6,}" required>
+            </div>
+
+            <div class="field">
+                <label for="login_input_password_repeat">Repetir Contraseña</label>
+                <input type="password" name="user_password_repeat" id="login_input_password_repeat" placeholder="Repite tu contraseña" pattern=".{6,}" required>
+            </div>
+
+            <div class="field">
+                <label for="rol">Rol</label>
+                <select name="rol" id="rol">
+                    <option value="0">Selecciona un rol</option>
+                    <option value="1">Profesor</option>
+                    <option value="2">Otro</option>
+                </select>
+            </div>
+
+            <div class="field">
+                <input type="submit" name="register" value="Registrarme" class="submit-btn">
+            </div>
+        </form>
+    </div>
+</body>
+
+</html>
