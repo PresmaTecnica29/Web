@@ -22,7 +22,7 @@ $conexion = conexion();
 $datos = []; // Valor predeterminado
 
 if ($conexion) {
-  $statement = $conexion->prepare("SELECT `idRol`, `rol_descripcion` FROM `rol` WHERE rol_descripcion <> 'Admin' AND rol_descripcion <> 'Alumno' AND rol_descripcion <> 'SuperAdmin'");
+  $statement = $conexion->prepare("SELECT `idRol`, `rol_descripcion` FROM `rol` where rol_descripcion <> 'Administrador' and rol_descripcion <> 'Alumno'");
   $statement->execute();
   $datos = $statement->fetchAll(); // Actualiza $datos si la conexión es exitosa
 } else {
@@ -39,7 +39,7 @@ if ($conexion) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="views\estilo.css">
   <link rel="icon" href="views/templates/logofinal.png" type="image/png">
-  <title>Inicio de sesion</title>
+  <title>Inico de sesion</title>
 </head>
 
 <body>
@@ -57,27 +57,15 @@ if ($conexion) {
         <input class="input" name="user_name" type="text" placeholder="Usuario" id="login_input_username" required>
       </div>
       <div class="field">
-        <label for="login_input_email">Email del Usuario</label>
+        <label for="login_input_email">Email del usuario</label>
         <input id="login_input_email" class="input" type="email" placeholder="Example@alu.tecnica29de6.edu.ar" name="user_email" required />
       </div>
       <div class="field">
-        <label for="login_input_password_new">Contraseña</label>
-        <input class="input" id="login_input_password_new" name="user_password_new" 
-          type="password" placeholder="Contraseña" pattern=".{6,}" required 
-          autocomplete="off">
-
-          <script>
-            document.getElementById('login_input_password_new').addEventListener('input', function () {
-              if (this.validity.patternMismatch) {
-                this.setCustomValidity('La contraseña debe tener al menos 6 caracteres.');
-              } else {
-                this.setCustomValidity('');
-              }
-            });
-          </script>
+        <label for="login_input_password_new">contraseña</label>
+        <input class="input" id="login_input_password_new" name="user_password_new" type="password" placeholder="Contraseña" pattern=".{6,}" required autocomplete="off">
       </div>
       <div class="field">
-        <label for="login_input_password_repeat">Repeti la Contraseña</label>
+        <label for="login_input_password_repeat">Repeti la contraseña</label>
         <input id="login_input_password_repeat" class="input" type="password" placeholder="Contraseña" name="user_password_repeat" pattern=".{6,}" required autocomplete="off" />
       </div>
       <div class="field">
@@ -89,7 +77,7 @@ if ($conexion) {
         </select>
       </div>
       <div class="field">
-        <input type="submit" name="register" value="Registrarme" class="input" />
+        <input type="submit" name="register" value="Register" class="input" />
       </div>
       <a href="index.php" id="back">Volver a la pagina de inicio de sesion</a>
     </form>
