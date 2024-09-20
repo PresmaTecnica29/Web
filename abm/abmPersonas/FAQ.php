@@ -107,9 +107,10 @@ error_reporting(E_ALL);
             </div>
         </div>
         <div class="faq-item">
-            <button class="faq-question" style='color: #e4e4e4  '>¿Pregunta 5?</button>
+            <button class="faq-question" style='color: #e4e4e4  '>¿Que sucede cuando un usuario es bloqueado?</button>
             <div class="faq-answer">
-                <p>Respuesta a la pregunta 5.</p>
+                <p>Cuando un usuario es bloqueado por un administrador, se inhabilita su capacidad para realizar prestamos a traves de la aplicacion movil, al igual que su capacidad para devolver materiales.</p>
+                <p>Esta sancion se puede aplicar por diversos motivos a usuarios que hayan cometido algun tipo de accion inadecuada y quedara a juicio del administrador correspondiente el aplicar esta penalizacion o deshacerla.</p>
             </div>
         </div>
         <div class="faq-item">

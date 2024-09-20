@@ -4,13 +4,13 @@
 <head>
   <meta charset="UTF-8">
   <title>Recursos</title>
-  <link rel="stylesheet" type="text/css" href="style.css">
+  <link rel="stylesheet" type="text/css" href="../style.css">
 </head>
 
 <body>
 
   <?php
-  include '../funciones.php';
+  include '../../funciones.php';
 
   csrf();
   if (isset($_POST['submit']) && !hash_equals($_SESSION['csrf'], $_POST['csrf'])) {
@@ -18,7 +18,7 @@
   }
 
   $error = false;
-  $config = include('../../config/db.php');
+  $config = include('../../../config/db.php');
 
   try {
     $conexion = conexion();
@@ -66,7 +66,7 @@
   $titulo = isset($_POST['apellido']) ? 'Lista de Materiales (' . $_POST['apellido'] . ')' : 'Lista de Materiales';
   ?>
 
-  <?php include "../template/header.php"; ?>
+  <?php include "../../template/header.php"; ?>
 
   <?php
   if ($error) {
@@ -93,6 +93,8 @@
               echo '<a href="agregarMaterial.php" class="btn btn-primary mt-4">Agregar material</a>';
             }
           } ?>
+          <a href="agregarTipoMaterial.php" class="btn btn-primary mt-4" style="margin-left: 10px;">Tipos de Materiales</a>
+          <a href="agregarArea.php" class="btn btn-primary mt-4" style="margin-left: 10px;">Areas</a>
 
         <form method="post" class="form-inline">
           <div class="form-group mr-3" style='margin-top:20px;'>
@@ -170,7 +172,7 @@
     </div>
   </div>
 
-  <?php include "../template/footer.php"; ?>
+  <?php include "../../template/footer.php"; ?>
 
 </body>
 </html>
