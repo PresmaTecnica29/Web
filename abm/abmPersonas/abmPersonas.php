@@ -5,6 +5,46 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Computadoras</title>
 <link rel="stylesheet" type="text/css" href="../netbook/style.css">
+
+<style>
+    /* Estilo para el modal */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    .modal-content {
+      background-color: white;
+      margin: 15% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+      max-width: 500px;
+      text-align: center;
+    }
+
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
+  </style>
+
 </head>
 
 <?php
@@ -22,18 +62,54 @@ $config = include('../../config/db.php');
 try {
   $conexion = conexion();
 
+  // Acciones de Borrar y Bloquear/Desbloquear Usuario
+  if (isset($_POST['accion']) && isset($_POST['user_name'])) {
+    $accion = $_POST['accion'];
+    $user_name = $_POST['user_name'];
+    
+    if ($accion === 'borrar') {
+      // Lógica para borrar al usuario de la base de datos
+      $consultaSQL = "DELETE FROM users WHERE user_name = :user_name";
+      $sentencia = $conexion->prepare($consultaSQL);
+      $sentencia->bindParam(':user_name', $user_name, PDO::PARAM_STR);
+      $sentencia->execute();
+      
+      $mensaje = "Usuario borrado exitosamente.";
+      
+    } elseif ($accion === 'bloquear') {
+      // Lógica para bloquear al usuario
+      $consultaSQL = "UPDATE users SET bloqueado = 1 WHERE user_name = :user_name";
+      $sentencia = $conexion->prepare($consultaSQL);
+      $sentencia->bindParam(':user_name', $user_name, PDO::PARAM_STR);
+      $sentencia->execute();
+      
+      $mensaje = "Usuario bloqueado exitosamente.";
+      
+    } elseif ($accion === 'desbloquear') {
+      // Lógica para desbloquear al usuario
+      $consultaSQL = "UPDATE users SET bloqueado = 0 WHERE user_name = :user_name";
+      $sentencia = $conexion->prepare($consultaSQL);
+      $sentencia->bindParam(':user_name', $user_name, PDO::PARAM_STR);
+      $sentencia->execute();
+      
+      $mensaje = "Usuario desbloqueado exitosamente.";
+    }
+  }
+
+  // Lógica para mostrar la lista de usuarios
   if (isset($_POST['apellido'])) {
     $consultaSQL = "SELECT user_id, user_name, user_email, rol.idRol, rol_descripcion, bloqueado 
                     FROM users 
                     INNER JOIN rol ON users.idRol = rol.idRol 
                     WHERE user_name LIKE '%" . $_POST['apellido'] . "%' 
                     LIMIT 100";
-} else {
+  } else {
     $consultaSQL = "SELECT user_id, user_name, user_email, rol.idRol, rol_descripcion, bloqueado 
                     FROM users 
                     INNER JOIN rol ON users.idRol = rol.idRol 
                     LIMIT 100";
-}
+  }
+  
   $sentencia = $conexion->prepare($consultaSQL);
   $sentencia->execute();
 
@@ -55,6 +131,20 @@ if ($error) {
       <div class="col-md-12">
         <div class="alert alert-danger" role="alert">
           <?= $error ?>
+        </div>
+      </div>
+    </div>
+  </div>
+<?php
+}
+
+if (isset($mensaje)) {
+?>
+  <div class="container mt-2">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="alert alert-success" role="alert">
+          <?= $mensaje ?>
         </div>
       </div>
     </div>
@@ -117,7 +207,7 @@ if ($error) {
               if ($_SESSION['user_rol'] == 5) {
                   // Solo se ejecutará este código si el rol del usuario es 5 o 4
                   ?>
-                  <a href="<?= 'borrarUsuario.php?id=' . escapar($fila["user_id"]) ?>" class="boton">🗑️ Borrar</a>
+                  <button class="boton" onclick="openDeleteModal('<?= escapar($fila['user_name']) ?>')" style='margin-left:10px;'>🗑️ Borrar</button>
                   <?php
                     }
                   }
@@ -152,11 +242,10 @@ if ($error) {
                   if ($_SESSION['user_rol'] >= $fila["idRol"]) {
                       ?>
                       <?php if ($fila["bloqueado"] == 0): ?>
-                      <a href="<?= 'bloquearUsuario.php?id=' . escapar($fila["user_id"]) ?>" class="boton">❌ Bloquear</a>
-                    <?php endif; ?>
-                  <?php if ($fila["bloqueado"] == 1): ?>
-                    <a href="<?= 'desbloquearUsuario.php?id=' . escapar($fila["user_id"]) ?>" class="boton">✅ Desbloquear</a>
-                  <?php endif; ?>
+                        <button class="boton" onclick="openBlockModal('<?= escapar($fila['user_name']) ?>', 'bloquear')" style='margin-left:1px;'>❌ Bloquear</button>
+                      <?php else: ?>
+                        <button class="boton" onclick="openBlockModal('<?= escapar($fila['user_name']) ?>', 'desbloquear')" style='margin-left:1px;'>✅ Desbloquear</button>
+                      <?php endif; ?>
                       <?php
                   }
               }
@@ -171,10 +260,75 @@ if ($error) {
             }
           }
           ?>
-        <tbody>
+        </tbody>
       </table>
     </div>
   </div>
 </div>
+
+  <div id="deleteModal" class="modal">
+    <div class="modal-content">
+      <p id="deleteModalText"></p>
+      <form id="deleteModalForm" method="post">
+        <input type="hidden" name="user_name" id="delete_user_name">
+        <input type="hidden" name="accion" value="borrar">
+        <input type="hidden" name="csrf" value="<?php echo escapar($_SESSION['csrf']); ?>">
+        <button type="submit" class="btn btn-primary" style="margin-top: 20px; margin-right: 20px; background-color: green; padding-left: 20px; padding-right: 20px;">Sí</button>
+        <button type="button" class="btn btn-secondary" onclick="closeDeleteModal()" style="margin-top: 20px; margin-left: 20px; background-color: red; padding-left: 20px; padding-right: 20px;">No</button>
+      </form>
+    </div>
+  </div>
+
+  <div id="blockModal" class="modal">
+    <div class="modal-content">
+      <p id="blockModalText"></p>
+      <form id="blockModalForm" method="post">
+        <input type="hidden" name="user_name" id="block_user_name">
+        <input type="hidden" name="accion" id="block_action">
+        <input type="hidden" name="csrf" value="<?php echo escapar($_SESSION['csrf']); ?>">
+        <button type="submit" class="btn btn-primary" style="margin-top: 20px; margin-right: 20px; background-color: green; padding-left: 20px; padding-right: 20px;">Sí</button>
+        <button type="button" class="btn btn-secondary" onclick="closeBlockModal()" style="margin-top: 20px; margin-left: 20px; background-color: red; padding-left: 20px; padding-right: 20px;">No</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+  // Funciones para abrir y cerrar el modal de borrar
+  function openDeleteModal(user_name) {
+    document.getElementById('delete_user_name').value = user_name;
+    document.getElementById('deleteModalText').innerText = "¿Estás seguro de que deseas borrar al usuario " + user_name + "?";
+    document.getElementById('deleteModal').style.display = "block";
+  }
+
+  function closeDeleteModal() {
+    document.getElementById('deleteModal').style.display = "none";
+  }
+
+  // Funciones para abrir y cerrar el modal de bloquear/desbloquear
+  function openBlockModal(user_name, action) {
+    document.getElementById('block_user_name').value = user_name;
+    document.getElementById('block_action').value = action;
+    document.getElementById('blockModalText').innerText = "¿Estás seguro de que deseas " + action + " al usuario " + user_name + "?";
+    document.getElementById('blockModal').style.display = "block";
+  }
+
+  function closeBlockModal() {
+    document.getElementById('blockModal').style.display = "none";
+  }
+
+  // Cerrar el modal cuando se hace clic fuera del contenido del modal
+  window.onclick = function(event) {
+    var deleteModal = document.getElementById('deleteModal');
+    var blockModal = document.getElementById('blockModal');
+
+    // Si el objetivo del clic es el modal (fondo) y no el contenido interno, se cierra el modal
+    if (event.target == deleteModal) {
+      closeDeleteModal();
+    }
+    if (event.target == blockModal) {
+      closeBlockModal();
+    }
+  }
+</script>
 
 <?php include "../template/footer.php"; ?>

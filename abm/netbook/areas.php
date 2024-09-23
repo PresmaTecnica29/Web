@@ -5,6 +5,46 @@
   <meta charset="UTF-8">
   <title>Recursos</title>
   <link rel="stylesheet" type="text/css" href="style.css">
+
+  <style>
+    /* Estilo para el modal */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    .modal-content {
+      background-color: white;
+      margin: 15% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+      max-width: 500px;
+      text-align: center;
+    }
+
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
+  </style>
+
 </head>
 
 <body>
@@ -116,8 +156,7 @@
                     if ($_SESSION['user_rol'] == 5) {
                         // Solo se ejecutará este código si el rol del usuario es 5 
                         ?>
-                        <a href="<?= 'borrarArea.php?id=' . escapar($fila["id"]) ?>" class="boton"
-                        title="Cambia el estado del recurso a MANTENIMIENTO" style='margin-left:10px;'>🗑️ Borrar</a>
+                        <button class="boton" onclick="openModal('<?= escapar($fila['area_nombre']) ?>')" style='margin-left:10px;'>🗑️ Borrar</button>
                         <?php
                           }
                         }
@@ -133,6 +172,59 @@
       </div>
     </div>
   </div>
+
+  <!-- Modal -->
+  <div id="modal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()">&times;</span>
+      <p id="modalText"></p>
+      <form id="modalForm" method="post">
+        <input type="hidden" name="area_nombre" id="area_nombre">
+        <input type="hidden" name="accion" id="accion">
+        <input type="hidden" name="csrf" value="<?php echo escapar($_SESSION['csrf']); ?>">
+        <button type="submit" class="btn btn-primary" style="margin-top: 20px; margin-right: 20px; background-color: green; padding-left: 20px; padding-right: 20px;">Sí</button>
+        <button type="button" class="btn btn-secondary" onclick="closeModal()" style="margin-top: 20px; margin-left: 20px; background-color: red; padding-left: 20px; padding-right: 20px;">No</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    function openModal(nombre, accion) {
+      document.getElementById("modalText").innerText = "¿Estás seguro de que quieres borrar el Area " + nombre + "? Esta accion no se puede deshacer";
+      document.getElementById("area_nombre").value = nombre;
+      document.getElementById("accion").value = accion;
+      document.getElementById("modal").style.display = "block";
+    }
+
+    function closeModal() {
+      document.getElementById("modal").style.display = "none";
+    }
+    
+    // Cerrar el modal al hacer clic fuera de él
+    window.onclick = function(event) {
+      if (event.target === document.getElementById("modal")) {
+        closeModal();
+      }
+    }
+  </script>
+
+  <?php
+  // Procesar el formulario del modal
+  if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['area_nombre']) && isset($_POST['accion'])) {
+    $nombreTipoMaterial = $_POST['area_nombre'];
+    $accion = $_POST['accion'];
+
+    try {
+      $conexion = conexion();
+      $stmt = $conexion->prepare("DELETE FROM area WHERE area_nombre = ?");
+      
+      $stmt->execute([$nombreTipoMaterial]);
+      // Solo recargar la página una vez después de la acción
+    } catch (PDOException $e) {
+      echo "<script>alert('Error: " . $e->getMessage() . "');</script>";
+    }
+  }
+  ?>
 
   <?php include "../template/footer.php"; ?>
 
