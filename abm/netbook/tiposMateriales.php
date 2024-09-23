@@ -191,24 +191,54 @@
   </div>
 
   <script>
-    function openModal(nombre, accion) {
-      document.getElementById("modalText").innerText = "¿Estás seguro de que quieres borrar el Tipo de Material " + nombre + "? Esta accion no se puede deshacer";
-      document.getElementById("tipo_recurso_nombre").value = nombre;
-      document.getElementById("accion").value = accion;
-      document.getElementById("modal").style.display = "block";
-    }
+  // Función para abrir el modal con los valores correctos
+  function openModal(nombre, accion) {
+    document.getElementById("modalText").innerText = "¿Estás seguro de que quieres borrar el Tipo de Material " + nombre + "? Esta acción no se puede deshacer";
+    document.getElementById("tipo_recurso_nombre").value = nombre;
+    document.getElementById("accion").value = accion;
+    document.getElementById("modal").style.display = "block";
+  }
 
-    function closeModal() {
-      document.getElementById("modal").style.display = "none";
+  // Función para cerrar el modal
+  function closeModal() {
+    document.getElementById("modal").style.display = "none";
+  }
+
+  // Cerrar el modal al hacer clic fuera de él
+  window.onclick = function(event) {
+    if (event.target === document.getElementById("modal")) {
+      closeModal();
     }
-    
-    // Cerrar el modal al hacer clic fuera de él
-    window.onclick = function(event) {
-      if (event.target === document.getElementById("modal")) {
-        closeModal();
+  }
+
+  // Interceptar el evento submit del formulario del modal
+  document.getElementById("modalForm").addEventListener("submit", function(event) {
+    event.preventDefault(); // Evitar el envío del formulario por defecto
+
+    // Obtener los datos del formulario
+    const formData = new FormData(event.target);
+
+    // Enviar los datos usando fetch
+    fetch("", {
+      method: "POST",
+      body: formData
+    })
+    .then(response => {
+      if (response.ok) {
+        // Si la respuesta es exitosa, recargar la página
+        window.location.reload();
+      } else {
+        // Si hay un error, mostrar una alerta con el mensaje de error
+        alert("Error al eliminar el Tipo de Material.");
       }
-    }
-  </script>
+    })
+    .catch(error => {
+      // Mostrar un mensaje en caso de error de conexión
+      console.error("Error de conexión:", error);
+      alert("Hubo un problema al conectar con el servidor.");
+    });
+  });
+</script>
 
   <?php
   // Procesar el formulario del modal

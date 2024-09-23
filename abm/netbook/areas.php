@@ -206,6 +206,34 @@
         closeModal();
       }
     }
+
+    // Interceptar el evento submit del formulario del modal
+  document.getElementById("modalForm").addEventListener("submit", function(event) {
+    event.preventDefault(); // Evitar el envío del formulario por defecto
+
+    // Obtener los datos del formulario
+    const formData = new FormData(event.target);
+
+    // Enviar los datos usando fetch
+    fetch("", {
+      method: "POST",
+      body: formData
+    })
+    .then(response => {
+      if (response.ok) {
+        // Si la respuesta es exitosa, recargar la página
+        window.location.reload();
+      } else {
+        // Si hay un error, mostrar una alerta con el mensaje de error
+        alert("Error al eliminar el Tipo de Material.");
+      }
+    })
+    .catch(error => {
+      // Mostrar un mensaje en caso de error de conexión
+      console.error("Error de conexión:", error);
+      alert("Hubo un problema al conectar con el servidor.");
+    });
+  });
   </script>
 
   <?php
