@@ -2,11 +2,27 @@
 
 include '../funciones.php';
 
+// Comprobación si hash_equals existe o no
+if (!function_exists('hash_equals')) {
+    function hash_equals($str1, $str2) {
+        if (strlen($str1) != strlen($str2)) {
+            return false;
+        } else {
+            $res = $str1 ^ $str2;
+            $ret = 0;
+            for ($i = strlen($res) - 1; $i >= 0; $i--) {
+                $ret |= ord($res[$i]);
+            }
+            return !$ret;
+        }
+    }
+}
+
+// Verificación del token CSRF
 csrf();
 if (isset($_POST['submit']) && !hash_equals($_SESSION['csrf'], $_POST['csrf'])) {
   die();
 }
-
 if (isset($_POST['submit'])) {
   $resultado = [
     'error' => false,

@@ -2,8 +2,11 @@
 include '../funciones.php';
 
 csrf();
-if (isset($_POST['submit']) && !hash_equals($_SESSION['csrf'], $_POST['csrf'])) {
-  die();
+if (isset($_POST['submit'])) {
+    // Cambia esta línea
+    if (!isset($_SESSION['csrf']) || $_POST['csrf'] !== $_SESSION['csrf']) {
+        die('CSRF token mismatch');
+    }
 }
 
 $config = include '../../config/db.php';
