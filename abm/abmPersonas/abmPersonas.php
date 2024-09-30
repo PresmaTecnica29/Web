@@ -43,6 +43,62 @@
       text-decoration: none;
       cursor: pointer;
     }
+
+    
+    input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      margin-right: 10px;
+    }
+
+    /* Estilo para el menú desplegable */
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: #f9f9f9;
+      min-width: 70px;
+      box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+      padding: 12px 16px;
+      z-index: 1;
+    }
+
+    .dropdown-content input[type="checkbox"] {
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+
+    .dropdown:hover .dropbtn {
+      background-color: #3e8e41;
+    }
+
+    .dropbtn {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px;
+      font-size: 16px;
+      border: none;
+      cursor: pointer;
+    }
+
+    .checkbox-wrapper {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .checkbox-wrapper input[type="checkbox"] {
+      margin-right: 10px;
+    }
+
   </style>
 
 </head>
@@ -118,6 +174,55 @@ try {
   $error = $error->getMessage();
 }
 
+try {
+    $conexion = conexion();
+    
+    // Consulta para obtener los roles
+    $consultaRoles = "SELECT idRol, rol_descripcion FROM rol";
+    $sentenciaRoles = $conexion->prepare($consultaRoles);
+    $sentenciaRoles->execute();
+    $roles = $sentenciaRoles->fetchAll();
+
+} catch (PDOException $error) {
+    $error = $error->getMessage();
+}
+
+try {
+  $conexion = conexion();
+
+  // Filtros seleccionados
+  $rolesSeleccionados = isset($_POST['roles']) ? $_POST['roles'] : [];
+  $bloqueadoSeleccionado = isset($_POST['bloqueado']) ? $_POST['bloqueado'] : [];
+
+  // Construir la consulta
+  $consultaSQL = "SELECT user_id, user_name, user_email, rol.idRol, rol_descripcion, bloqueado FROM users INNER JOIN rol ON users.idRol = rol.idRol WHERE 1=1";
+
+  // Agregar filtro por roles seleccionados
+  if (!empty($rolesSeleccionados)) {
+    $roles = implode(",", array_map('intval', $rolesSeleccionados));
+    $consultaSQL .= " AND users.idRol IN ($roles)";
+  }
+
+  // Agregar filtro por estado de bloqueado
+  if (!empty($bloqueadoSeleccionado)) {
+    $bloqueados = implode(",", array_map('intval', $bloqueadoSeleccionado));
+    $consultaSQL .= " AND users.bloqueado IN ($bloqueados)";
+  }
+
+  // Filtro por nombre
+  if (isset($_POST['apellido']) && !empty($_POST['apellido'])) {
+    $consultaSQL .= " AND user_name LIKE '%" . $_POST['apellido'] . "%'";
+  }
+
+  // Ejecutar consulta
+  $sentencia = $conexion->prepare($consultaSQL);
+  $sentencia->execute();
+  $alumnos = $sentencia->fetchAll();
+} catch (PDOException $error) {
+  $error = $error->getMessage();
+}
+
+
 $titulo = isset($_POST['apellido']) ? 'Lista de Alumnos (' . $_POST['apellido'] . ')' : 'Lista de Alumnos';
 ?>
 
@@ -168,15 +273,53 @@ if (isset($mensaje)) {
                 ?>
         <a href="noActivos.php" class="btn btn-primary mt-4">No Activos</a>
 
-      <form method="post" class="form-inline">
-        <div class="form-group mr-3" style='margin-top:20px;'>
-          <input type="text" id="apellido" name="apellido" placeholder="Buscar por Usuario" class="form-control">
+        <div class="row">
+    <div class="col-md-12">
+
+      <!-- Formulario de filtros -->
+      <form method="post">
+        <div class="form-group" style='margin-top:20px;'>
+          <input type="text" id="apellido" name="apellido" placeholder="Buscar por Nombre" class="form-control">
         </div>
-        <input name="csrf" type="hidden" value="<?php echo escapar($_SESSION['csrf']); ?>"><br>
+
+       <!-- Menú desplegable para roles -->
+      <div class="dropdown" style="margin-top: 20px;">
+        <span class="btn btn-secondary">Rol▾</span>
+        <div class="dropdown-content">
+          <?php foreach ($roles as $rol) : ?>
+            <div class="checkbox-wrapper">
+              <input type="checkbox" id="rol_<?= escapar($rol['idRol']) ?>" name="roles[]" value="<?= escapar($rol['idRol']) ?>" <?= in_array($rol['idRol'], $rolesSeleccionados) ? 'checked' : '' ?>>
+              <label for="rol_<?= escapar($rol['idRol']) ?>"><?= escapar($rol['rol_descripcion']) ?></label>
+            </div>
+          <?php endforeach; ?>
+        </div>
+      </div>
+
+      <!-- Menú desplegable para bloqueado -->
+      <div class="dropdown" style="margin-top: 20px; margin-left: 10px;">
+        <span class="btn btn-secondary">Bloqueado▾</span>
+        <div class="dropdown-content">
+          <div class="checkbox-wrapper">
+            <input type="checkbox" id="bloqueado_si" name="bloqueado[]" value="1" <?= in_array(1, $bloqueadoSeleccionado) ? 'checked' : '' ?>>
+            <label for="bloqueado_si">Sí</label>
+          </div>
+          <div class="checkbox-wrapper">
+            <input type="checkbox" id="bloqueado_no" name="bloqueado[]" value="0" <?= in_array(0, $bloqueadoSeleccionado) ? 'checked' : '' ?>>
+            <label for="bloqueado_no">No</label>
+          </div>
+        </div>
+      </div>
+
+        <!-- Botón de filtrar -->
+        <div class="form-group" style="margin-top: 20px; float:right">
+          <input type="hidden" name="csrf" value="<?php echo escapar($_SESSION['csrf']); ?>">
+          <button type="submit" class="btn btn-primary">Filtrar</button>
+        </div>
       </form>
-    </div>
+
+          </div>
+     </div>   
   </div>
-</div>
 
 <div class="container">
   <div class="row">

@@ -226,7 +226,7 @@ try {
 
           <!-- Menú desplegable para filtros por estado -->
           <div class="dropdown" style="margin-top: 20px; margin-bottom: 10px;">
-            <span class="btn btn-secondary">Estado</span>
+            <span class="btn btn-secondary">Estado▾</span>
             <div class="dropdown-content">
               <div class="checkbox-wrapper">
                 <input type="checkbox" id="libre" name="estado[]" value="1">
@@ -245,7 +245,7 @@ try {
 
           <!-- Menú desplegable para tipos de recurso -->
           <div class="dropdown" style="margin-top: 20px; margin-left: 10px;">
-            <span class="btn btn-secondary">Tipo de Recurso</span>
+            <span class="btn btn-secondary">Tipo de Recurso▾</span>
             <div class="dropdown-content">
               <?php foreach ($tiposRecursos as $tipo) : ?>
                 <div class="checkbox-wrapper">
@@ -259,7 +259,7 @@ try {
 
           <!-- Menú desplegable para áreas -->
           <div class="dropdown" style="margin-top: 20px; margin-left: 10px;">
-            <span class="btn btn-secondary">Área</span>
+            <span class="btn btn-secondary">Area▾</span>
             <div class="dropdown-content">
               <?php foreach ($areas as $area) : ?>
                 <div class="checkbox-wrapper">
@@ -271,9 +271,12 @@ try {
           </div>
 
 
-          <input name="csrf" type="hidden" value="<?php echo escapar($_SESSION['csrf']); ?>"><br>
-          <button type="submit" class="btn btn-primary" style="float: right;">Buscar</button>
-        </form>
+           <!-- Botón de filtrar -->
+          <div class="form-group" style="margin-top: 20px; float:right">
+            <input type="hidden" name="csrf" value="<?php echo escapar($_SESSION['csrf']); ?>">
+            <button type="submit" class="btn btn-primary">Filtrar</button>
+          </div>
+      </form>
       </div>
     </div>
   </div>
@@ -394,7 +397,7 @@ try {
     }
   }
   ?>
-  
+
   <?php include "../template/footer.php"; ?>
 
 </body>
