@@ -42,6 +42,61 @@
       text-decoration: none;
       cursor: pointer;
     }
+
+    input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      margin-right: 10px;
+    }
+
+    /* Estilo para el menú desplegable */
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: #f9f9f9;
+      min-width: 360px;
+      box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+      padding: 12px 16px;
+      z-index: 1;
+    }
+
+    .dropdown-content input[type="checkbox"] {
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+
+    .dropdown:hover .dropbtn {
+      background-color: #3e8e41;
+    }
+
+    .dropbtn {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px;
+      font-size: 16px;
+      border: none;
+      cursor: pointer;
+    }
+
+    .checkbox-wrapper {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .checkbox-wrapper input[type="checkbox"] {
+      margin-right: 10px;
+    }
+
   </style>
 </head>
 
@@ -60,34 +115,44 @@
   try {
     $conexion = conexion();
 
-    // Consulta SQL
-    if (isset($_POST['apellido'])) {
-      $consultaSQL = "SELECT 
-                            recurso.recurso_id, 
-                            recurso.recurso_nombre, 
-                            tipo_recurso.tipo_recurso_nombre, 
-                            area.area_nombre, 
-                            estado.descripcion_estado, 
-                            recurso.recurso_estado
-                        FROM recurso 
-                        INNER JOIN tipo_recurso ON recurso.recurso_tipo = tipo_recurso.tipo_recurso_id 
-                        INNER JOIN area ON tipo_recurso.tipo_recurso_area = area.id 
-                        INNER JOIN estado ON recurso.recurso_estado = estado.idEstado 
-                        WHERE recurso.recurso_id LIKE '%" . $_POST['apellido'] . "%' 
-                        LIMIT 100;";
-    } else {
-      $consultaSQL = "SELECT 
-                            recurso.recurso_id, 
-                            recurso.recurso_nombre, 
-                            tipo_recurso.tipo_recurso_nombre, 
-                            area.area_nombre, 
-                            estado.descripcion_estado, 
-                            recurso.recurso_estado
-                        FROM recurso 
-                        INNER JOIN tipo_recurso ON recurso.recurso_tipo = tipo_recurso.tipo_recurso_id 
-                        INNER JOIN area ON tipo_recurso.tipo_recurso_area = area.id 
-                        INNER JOIN estado ON recurso.recurso_estado = estado.idEstado;";
+    // Construcción de la consulta SQL
+    $consultaSQL = "SELECT 
+                      recurso.recurso_id, 
+                      recurso.recurso_nombre, 
+                      tipo_recurso.tipo_recurso_nombre, 
+                      area.area_nombre, 
+                      estado.descripcion_estado, 
+                      recurso.recurso_estado
+                    FROM recurso 
+                    INNER JOIN tipo_recurso ON recurso.recurso_tipo = tipo_recurso.tipo_recurso_id 
+                    INNER JOIN area ON tipo_recurso.tipo_recurso_area = area.id 
+                    INNER JOIN estado ON recurso.recurso_estado = estado.idEstado 
+                    WHERE 1=1";
+
+    // Filtrar por ID si se proporciona
+    if (isset($_POST['apellido']) && !empty($_POST['apellido'])) {
+      $consultaSQL .= " AND recurso.recurso_id LIKE '%" . $_POST['apellido'] . "%'";
     }
+
+    // Filtrar por estado
+    if (isset($_POST['estado']) && !empty($_POST['estado'])) {
+      $estadosSeleccionados = implode(",", $_POST['estado']);
+      $consultaSQL .= " AND recurso.recurso_estado IN ($estadosSeleccionados)";
+    }
+
+    // Filtrar por tipos de recurso
+    if (isset($_POST['tipo_recurso']) && !empty($_POST['tipo_recurso'])) {
+      $tiposSeleccionados = implode(",", $_POST['tipo_recurso']);
+      $consultaSQL .= " AND recurso.recurso_tipo IN ($tiposSeleccionados)";
+  }
+
+  // Filtrar por áreas
+  if (isset($_POST['area']) && !empty($_POST['area'])) {
+      $areasSeleccionadas = implode(",", $_POST['area']);
+      $consultaSQL .= " AND area.id IN ($areasSeleccionadas)";
+  }
+  
+    $consultaSQL .= " LIMIT 100;";
 
     // Preparar y ejecutar la consulta
     $sentencia = $conexion->prepare($consultaSQL);
@@ -101,6 +166,25 @@
 
   // Título según si hay un valor de búsqueda o no
   $titulo = isset($_POST['apellido']) ? 'Lista de Materiales (' . $_POST['apellido'] . ')' : 'Lista de Materiales';
+
+  // Consulta para obtener los tipos de recursos
+$tiposRecursos = [];
+$areas = [];
+try {
+    // Tipos de Recursos
+    $sqlTiposRecursos = "SELECT tipo_recurso_id, tipo_recurso_nombre FROM tipo_recurso";
+    $stmtTiposRecursos = $conexion->prepare($sqlTiposRecursos);
+    $stmtTiposRecursos->execute();
+    $tiposRecursos = $stmtTiposRecursos->fetchAll();
+
+    // Áreas
+    $sqlAreas = "SELECT id, area_nombre FROM area";
+    $stmtAreas = $conexion->prepare($sqlAreas);
+    $stmtAreas->execute();
+    $areas = $stmtAreas->fetchAll();
+} catch (PDOException $e) {
+    echo "Error en la consulta: " . $e->getMessage();
+}
   ?>
 
   <?php include "../template/header.php"; ?>
@@ -134,11 +218,61 @@
         <a href="tiposMateriales.php" class="btn btn-primary mt-4" style="margin-left: 10px;">Tipos de Materiales</a>
         <a href="areas.php" class="btn btn-primary mt-4" style="margin-left: 10px;">Áreas</a>
 
+        <!-- Formulario de búsqueda y filtros -->
         <form method="post" class="form-inline">
           <div class="form-group mr-3" style='margin-top:20px;'>
             <input type="text" id="apellido" name="apellido" placeholder="Buscar por Id" class="form-control">
           </div>
+
+          <!-- Menú desplegable para filtros por estado -->
+          <div class="dropdown" style="margin-top: 20px; margin-bottom: 10px;">
+            <span class="btn btn-secondary">Estado</span>
+            <div class="dropdown-content">
+              <div class="checkbox-wrapper">
+                <input type="checkbox" id="libre" name="estado[]" value="1">
+                <label for="libre">Libre</label>
+              </div>
+              <div class="checkbox-wrapper">
+                <input type="checkbox" id="reservado" name="estado[]" value="2">
+                <label for="reservado">Reservado</label>
+              </div>
+              <div class="checkbox-wrapper">
+                <input type="checkbox" id="mantenimiento" name="estado[]" value="3">
+                <label for="mantenimiento">En Mantenimiento</label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Menú desplegable para tipos de recurso -->
+          <div class="dropdown" style="margin-top: 20px; margin-left: 10px;">
+            <span class="btn btn-secondary">Tipo de Recurso</span>
+            <div class="dropdown-content">
+              <?php foreach ($tiposRecursos as $tipo) : ?>
+                <div class="checkbox-wrapper">
+                  <input type="checkbox" id="tipo_<?= escapar($tipo['tipo_recurso_id']) ?>" name="tipo_recurso[]" value="<?= escapar($tipo['tipo_recurso_id']) ?>">
+                  <label for="tipo_<?= escapar($tipo['tipo_recurso_id']) ?>"><?= escapar($tipo['tipo_recurso_nombre']) ?></label>
+                </div>
+              <?php endforeach; ?>
+            </div>
+          </div>
+
+
+          <!-- Menú desplegable para áreas -->
+          <div class="dropdown" style="margin-top: 20px; margin-left: 10px;">
+            <span class="btn btn-secondary">Área</span>
+            <div class="dropdown-content">
+              <?php foreach ($areas as $area) : ?>
+                <div class="checkbox-wrapper">
+                  <input type="checkbox" id="area_<?= escapar($area['id']) ?>" name="area[]" value="<?= escapar($area['id']) ?>">
+                  <label for="area_<?= escapar($area['id']) ?>"><?= escapar($area['area_nombre']) ?></label>
+                </div>
+              <?php endforeach; ?>
+            </div>
+          </div>
+
+
           <input name="csrf" type="hidden" value="<?php echo escapar($_SESSION['csrf']); ?>"><br>
+          <button type="submit" class="btn btn-primary" style="float: right;">Buscar</button>
         </form>
       </div>
     </div>
@@ -179,15 +313,13 @@
                     <?php
                     if (isset($_SESSION['user_rol'])) {
                       if ($_SESSION['user_rol'] == 5 || $_SESSION['user_rol'] == 4 || $_SESSION['user_rol'] == 3) {
-                        // Acciones según el estado del recurso
                         $estadoRecurso = isset($fila["recurso_estado"]) ? $fila["recurso_estado"] : null;
 
-                        // Poner en mantenimiento
                         if ($estadoRecurso == 1 || $estadoRecurso == 2) {
                           ?>
                           <button class="boton" onclick="openModal('<?= escapar($fila['recurso_nombre']) ?>', 'mantenimiento')" style='margin-left:10px;'>Poner en Mantenimiento</button>
                           <?php
-                        } elseif ($estadoRecurso == 3) { // Habilitar
+                        } elseif ($estadoRecurso == 3) {
                           ?>
                           <button class="boton" onclick="openModal('<?= escapar($fila['recurso_nombre']) ?>', 'habilitar')" style='margin-left:10px;'>Habilitar</button>
                           <?php
@@ -212,12 +344,12 @@
     <div class="modal-content">
       <span class="close" onclick="closeModal()">&times;</span>
       <p id="modalText"></p>
-      <form id="modalForm" method="post">
+      <form id="modalForm" method="POST" action="">
         <input type="hidden" name="recurso_nombre" id="recurso_nombre">
         <input type="hidden" name="accion" id="accion">
         <input type="hidden" name="csrf" value="<?php echo escapar($_SESSION['csrf']); ?>">
-        <button type="submit" class="btn btn-primary" style="margin-top: 20px; margin-right: 20px; background-color: green; padding-left: 20px; padding-right: 20px;">Sí</button>
-        <button type="button" class="btn btn-secondary" onclick="closeModal()" style="margin-top: 20px; margin-left: 20px; background-color: red; padding-left: 20px; padding-right: 20px;">No</button>
+        <button type="submit" class="btn btn-danger" style="background-color: red;" id="confirmButton">Si</button>
+        <button type="button" class="btn btn-secondary" onclick="closeModal()">No</button>
       </form>
     </div>
   </div>
@@ -262,8 +394,9 @@
     }
   }
   ?>
-
+  
   <?php include "../template/footer.php"; ?>
 
 </body>
+
 </html>
