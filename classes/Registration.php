@@ -84,7 +84,7 @@ class Registration
 
 
                 $user_password = $_POST['user_password_new'];
-                $user_rol = $_POST['rol'];
+                $user_rol = '1';
 
                 // crypt the user's password with PHP 5.5's password_hash() function, results in a 60 character
                 // hash string. the PASSWORD_DEFAULT constant is defined by the PHP 5.5, or if you are using

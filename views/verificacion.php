@@ -29,17 +29,20 @@ if ($conexion) {
 
 <body>
 <div id="formulario">
-<form id="formverificar" class="form card" method="post" action="verificar_codigo.php" name="verfform">
+    <form id="formverificar" class="form card" method="post" action="verificar_codigo.php" name="verfform">
         <h1 class="form_heading">Verificacion de Dos pasos</h1>
-      </div>
-      <div class="field">
-        <input id="registerinput_verfcode" class="input" type="int(6)" placeholder="Codigo de verificacion" name="verfcode_input" />
-      </div>
-      <div class="field">
-      <input type="submit" name="verificar" value="Verificar" class="input"/>
-      </div>
-      <a href="../index.php" id="back">Volver a la pagina de inicio de sesion</a>
-  </div>
-</body>
+        
+        <!-- Hidden input fields for previously posted data -->
+        <input type="hidden" name="user_email" value="<?php echo htmlspecialchars($_POST['user_email'] ?? ''); ?>" />
 
+        <div class="field">
+            <input id="registerinput_verfcode" class="input" type="number" placeholder="Codigo de verificacion" name="verfcode_input" required />
+        </div>
+        <div class="field">
+            <input type="submit" name="verificar" value="Verificar" class="input"/>
+        </div>
+        <a href="../index.php" id="back">Volver a la pagina de inicio de sesion</a>
+    </form>
+</div>
+</body>
 </html>
