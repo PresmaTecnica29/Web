@@ -15,6 +15,11 @@ $statement = $conexion->prepare("SELECT * FROM rol");
 $statement->execute();
 $datos = $statement->fetchAll();
 
+// Consulta para obtener las áreas
+$statement = $conexion->prepare("SELECT id, area_nombre FROM area");
+$statement->execute();
+$areas = $statement->fetchAll();
+
 $resultado = [
   'error' => false,
   'mensaje' => ''
@@ -33,14 +38,17 @@ if (isset($_POST['submit'])) {
       "id"        => $_GET['id'],
       "nombre"    => $_POST['nombre'],
       "email"     => $_POST['email'],
-      "rol" => isset($_POST['idRol']) ? $_POST['idRol'] : null,  // Corregido
+      "rol"       => isset($_POST['idRol']) ? $_POST['idRol'] : null,
+      "area"      => isset($_POST['idArea']) ? $_POST['idArea'] : null, // Agregado para el área
     ];
 
     $consultaSQL = "UPDATE users SET
-        user_name = :nombre,
-        user_email = :email,
-        idRol = :rol
-        WHERE user_id = :id";
+      user_name = :nombre,
+      user_email = :email,
+      idRol = :rol,
+      user_area = :area
+      WHERE user_id = :id";
+      
     $consulta = $conexion->prepare($consultaSQL);
     $consulta->execute($alumno);
   } catch (PDOException $error) {
@@ -128,23 +136,36 @@ if (isset($alumno) && $alumno) {
             <?php
               isset($_SESSION['user_rol']);
               $user_rol = isset($_SESSION['user_rol']) ? $_SESSION['user_rol'] : 5;
-              ?>
-              <select name="idRol" id="idRol" class="input"> <!-- Corregido el nombre a idRol -->
+            ?>
+            <select name="idRol" id="idRol" class="input"> 
                 <?php
                 foreach ($datos as $dato) {
                     // Mostrar todas las opciones si el rol del usuario es 5
                     if ($user_rol == 5) {
-                        echo '<option value="' . $dato['idRol'] . '" ' . ($alumno['idRol'] == $dato['idRol'] ? 'selected' : '') . '>' . $dato['rol_descripcion'] . '</option>';
+                        echo '<option value="' . escapar($dato['idRol']) . '" ' . ($alumno['idRol'] == $dato['idRol'] ? 'selected' : '') . '>' . escapar($dato['rol_descripcion']) . '</option>';
                     } else {
                         // Filtrar opciones según el rol del usuario
                         if ($dato['idRol'] < $user_rol) {
-                            echo '<option value="' . $dato['idRol'] . '" ' . ($alumno['idRol'] == $dato['idRol'] ? 'selected' : '') . '>' . $dato['rol_descripcion'] . '</option>';
+                            echo '<option value="' . escapar($dato['idRol']) . '" ' . ($alumno['idRol'] == $dato['idRol'] ? 'selected' : '') . '>' . escapar($dato['rol_descripcion']) . '</option>';
                         }
                     }
                 }
                 ?>
-              </select>
+            </select>
           </div>
+
+          <!-- Selector de Áreas -->
+          <div class="form-group" style='margin-bottom:10px;'>
+            <label for="area">Area asignada:</label>
+            <select name="idArea" id="idArea" class="input">
+                <?php
+                foreach ($areas as $area) {
+                    echo '<option value="' . escapar($area['id']) . '" ' . ($alumno['user_area'] == $area['id'] ? 'selected' : '') . '>' . escapar($area['area_nombre']) . '</option>';
+                }
+                ?>
+            </select>
+          </div>
+
           <div class="form-group">
             <input name="csrf" type="hidden" value="<?php echo escapar($_SESSION['csrf']); ?>">
             <input type="submit" name="submit" class="btn btn-primary" value="Actualizar">

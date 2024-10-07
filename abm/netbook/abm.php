@@ -1,3 +1,9 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<head>
 <style>
   /* Estilos para la tabla */
   table {
@@ -75,7 +81,7 @@
   /* Adjust modal width */
   .modal-dialog,
   .modal-content {
-    width: 80% !important;
+    width: 80% ;
     /* Set a more reasonable width */
     max-width: 80% !important;
   }
@@ -114,9 +120,9 @@
 
   /* Adjust buttons for compact layout */
   button {
-    padding: 5px 10px !important;
+    padding: 5px 10px ;
     /* Smaller padding for buttons */
-    font-size: 14px !important;
+    font-size: 14px ;
     /* Smaller font size */
     margin: 5px;
     /* Reduce margin between buttons */
@@ -135,9 +141,7 @@
     /* Slightly smaller modal title */
   }
 </style>
-
-
-
+</head>
 
 <?php
 include '../funciones.php';
@@ -289,6 +293,8 @@ if ($error) {
 <?php
 }
 ?>
+
+
 
 <div class="container">
   <div class="row">
@@ -595,7 +601,6 @@ if ($error) {
 </div>
 </div>
 </div>
-
 
 
 

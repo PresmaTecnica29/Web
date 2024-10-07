@@ -446,7 +446,61 @@
       position: fixed;
       bottom: 0;
     }
-  </style>
+
+   /* Estilo para el modal */
+   .modal {
+    display: none; 
+    position: fixed; 
+    z-index: 1; 
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4); 
+  }
+  .modal-content {
+    background-color: #fff;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 300px;
+    text-align: center;
+    position: relative;
+  }
+  .close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  #modalMessage {
+    color: #333;
+    font-size: 16px;
+    margin-bottom: 20px;
+  }
+  .modal-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  .modal-buttons button {
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  .modal-buttons button:first-child {
+    background-color: #f44336;
+    color: white;
+  }
+  .modal-buttons button:last-child {
+    background-color: #ddd;
+    color: black;
+  }
+</style>
   <link rel="stylesheet" href="../../views/templates/stylelog.css">
   <link rel="icon" href="../../template/logofinal.png" type="image/png">
   <title>Presma</title>
@@ -469,9 +523,10 @@
           } ?>
           <li><a href="../netbook/visual.php" class="nav-link px-2 text-white">Visual</a></li>
 
-          <li><a href="../../index.php?logout" class="nav-link px-2 text-white">Cerrar sesion</a></li>
-
           <li><a href="../../abm/abmPersonas/FAQ.php" class="nav-link px-2 text-white">FAQ</a></li>
+
+          <!-- Botón de Cerrar Sesión -->
+          <li><button id="logoutButton" type="button" onclick="openLogoutModal()" style="border: none; background: none; color: white; padding: 0; cursor: pointer; margin-top: 8px; margin-left: 10px;">Cerrar Sesión</button></li>
 
         </ul>
 
@@ -481,4 +536,43 @@
         </div>
       </div>
     </div>
+
+    <!-- Modal de Confirmación de Cierre de Sesión -->
+  <div id="logoutModal" class="modal" style="display:none;">
+    <div class="modal-content">
+    <p id="modalMessage">¿Estás seguro de que deseas Cerrar Sesión?</p>
+    <div class="modal-buttons">
+      <button class="btn btn-danger" onclick="confirmLogout()">Sí, Cerrar</button>
+      <button class="btn btn-secondary" onclick="closeLogoutModal()">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+
+  
+    <script>
+        function openLogoutModal() {
+        document.getElementById("logoutModal").style.display = "block";
+      }
+
+      function closeLogoutModal() {
+        document.getElementById("logoutModal").style.display = "none";
+      }
+
+      function confirmLogout() {
+        // Cierra el modal
+        closeLogoutModal();
+        
+        // Redirige a la página de cierre de sesión
+        window.location.href = "../../index.php?logout"; 
+      }
+
+      // Cerrar el modal si se hace clic fuera del contenido del modal
+      window.onclick = function(event) {
+        const modal = document.getElementById("logoutModal");
+        if (event.target === modal) {
+          closeLogoutModal();
+        }
+      }
+      </script>
   </header>

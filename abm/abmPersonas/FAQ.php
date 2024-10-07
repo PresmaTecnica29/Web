@@ -126,10 +126,10 @@ error_reporting(E_ALL);
             </div>
         </div>
         <div class="faq-item">
-            <button class="faq-question" style='color: #e4e4e4  '>¿Pregunta 8?</button>
+            <button class="faq-question" style='color: #e4e4e4  '>¿Que hago si ninguna de estas era mi duda?</button>
             <div class="faq-answer">
-                <p>Respuesta a la pregunta 8.</p>
-                <img src="https://www.google.com/imgres?q=lo%20suponia%20meme&imgurl=https%3A%2F%2Fi.pinimg.com%2F236x%2F4f%2Ffb%2Faa%2F4ffbaaff551f4713c5c7708b5ad2b768.jpg&imgrefurl=https%3A%2F%2Fes.pinterest.com%2Falexopro777zzzzzz%2Flo-suponia%2F&docid=J1HrKXzTqz8alM&tbnid=nJhbYioFkwd_-M&vet=12ahUKEwiYl5SxkveHAxXnLEQIHbMDHkEQM3oECGQQAA..i&w=236&h=386&hcb=2&ved=2ahUKEwiYl5SxkveHAxXnLEQIHbMDHkEQM3oECGQQAA" alt="Ejemplo de imagen en línea">
+                <p>En caso de que no hayas encontrado la respuesta a tu pregunta, puedes contactar a los desarrolladores de esta web via mail, envia un correo electronico expresando tu inquietud y seras respondido lo mas pronto posible! Recuerda ser paciente, no eres el unico que nos plantea sus dudas.</p>
+                <p>Contacto: presmaatencionalclienteoficial@gmail.com
             </div>
         </div>
 
