@@ -398,6 +398,9 @@ if (isset($mensaje)) {
                     }
                   }
                 ?>
+
+                <a href="<?= 'registroUser.php?id=' . escapar($fila["user_id"]) ?>" class="boton">📆</a>
+
                 </td>
               </tr>
           <?php

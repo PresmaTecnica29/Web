@@ -531,8 +531,9 @@
         </ul>
 
         <div class="contenedor" bis_skin_checked="1">
+        <a href="../abmPersonas/infouser.php" style="color: white; padding: 0; cursor: pointer; margin-right: 10px; text-decoration: none; font-size: 30px;">ⓘ</a>
           <div class="caja-advertencia"><?php echo $_SESSION['user_name']; ?></div>
-          <img class="ñiquito" src="../../views/templates/logofinal.png">
+          <img class="ñiquito" src="../../views/templates/logofinal.png"> 
         </div>
       </div>
     </div>
