@@ -32,52 +32,25 @@ if (isset($_POST['submit']) && !hash_equals($_SESSION['csrf'], $_POST['csrf'])) 
 
 $error = false;
 
-$stmt = $conexion->query("
-SELECT *
-FROM recurso 
-LEFT JOIN registros 
-    ON recurso.recurso_id = registros.idrecurso 
-    AND registros.idregistro = (
-        SELECT MAX(idregistro) 
-        FROM registros AS r
-        WHERE r.idrecurso = recurso.recurso_id
-    )
-LEFT JOIN users 
-    ON registros.idusuario = users.user_id 
-WHERE recurso.recurso_id LIKE '%A'
-ORDER BY recurso.recurso_id
-");
+// Obtener los tipos de recurso para llenar el selector
+$stmtTipos = $conexion->query("SELECT tipo_recurso_id, tipo_recurso_nombre FROM tipo_recurso");
+$tipos = $stmtTipos->fetchAll(PDO::FETCH_ASSOC);
 
-$stmtB = $conexion->query("
-SELECT *
-FROM recurso 
-LEFT JOIN registros 
-    ON recurso.recurso_id = registros.idrecurso 
-    AND registros.idregistro = (
-        SELECT MAX(idregistro) 
-        FROM registros AS r
-        WHERE r.idrecurso = recurso.recurso_id
-    )
-LEFT JOIN users 
-    ON registros.idusuario = users.user_id 
-WHERE recurso.recurso_id LIKE '%B'
-ORDER BY recurso.recurso_id
-");
-
-$stmtC = $conexion->query("
-SELECT *
-FROM recurso 
-LEFT JOIN registros 
-    ON recurso.recurso_id = registros.idrecurso 
-    AND registros.idregistro = (
-        SELECT MAX(idregistro) 
-        FROM registros AS r
-        WHERE r.idrecurso = recurso.recurso_id
-    )
-LEFT JOIN users 
-    ON registros.idusuario = users.user_id 
-WHERE recurso.recurso_id LIKE '%C'
-ORDER BY recurso.recurso_id
+// Preparar la consulta para obtener las computadoras según el tipo de recurso seleccionado
+$stmtComputadoras = $conexion->prepare("
+    SELECT recurso.*, users.user_name
+    FROM recurso 
+    LEFT JOIN registros 
+        ON recurso.recurso_id = registros.idrecurso 
+        AND registros.idregistro = (
+            SELECT MAX(idregistro) 
+            FROM registros AS r
+            WHERE r.idrecurso = recurso.recurso_id
+        )
+    LEFT JOIN users 
+        ON registros.idusuario = users.user_id 
+    WHERE recurso.recurso_tipo = ?
+    ORDER BY recurso.recurso_id
 ");
 
 include "../template/header.php";
@@ -98,7 +71,6 @@ include "../template/header.php";
     </div>
 </div>
 
-
 <div style='display: flex; justify-content:center;'>
 <div id="netbookContainer" style='display: flex; flex-wrap: wrap; width: 1000px;'>
     <div style='background-color: white; display: flex; flex-wrap: wrap; margin-top:35px; margin-left:110px;'>
@@ -106,123 +78,67 @@ include "../template/header.php";
     <form id="miFormulario" style='margin-top:10px;'>
       <label for="opciones">Selecciona una opción:</label>
       <select id="opciones" name="opciones">
-        <option value="opcion1">Carrito 1</option>
-        <option value="opcion2">Carrito 2</option>
-        <option value="opcion3">Carrito 3</option>
+        <?php foreach ($tipos as $tipo): ?>
+          <option value="<?= $tipo['tipo_recurso_id'] ?>"><?= $tipo['tipo_recurso_nombre'] ?></option>
+        <?php endforeach; ?>
       </select>
     </form>
 
-    <div id="opcion1Div" class="hidden">
-        <div style='display:flex; flex-wrap:wrap; background-color: white; border-radius: 10px; margin-top: 25px;'>
-            <?php 
-            while ($row = $stmt->fetch()) {
-                if ($row['recurso_estado'] == '1') {
-                    $color = '#d4edda'; // Verde claro para "Libre"
-                } elseif ($row['recurso_estado'] == '2') {
-                    $color = '#f8d7da'; // Rojo claro para "Ocupado"
-                } elseif ($row['recurso_estado'] == '3') {
-                    $color = '#fff3cd'; // Amarillo claro para "Reservado"
-                } 
-                echo "<div class='netbook'
-                         data-recurso_id='{$row['recurso_id']}' 
-                         data-recurso_nombre='{$row['recurso_nombre']}' 
-                         data-recurso_estado='{$row['recurso_estado']}' 
-                         data-reservado-por='{$row['user_name']}' 
-                         style='background-color: {$color}; width: 50px; height: 50px; margin: 10px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.15); display: flex; justify-content: center; align-items: center; text-align: center;'>
-                        <img src='netbook.png' alt='Netbook' style='width: 50%;'>
-                        <p>{$row['recurso_nombre']}</p>
-                      </div>";
-            }
-            ?>
+    <div id="computadorasDiv" class="hidden">
+        <div style='display:flex; flex-wrap:wrap; background-color: white; border-radius: 10px; margin-top: 25px;' id="netbooks">
+            <!-- Las computadoras se cargarán aquí mediante AJAX -->
         </div>
     </div>
-
-    <div id="opcion2Div" class="hidden">
-        <div style='display:flex; flex-wrap:wrap; background-color: white; border-radius: 10px; margin-top: 25px;'>
-            <?php 
-            while ($row = $stmtB->fetch()) {
-                if ($row['recurso_estado'] == '1') {
-                    $color = '#d4edda'; // Verde claro para "Libre"
-                } elseif ($row['recurso_estado'] == '2') {
-                    $color = '#f8d7da'; // Rojo claro para "Ocupado"
-                } elseif ($row['recurso_estado'] == '3') {
-                    $color = '#fff3cd'; // Amarillo claro para "Reservado"
-                } 
-                echo "<div class='netbook'
-                         data-recurso_id='{$row['recurso_id']}' 
-                         data-recurso_nombre='{$row['recurso_nombre']}' 
-                         data-recurso_estado='{$row['recurso_estado']}' 
-                         data-reservado-por='{$row['user_name']}' 
-                         style='background-color: {$color}; width: 50px; height: 50px; margin: 10px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.15); display: flex; justify-content: center; align-items: center; text-align: center;'>
-                        <img src='netbook.png' alt='Netbook' style='width: 50%;'>
-                        <p>{$row['recurso_nombre']}</p>
-                      </div>";
-            }
-            ?>
-        </div>   
-    </div>
-
-    <div id="opcion3Div" class="hidden">
-    <div style='display:flex; flex-wrap:wrap; background-color: white; border-radius: 10px; margin-top: 25px;'>
-            <?php 
-            while ($row = $stmtC->fetch()) {
-                if ($row['recurso_estado'] == '1') {
-                    $color = '#d4edda'; // Verde claro para "Libre"
-                } elseif ($row['recurso_estado'] == '2') {
-                    $color = '#f8d7da'; // Rojo claro para "Ocupado"
-                } elseif ($row['recurso_estado'] == '3') {
-                    $color = '#fff3cd'; // Amarillo claro para "Reservado"
-                } 
-                echo "<div class='netbook'
-                         data-recurso_id='{$row['recurso_id']}' 
-                         data-recurso_nombre='{$row['recurso_nombre']}' 
-                         data-recurso_estado='{$row['recurso_estado']}' 
-                         data-reservado-por='{$row['user_name']}' 
-                         style='background-color: {$color}; width: 50px; height: 50px; margin: 10px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.15); display: flex; justify-content: center; align-items: center; text-align: center;'>
-                        <img src='netbook.png' alt='Netbook' style='width: 50%;'>
-                        <p>{$row['recurso_nombre']}</p>
-                      </div>";
-            }
-            ?>
-        </div>   
-    </div>
 </div>
 
 </div>
-    </div>
+</div>
 
-    <a href="expirados.php" class="boton" title="Muestra las netbooks que han pasado su tiempo de prestamo" style='margin-left:20px;'>Expirados</a>
-    <a href="graficos.php" class="boton" title="Muestra graficos de los estados de las netbooks" style='margin-left: 78%;'>Estadisticas</a>
+<a href="expirados.php" class="boton" title="Muestra las netbooks que han pasado su tiempo de prestamo" style='margin-left:20px;'>Expirados</a>
+<a href="graficos.php" class="boton" title="Muestra graficos de los estados de las netbooks" style='margin-left: 78%;'>Estadisticas</a>
 
 <script>
   // Capturar el evento de cambio en el select
   document.getElementById('opciones').addEventListener('change', function() {
-    var seleccion = document.getElementById('opciones').value;
-    if (seleccion === 'opcion1') {
-      mostrarDiv('opcion1Div');
-    } else if (seleccion === 'opcion2') {
-      mostrarDiv('opcion2Div');
-    } else if (seleccion === 'opcion3') {
-      mostrarDiv('opcion3Div');
-    }
+    var tipoSeleccionado = this.value;
+    mostrarDiv(tipoSeleccionado);
   });
 
-  function mostrarDiv(idDiv) {
-    var divs = document.querySelectorAll('div[id$="Div"]');
-    divs.forEach(function(div) {
-      div.classList.add('hidden');
-    });
-    var divMostrar = document.getElementById(idDiv);
-    divMostrar.classList.remove('hidden');
+  function mostrarDiv(tipoSeleccionado) {
+    var divComputadoras = document.getElementById('computadorasDiv');
+    var netbooksContainer = document.getElementById('netbooks');
+    netbooksContainer.innerHTML = ''; // Limpiar contenido previo
+
+    // Realizar una solicitud AJAX para obtener las computadoras
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'obtener_computadoras.php', true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.onload = function() {
+      if (this.status == 200) {
+        var response = JSON.parse(this.responseText);
+        response.forEach(function(row) {
+          var color = row.recurso_estado == '1' ? '#d4edda' : (row.recurso_estado == '2' ? '#f8d7da' : '#fff3cd');
+          netbooksContainer.innerHTML += `
+            <div class='netbook'
+                 data-recurso_id='${row.recurso_id}' 
+                 data-recurso_nombre='${row.recurso_nombre}' 
+                 data-recurso_estado='${row.recurso_estado}' 
+                 data-reservado-por='${row.user_name}' 
+                 style='background-color: ${color}; width: 50px; height: 50px; margin: 10px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.15); display: flex; justify-content: center; align-items: center; text-align: center;'>
+              <img src='netbook.png' alt='Netbook' style='width: 50%;'>
+              <p>${row.recurso_nombre}</p>
+            </div>`;
+        });
+        divComputadoras.classList.remove('hidden'); // Mostrar div con computadoras
+      }
+    };
+    xhr.send('tipo_recurso_id=' + tipoSeleccionado);
   }
 
   document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('opciones').value = 'opcion1';
     document.getElementById('opciones').dispatchEvent(new Event('change'));
   });
 </script>
-
-
 
 <?php include "../template/footer.php"; ?>
 </body>
