@@ -174,6 +174,8 @@ try {
   $error = $error->getMessage();
 }
 
+$roles = [];
+
 try {
     $conexion = conexion();
     
@@ -199,8 +201,8 @@ try {
 
   // Agregar filtro por roles seleccionados
   if (!empty($rolesSeleccionados)) {
-    $roles = implode(",", array_map('intval', $rolesSeleccionados));
-    $consultaSQL .= " AND users.idRol IN ($roles)";
+    $rolesParaConsulta = implode(",", array_map('intval', $rolesSeleccionados));
+    $consultaSQL .= " AND users.idRol IN ($rolesParaConsulta)";
   }
 
   // Agregar filtro por estado de bloqueado
@@ -288,7 +290,7 @@ if (isset($mensaje)) {
         <div class="dropdown-content">
           <?php foreach ($roles as $rol) : ?>
             <div class="checkbox-wrapper">
-              <input type="checkbox" id="rol_<?= escapar($rol['idRol']) ?>" name="roles[]" value="<?= escapar($rol['idRol']) ?>" <?= in_array($rol['idRol'], $rolesSeleccionados) ? 'checked' : '' ?>>
+              <input type="checkbox" id="rol_<?= escapar($rol['idRol']) ?>" name="roles[]" value="<?= escapar($rol['idRol']) ?>">
               <label for="rol_<?= escapar($rol['idRol']) ?>"><?= escapar($rol['rol_descripcion']) ?></label>
             </div>
           <?php endforeach; ?>
@@ -386,7 +388,7 @@ if (isset($mensaje)) {
                   if ($_SESSION['user_rol'] >= $fila["idRol"]) {
                       ?>
                       <?php if ($fila["bloqueado"] == 0): ?>
-                        <button class="boton" onclick="openBlockModal('<?= escapar($fila['user_name']) ?>', 'bloquear')" style='margin-left:1px;'>❌ Bloquear</button>
+                        <button class="boton" onclick="openBlockModal('<?= escapar($fila['user_name']) ?>', 'bloquear')" style='margin-left:1px; padding-left: 34px; padding-right: 34px;'>❌ Bloquear</button>
                       <?php else: ?>
                         <button class="boton" onclick="openBlockModal('<?= escapar($fila['user_name']) ?>', 'desbloquear')" style='margin-left:1px;'>✅ Desbloquear</button>
                       <?php endif; ?>
@@ -398,9 +400,16 @@ if (isset($mensaje)) {
                     }
                   }
                 ?>
-
-                <a href="<?= 'registroUser.php?id=' . escapar($fila["user_id"]) ?>" class="boton">📆</a>
-
+              <?php
+          if (isset($_SESSION['user_rol'])) {
+              if ($_SESSION['user_rol'] == 5 || $_SESSION['user_rol'] == 4) {
+                  // Solo se ejecutará este código si el rol del usuario es 5 o 4
+                  ?>
+                <a href="<?= 'registroUser.php?id=' . escapar($fila["user_id"]) ?>" class="boton">📜</a>
+                <?php
+                    }
+                  }
+                ?>
                 </td>
               </tr>
           <?php
