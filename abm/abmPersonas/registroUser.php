@@ -58,6 +58,17 @@ $historial = $historialStmt->fetchAll(PDO::FETCH_ASSOC);
 
 <a href="abmPersonas.php" class="boton" style="float: right; margin-right: 20px; margin-top: 20px;">Volver Atras</a>
 
+
+<div class="user-info">
+    <h1>Información del Usuario</h1>
+    <p><strong>Nombre de Usuario:</strong> <?php echo htmlspecialchars($user['user_name']); ?></p>
+    <p><strong>Email:</strong> <?php echo htmlspecialchars($user['user_email']); ?></p>
+    <p><strong>Usuario Bloqueado:</strong> <?php echo $user['bloqueado'] ? 'Sí' : 'No'; ?></p>
+    <p><strong>Rol:</strong> <?php echo htmlspecialchars($user['rol_descripcion']); ?></p>
+    <p><strong>Área Asignada:</strong> <?php echo htmlspecialchars($user['area_nombre']); ?></p>
+</div>
+
+
 <!-- Sección de Historial de Préstamos -->
 <div class="historial-prestamos">
     <h2>Historial de Préstamos</h2>
