@@ -216,7 +216,7 @@ try {
         }
         ?>
         <a href="tiposMateriales.php" class="btn btn-primary mt-4" style="margin-left: 10px;">Tipos de Materiales</a>
-        <a href="areas.php" class="btn btn-primary mt-4" style="margin-left: 10px;">Áreas</a>
+        <a href="areas.php" class="btn btn-primary mt-4" style="margin-left: 10px;">Areas</a>
 
         <!-- Formulario de búsqueda y filtros -->
         <form method="post" class="form-inline">

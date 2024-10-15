@@ -112,15 +112,14 @@ if (isset($tipo_recurso) && $tipo_recurso) {
     <div class="row">
       <div class="col-md-12">
         <h2 class="mt-4">Editando el Tipo de Material: <?= escapar($tipo_recurso['tipo_recurso_nombre']) ?></h2>
-        <hr>
         <form method="post">
-          <div class="form-group">
-            <label for="nombre">Nombre del Tipo de Recurso</label>
+          <div class="form-group" >
+            <label for="nombre" style="margin-top: 10px;">Nombre del Tipo de Recurso</label>
             <input type="text" name="nombre" id="nombre" value="<?= escapar($tipo_recurso['tipo_recurso_nombre']) ?>" class="form-control">
           </div>
           <div class="form-group">
-            <label for="area">Área</label>
-            <select name="area" id="area" class="form-control">
+            <label for="area" style="margin-top: 10px;">Área</label>
+            <select name="area" id="area" class="form-control" style="width: 250px;">
               <?php
               foreach ($areas as $area) {
                 echo '<option value="' . $area['id'] . '" ' . ($tipo_recurso['tipo_recurso_area'] == $area['id'] ? 'selected' : '') . '>' . escapar($area['area_nombre']) . '</option>';
@@ -128,10 +127,10 @@ if (isset($tipo_recurso) && $tipo_recurso) {
               ?>
             </select>
           </div>
-          <div class="form-group" style="margin-top: 20px;">
+          <div class="form-group" style="margin-top: 10px;">
             <input name="csrf" type="hidden" value="<?php echo escapar($_SESSION['csrf']); ?>">
-            <input type="submit" name="submit" class="btn btn-primary" value="Actualizar">
-            <a class="btn btn-primary" href="tiposMateriales.php" style="margin-left: 10px;">Regresar</a>
+            <input type="submit" name="submit" class="btn btn-primary" value="Actualizar" style="background-color: green; margin-top: 20px;">
+            <a class="btn btn-primary" href="tiposMateriales.php" style="margin-left: 10px; background-color: red; margin-top: 20px;">Regresar</a>
           </div>
         </form>
       </div>

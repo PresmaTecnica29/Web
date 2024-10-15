@@ -86,9 +86,9 @@ if (isset($resultado)) {
           </select>
         </div><br>
         <div class="form-group">
-          <label for="recurso_tipo">Material</label>
+          <label for="recurso_tipo">Tipo de Material</label>
           <select name="recurso_tipo" id="recurso_tipo" class="input" required>
-          <option value="" disabled hidden selected >Elegir un material</option>
+          <option value="" disabled hidden selected >Elegir un tipo de material</option>
             <?php foreach ($datos as $dato) : ?>
               <option value="<?= $dato['tipo_recurso_id'] ?>" class="input"><?= $dato['tipo_recurso_nombre'] ?></option>
             <?php endforeach; ?>

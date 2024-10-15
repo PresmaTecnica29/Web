@@ -89,7 +89,7 @@ class Login
                     $this->errors[] = "Este usuario no existe.";
                 }
             } else {
-                $this->errors[] = "Problemas con la conexion a la bd.";
+                $this->errors[] = "Problemas con la conexion a la base de datos.";
             }
         }
     }

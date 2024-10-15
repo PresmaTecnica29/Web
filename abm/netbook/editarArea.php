@@ -106,7 +106,7 @@ if (isset($area) && $area) {
         <div class="row">
             <div class="col-md-12">
                 <h2 class="mt-4">Editando el área <?= escapar($area['area_nombre']) ?></h2>
-                <hr>
+
                 <form method="post">
                     <div class="form-group">
                         <label for="area_nombre">Nombre del Área</label>
@@ -115,8 +115,8 @@ if (isset($area) && $area) {
                     <br>
                     <div class="form-group">
                         <input name="csrf" type="hidden" value="<?php echo escapar($_SESSION['csrf']); ?>">
-                        <input type="submit" name="submit" class="btn btn-primary" value="Actualizar">
-                        <a class="btn btn-primary" href="areas.php" style="margin-left: 10px;">Regresar</a>
+                        <input type="submit" name="submit" class="btn btn-primary" value="Actualizar" style="background: green;">
+                        <a class="btn btn-primary" href="areas.php" style="margin-left: 10px; background: red;">Regresar</a>
                     </div>
                 </form>
             </div>

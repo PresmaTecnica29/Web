@@ -39,7 +39,7 @@ if ($conexion) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="views\estilo.css">
   <link rel="icon" href="views/templates/logofinal.png" type="image/png">
-  <title>Inico de sesion</title>
+  <title>Inicio de sesion</title>
 </head>
 
 <body>
@@ -57,15 +57,15 @@ if ($conexion) {
         <input class="input" name="user_name" type="text" placeholder="Usuario" id="login_input_username" required>
       </div>
       <div class="field">
-        <label for="login_input_email">Email del usuario</label>
+        <label for="login_input_email">Email del Usuario</label>
         <input id="login_input_email" class="input" type="email" placeholder="Example@alu.tecnica29de6.edu.ar" name="user_email" required />
       </div>
       <div class="field">
-        <label for="login_input_password_new">contraseña</label>
+        <label for="login_input_password_new">Contraseña</label>
         <input class="input" id="login_input_password_new" name="user_password_new" type="password" placeholder="Contraseña" pattern=".{6,}" required autocomplete="off">
       </div>
       <div class="field">
-        <label for="login_input_password_repeat">Repeti la contraseña</label>
+        <label for="login_input_password_repeat">Repeti la Contraseña</label>
         <input id="login_input_password_repeat" class="input" type="password" placeholder="Contraseña" name="user_password_repeat" pattern=".{6,}" required autocomplete="off" />
       </div>
       <div class="field">
