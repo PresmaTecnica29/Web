@@ -468,6 +468,18 @@
     text-align: center;
     position: relative;
   }
+  .modal-content2 {
+  background-color: #fff;
+  margin: 1% auto 0; /* Cambiamos la distancia superior a 5% y eliminamos el margen inferior */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 300px;
+  text-align: center;
+  border-radius: 15px; /* Ajusta el valor para redondear las esquinas */
+  position: relative;
+}
+
+ 
   .close {
     position: absolute;
     top: 10px;
@@ -540,7 +552,7 @@
 
     <!-- Modal de Confirmación de Cierre de Sesión -->
   <div id="logoutModal" class="modal" style="display:none;">
-    <div class="modal-content">
+    <div class="modal-content2">
     <p id="modalMessage">¿Estás seguro de que deseas Cerrar Sesión?</p>
     <div class="modal-buttons">
       <button class="btn btn-danger" onclick="confirmLogout()">Sí, Cerrar</button>

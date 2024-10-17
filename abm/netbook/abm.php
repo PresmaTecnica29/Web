@@ -81,7 +81,7 @@
   /* Adjust modal width */
   .modal-dialog,
   .modal-content {
-    width: 80% ;
+    width: 80% !important;
     /* Set a more reasonable width */
     max-width: 80% !important;
   }
