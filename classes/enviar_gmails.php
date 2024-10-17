@@ -19,7 +19,7 @@ function sendVerificationCode($userEmail, $code,) {
         $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
         $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
         $mail->Username   = 'presma@tecnica29de6.edu.ar';                     //SMTP username
-        $mail->Password   = 'rdnbcymcztkmukww';                               //SMTP password
+        $mail->Password   = 'snwhnxpawcnjaywg';                               //SMTP password
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
         $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
     
@@ -50,12 +50,35 @@ function storeVerificationCode($userId, $code) {
     $stmt->execute([$userId, $code]);
 }
 
-function verifyCode($user_email_verfcode, $code) {
+function activateUser($user_idact) {
     try {
+        // Crear la conexión PDO
         $pdo = new PDO('mysql:host=localhost;dbname=login', 'root', '');
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        // Prepare and execute the first query to get user_id
+        // Preparar y ejecutar la consulta de actualización
+        $consultaACT = $pdo->prepare("UPDATE users SET activado = '1' WHERE user_id = :user_id");
+        $consultaACT->execute([':user_id' => $user_idact]);
+
+        // Comprobar si se actualizó alguna fila
+        if ($consultaACT->rowCount() > 0) {
+            return true; // Si se actualizó al menos una fila, devuelve true
+        } else {
+            return false; // Si no se actualizó ninguna fila, devuelve false
+        }
+
+    } catch (PDOException $e) {
+        // Capturar errores de la base de datos
+        echo "Error: " . $e->getMessage();
+        return false;
+    }
+}
+
+
+function getUserId($user_email_verfcode) { 
+    $pdo = new PDO('mysql:host=localhost;dbname=login', 'root', '');
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    // Prepare and execute the first query to get user_id
         $consulta1 = $pdo->prepare("SELECT user_id FROM users WHERE user_email = :user_email");
         $consulta1->execute([':user_email' => $user_email_verfcode]);
         $user_id = $consulta1->fetchColumn(); // Use fetchColumn to get a single value
@@ -63,11 +86,21 @@ function verifyCode($user_email_verfcode, $code) {
         // Check if user_id was found
         if (!$user_id) {
             return false; // User not found
+        } else {
+            return $user_id;
         }
 
+}
+
+
+function verifyCode($user_id, $code) {
+    try {
+        $pdo = new PDO('mysql:host=localhost;dbname=login', 'root', '');
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
         // Prepare and execute the second query to verify the code
-        $consulta2 = $pdo->prepare("SELECT * FROM verification_codes WHERE user_id = :user_id AND code = :code ORDER BY user_id DESC LIMIT 1");
-        $consulta2->execute([':user_id' => $user_id, ':code' => $code]);
+        $consulta2 = $pdo->prepare("SELECT * FROM verification_codes WHERE user_id = ? AND code = ? ORDER BY user_id DESC LIMIT 1");
+        $consulta2->execute([$user_id, $code]);
         $verificacion = $consulta2->fetch(PDO::FETCH_ASSOC);
 
         // Check if the verification code is valid

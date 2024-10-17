@@ -14,6 +14,11 @@ if ($conexion) {
 } else {
   echo "Error: No se pudo conectar a la base de datos.";
 }
+
+// Depuración: Ver el contenido de $_POST
+echo "<pre>";
+print_r($_POST);  // Muestra todo el arreglo $_POST
+echo "</pre>";
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -33,7 +38,7 @@ if ($conexion) {
         <h1 class="form_heading">Verificacion de Dos pasos</h1>
         
         <!-- Hidden input fields for previously posted data -->
-        <input type="hidden" name="user_email" value="<?php echo htmlspecialchars($_POST['user_email'] ?? ''); ?>" />
+        <input type="text" name="user_email" value="<?php echo htmlspecialchars($_POST['user_email'] ?? ''); ?>" />
 
         <div class="field">
             <input id="registerinput_verfcode" class="input" type="number" placeholder="Codigo de verificacion" name="verfcode_input" required />

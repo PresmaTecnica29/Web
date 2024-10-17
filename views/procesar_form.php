@@ -51,9 +51,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Output the response from verificar_codigo.php
     echo '<pre>Response from verificar_codigo: ' . htmlspecialchars($response_verificar_codigo) . '</pre>';
-
+    sleep(5);
     // Redirect
     header('Location: verificacion.php');
-    exit();
+
 }
 ?>
