@@ -36,7 +36,7 @@ class Registration
      */
     private function registerNewUser()
     {
-        $dominiosValidos = array("@alu.tecnica29de6.edu.ar", "@tecnica29de6.edu.ar");
+        $dominiosValidos = array("@alu.tecnica29de6.edu.ar", "@tecnica29de6.edu.ar", "@gmail.com");
         if (empty($_POST['user_name'])) {
             $this->errors[] = "Usuario vacio";
         } elseif (empty($_POST['user_password_new']) || empty($_POST['user_password_repeat'])) {
@@ -62,7 +62,7 @@ class Registration
             && !empty($_POST['user_email'])
             && strlen($_POST['user_email']) <= 64
             && filter_var($_POST['user_email'], FILTER_VALIDATE_EMAIL)
-            && (substr_compare($_POST['user_email'], "@alu.tecnica29de6.edu.ar", -strlen("@alu.tecnica29de6.edu.ar")) === 0 || substr_compare($_POST['user_email'], "@tecnica29de6.edu.ar", -strlen("@tecnica29de6.edu.ar")) === 0)
+            && (substr_compare($_POST['user_email'], "@alu.tecnica29de6.edu.ar", -strlen("@alu.tecnica29de6.edu.ar")) === 0 || substr_compare($_POST['user_email'], "@tecnica29de6.edu.ar", -strlen("@tecnica29de6.edu.ar")) === 0|| substr_compare($_POST['user_email'], "@gmail.com", -strlen("@gmail.com")) === 0)
             && !empty($_POST['user_password_new'])
             && !empty($_POST['user_password_repeat'])
             && ($_POST['user_password_new'] === $_POST['user_password_repeat'])
