@@ -102,6 +102,30 @@
 
 <body>
 
+
+<script>
+function checkPendingLoans() {
+    fetch('prestamos_pendientes.php') // Llama a la página que verifica los préstamos pendientes
+        .then(response => response.json())
+        .then(data => {
+            const notification = document.getElementById('prestamo-notification');
+            const count = data.count;
+
+            if (count > 0) {
+                notification.textContent = count; // Muestra la cantidad de préstamos pendientes
+                notification.style.display = 'inline'; // Muestra el indicador
+            } else {
+                notification.style.display = 'none'; // Oculta el indicador si no hay préstamos
+            }
+        })
+        .catch(error => console.error('Error fetching pending loans:', error));
+
+}
+
+// Llama a esta función periódicamente cada 2 segundos
+setInterval(checkPendingLoans, 2000); // 2 segundos
+</script>
+
   <?php
   include '../funciones.php';
   csrf();

@@ -437,6 +437,16 @@
 
 
   <style>
+    .notification-indicator {
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    padding: 5px 10px;
+    font-size: 12px;
+    position: relative;
+    top: -10px;
+    left: -5px;
+    }
     .img>img {
       margin-right: 5px;
     }
@@ -526,6 +536,7 @@
         <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
           <li><a href='../../index.php' class="nav-link px-2 text-secondary">Inicio</a></li>
           <li><a href='../netbook/abm.php' class="nav-link px-2 text-white">Prestamos</a></li>
+          <li><span id="prestamo-notification" class="notification-indicator">0</span></li>
           <?php
           if (isset($_SESSION['user_rol'])) {
             if ($_SESSION['user_rol'] == 5 || $_SESSION['user_rol'] == 4 || $_SESSION['user_rol'] == 3 || $_SESSION['user_rol'] == 2 || $_SESSION['user_rol'] == 1) {
