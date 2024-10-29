@@ -85,6 +85,7 @@ class Login
                     // the hash of that user's password
                     if (password_verify($_POST['user_password'], $result_row->user_password_hash)) {
                             // write user data into PHP SESSION (a file on your server)
+                            /* https://staging.cohostcdn.org/attachment/84692400-ca06-4063-bbef-d15a8785bfe4/clothedd.png?width=675&auto=webp&dpr=1  */
                             $_SESSION['user_id'] = $result_row->user_id;
                             $_SESSION['user_name'] = $result_row->user_name;
                             $_SESSION['user_email'] = $result_row->user_email;
