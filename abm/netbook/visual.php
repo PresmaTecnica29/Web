@@ -118,6 +118,7 @@ include "../template/header.php";
 
 <a href="expirados.php" class="boton" title="Muestra las netbooks que han pasado su tiempo de prestamo" style='margin-left:20px;'>Expirados</a>
 <a href="graficos.php" class="boton" title="Muestra graficos de los estados de las netbooks" style='margin-left: 78%;'>Estadisticas</a>
+<a href="prestamos_pendientes.php"> me quiero matar</a>
 
 <script>
   // Capturar el evento de cambio en el select

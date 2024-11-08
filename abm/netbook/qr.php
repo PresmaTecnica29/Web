@@ -1,3 +1,10 @@
+<?php
+if (session_status() === PHP_SESSION_NONE) {
+  session_start();
+}
+?>
+
+
 <!DOCTYPE html>
 <html lang="es">
 
@@ -101,30 +108,6 @@
 </head>
 
 <body>
-
-
-<script>
-function checkPendingLoans() {
-    fetch('prestamos_pendientes.php') // Llama a la página que verifica los préstamos pendientes
-        .then(response => response.json())
-        .then(data => {
-            const notification = document.getElementById('prestamo-notification');
-            const count = data.count;
-
-            if (count > 0) {
-                notification.textContent = count; // Muestra la cantidad de préstamos pendientes
-                notification.style.display = 'inline'; // Muestra el indicador
-            } else {
-                notification.style.display = 'none'; // Oculta el indicador si no hay préstamos
-            }
-        })
-        .catch(error => console.error('Error fetching pending loans:', error));
-
-}
-
-// Llama a esta función periódicamente cada 2 segundos
-setInterval(checkPendingLoans, 2000); // 2 segundos
-</script>
 
   <?php
   include '../funciones.php';
@@ -243,8 +226,14 @@ try {
         <a href="areas.php" class="btn btn-primary mt-4" style="margin-left: 10px;">Areas</a>
 
         <!-- Formulario de búsqueda y filtros -->
+        <div id="miTexto"></div>
         <form method="post" class="form-inline">
           <div class="form-group mr-3" style='margin-top:20px;'>
+          <div>
+        <h3>Préstamos Pendientes: <span id="prestamosPendientes">Cargando...</span></h3>
+          </div>
+            <!-- Elemento para mostrar el resultado -->
+            <div id="resultado-count"></div>
             <input type="text" id="apellido" name="apellido" placeholder="Buscar por Id" class="form-control">
           </div>
 
@@ -423,6 +412,60 @@ try {
   ?>
 
   <?php include "../template/footer.php"; ?>
+  <script>
+
+  // Función para obtener el número de préstamos pendientes desde prestamos_pendientes.php
+async function obtenerPrestamosPendientes() {
+    try {
+        // Realizamos la solicitud al archivo prestamos_pendientes.php
+        const response = await fetch('prestamos_pendientes.php');
+        
+        // Verificamos si la respuesta fue exitosa
+        if (!response.ok) {
+            throw new Error('No se pudo obtener los datos. Código de respuesta: ' + response.status);
+        }
+
+        // Verificamos si la respuesta contiene JSON válido
+        const contentType = response.headers.get('Content-Type');
+        console.log("Tipo de contenido recibido:", contentType);  // Depuración del tipo de contenido
+
+        if (contentType && contentType.includes('application/json')) {
+            // Parseamos el contenido JSON de la respuesta
+            const data = await response.json();
+            console.log("Datos obtenidos:", data);  // Depuración de los datos obtenidos
+
+            // Verificamos si el JSON tiene el dato esperado (por ejemplo, count)
+            if (data && data.count !== undefined) {
+                // Asegúrate de que el elemento exista antes de intentar modificarlo
+                const prestamosElement = document.getElementById('prestamosPendientes');
+                if (prestamosElement) {
+                    prestamosElement.textContent = data.count;
+                } else {
+                    console.error('Elemento con id "prestamosPendientes" no encontrado');
+                }
+            } else {
+                throw new Error('Formato de datos incorrecto');
+            }
+        } else {
+            throw new Error('La respuesta no es JSON: ' + contentType);
+        }
+    } catch (error) {
+        // En caso de error, mostramos un mensaje en el elemento
+        const prestamosElement = document.getElementById('prestamosPendientes');
+        if (prestamosElement) {
+            prestamosElement.textContent = 'Error al obtener datos';
+        }
+        console.error(error);
+    }
+}
+
+// Llamar a la función al cargar la página (puedes usar setInterval si quieres que se actualice periódicamente)
+document.addEventListener('DOMContentLoaded', function() {
+    obtenerPrestamosPendientes();  // Llamar una vez al cargar
+    setInterval(obtenerPrestamosPendientes, 2000);  // Actualizar cada 2 segundos
+});
+
+</script>
 
 </body>
 
