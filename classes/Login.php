@@ -63,11 +63,20 @@ class Login
 
                 // database query, getting all the info of the selected user (allows login via email address in the
                 // username field)
-                $sql = "SELECT user_id, user_name, user_email, user_area, idRol, user_password_hash  FROM users WHERE user_name = '" . $user_name . "' OR user_email = '" . $user_name . "';";
+                $sql = "SELECT user_id, user_name, user_email, idRol, user_password_hash FROM users WHERE user_name = '" . $user_name . "' OR user_email = '" . $user_name . "';";
                 $result_of_login_check = $this->db_connection->query($sql);
+                $sql2 = "SELECT activado from users where user_name = '" . $user_name . "';";
+                $activadoconsulta = $this->db_connection->query($sql2);
+
+
+            if ($activadoconsulta) {
+            // Fetch the result as an associative array
+            $activado = $activadoconsulta->fetch_assoc();
+            }
 
                 // if this user exists
-                if ($result_of_login_check->num_rows == 1) {
+                if ($result_of_login_check->num_rows == 1 &&  $activado['activado'] == 1) {
+                    
 
                     // get result row (as an object)
                     $result_row = $result_of_login_check->fetch_object();
@@ -76,20 +85,20 @@ class Login
                     // the hash of that user's password
                     if (password_verify($_POST['user_password'], $result_row->user_password_hash)) {
                             // write user data into PHP SESSION (a file on your server)
+                            /* https://staging.cohostcdn.org/attachment/84692400-ca06-4063-bbef-d15a8785bfe4/clothedd.png?width=675&auto=webp&dpr=1  */
                             $_SESSION['user_id'] = $result_row->user_id;
                             $_SESSION['user_name'] = $result_row->user_name;
                             $_SESSION['user_email'] = $result_row->user_email;
                             $_SESSION['user_rol'] = $result_row->idRol;
-                            $_SESSION['user_area'] = $result_row->user_area;
                             $_SESSION['user_login_status'] = 1;
                     } else {
                         $this->errors[] = "Contraseña incorrecta. Intententalo devuelta.";
                     }
                 } else {
-                    $this->errors[] = "Este usuario no existe.";
+                    $this->errors[] = "Este usuario no existe o no esta activado.";
                 }
             } else {
-                $this->errors[] = "Problemas con la conexion a la base de datos.";
+                $this->errors[] = "Problemas con la conexion a la bd.";
             }
         }
     }

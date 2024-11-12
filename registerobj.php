@@ -1,5 +1,7 @@
 <?php
-
+echo '<pre>';
+print_r($_POST);
+echo '</pre>';
 /**
  * A simple, clean and secure PHP Login Script / MINIMAL VERSION
  *
