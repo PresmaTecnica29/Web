@@ -19,7 +19,7 @@ function sendVerificationCode($userEmail, $code,) {
         $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
         $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
         $mail->Username   = 'presma@tecnica29de6.edu.ar';                     //SMTP username
-        $mail->Password   = 'snwhnxpawcnjaywg';                               //SMTP password
+        $mail->Password   = 'bwvhaugxuapkhpfq';                               //SMTP password
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
         $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
     
@@ -45,7 +45,7 @@ function generateVerificationCode($length = 6) {
 
 function storeVerificationCode($userId, $code) {
     // Conexión a la base de datos
-    $pdo = new PDO('mysql:host=localhost;dbname=login', 'root', '');
+    $pdo = new PDO('mysql:host=190.228.29.62;dbname=bdwebet29', 'bdwebet29', 'Tecnica29!');
     $stmt = $pdo->prepare('INSERT INTO verification_codes (user_id, code) VALUES (?, ?)');
     $stmt->execute([$userId, $code]);
 }
@@ -53,7 +53,7 @@ function storeVerificationCode($userId, $code) {
 function activateUser($user_idact) {
     try {
         // Crear la conexión PDO
-        $pdo = new PDO('mysql:host=localhost;dbname=login', 'root', '');
+        $pdo = new PDO('mysql:host=190.228.29.62;dbname=bdwebet29', 'bdwebet29', 'Tecnica29!');
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
         // Preparar y ejecutar la consulta de actualización
@@ -76,7 +76,7 @@ function activateUser($user_idact) {
 
 
 function getUserId($user_email_verfcode) { 
-    $pdo = new PDO('mysql:host=localhost;dbname=login', 'root', '');
+    $pdo = new PDO('mysql:host=190.228.29.62;dbname=bdwebet29', 'bdwebet29', 'Tecnica29!');
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     // Prepare and execute the first query to get user_id
         $consulta1 = $pdo->prepare("SELECT user_id FROM users WHERE user_email = :user_email");
@@ -95,7 +95,7 @@ function getUserId($user_email_verfcode) {
 
 function verifyCode($user_id, $code) {
     try {
-        $pdo = new PDO('mysql:host=localhost;dbname=login', 'root', '');
+        $pdo = new PDO('mysql:host=190.228.29.62;dbname=bdwebet29', 'bdwebet29', 'Tecnica29!');
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
         // Prepare and execute the second query to verify the code

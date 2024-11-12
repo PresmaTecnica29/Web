@@ -50,7 +50,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     curl_close($ch);
 
     // Output the response from verificar_codigo.php
-    echo '<pre>Response from verificar_codigo: ' . htmlspecialchars($response_verificar_codigo) . '</pre>';
     sleep(5);
     // Redirect
     header('Location: verificacion.php');

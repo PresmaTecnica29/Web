@@ -53,7 +53,7 @@ echo "</pre>";
       <div class="field">
         <input type="submit" name="register" value="Submit" class="input"/>
       </div>
-      <a href="index.php" id="back">Volver a la pagina de inicio de sesion</a>
+      <a href="../index.php" id="back">Volver a la pagina de inicio de sesion</a>
       </form>
     </form>
   </div>
