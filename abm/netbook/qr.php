@@ -230,7 +230,7 @@ try {
         <form method="post" class="form-inline">
           <div class="form-group mr-3" style='margin-top:20px;'>
           <div>
-        <h3>Préstamos Pendientes: <span id="prestamosPendientes">Cargando...</span></h3>
+        <h3>Préstamos Pendientes: <span id="prestamosPendientes">Cargando...</span></h3> <!-- AAAAAAAAAAAAAAAA ES ACAAAAAAAAAA ES ACAAAAAAAAAAAAAAA -->
           </div>
             <!-- Elemento para mostrar el resultado -->
             <div id="resultado-count"></div>
@@ -305,7 +305,7 @@ try {
               <th>Material</th>
               <th>Tipo de Recurso</th>
               <th>Estado</th>
-              <th>Área</th>
+              <th>Area</th>
               <th>Acciones</th>
             </tr>
           </thead>
@@ -412,6 +412,16 @@ try {
   ?>
 
   <?php include "../template/footer.php"; ?>
+
+  <script>
+  const prestamosElement = document.getElementById('prestamosPendientes');
+if (prestamosElement) {
+    prestamosElement.textContent = 'Error al obtener datos';
+} else {
+    console.error('Elemento con id "prestamosPendientes" no encontrado');
+}
+</script>
+
   <script>
 
   // Función para obtener el número de préstamos pendientes desde prestamos_pendientes.php

@@ -2,6 +2,7 @@
 if (session_status() === PHP_SESSION_NONE) {
   session_start();
 }
+
 include "../template/header.php";
 include '../funciones.php';
 include '../../config/db.php';
@@ -13,6 +14,10 @@ if (!isset($_SESSION['user_area'])) {
 
 $user_area = $_SESSION['user_area'];
 $conexion = conexion();
+
+if (!isset($_SESSION['user_area'])) {
+    die(json_encode(['error' => 'Área de usuario no definida.']));
+}
 
 try {
     // Consulta para contar los registros con 'Pending' en el área específica del usuario
@@ -37,6 +42,7 @@ try {
 } catch (PDOException $e) {
     echo json_encode(['error' => $e->getMessage()]);
 }
+
 
 
 
