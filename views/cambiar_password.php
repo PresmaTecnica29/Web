@@ -79,14 +79,14 @@ if (isset($_POST['submit'])) {
       </div>
     </div>
   </div>
-  <footer class="bg-light text-center text-lg-start" style="position: fixed; bottom: 0px; width:100%;">
-    <!-- Copyright -->
-    <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
-      © 2023 Copyright:
-      <a class="text-dark" href="https://mdbootstrap.com/">Presma</a>
-    </div>
-    <!-- Copyright -->
-  </footer>
+  <footer class="bg-light text-center text-lg-start">
+        <!-- Copyright -->
+        <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+            © 2024 Copyright:
+            <a class="text-dark" href="https://www.tecnica29de6.edu.ar/">Escuela Tecnica N°29 DE 6 Reconquista de Buenos Aires</a>
+        </div>
+        <!-- Copyright -->
+    </footer>
 </body>
 
 </html>
